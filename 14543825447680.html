@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>HBase Indexer 整合 Solr - 蛮-com | 醉里挑灯看剑</title>
+    <meta name="keywords" content="大数据,数据仓库,数据挖掘,Linux,运维,PHP,后端,架构师,smallmenu,niuchaoqun,蛮-com">
+    <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <link href="atom.xml" rel="alternate" title="蛮-com | 醉里挑灯看剑" type="application/atom+xml">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link href="asset/css/bootstrap.min.css" rel="stylesheet">
+    <link href="asset/css/style.css" rel="stylesheet">
+    <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <script src="asset/js/jquery.min.js"></script>
+    <script src="asset/js/bootstrap.min.js"></script>
+    <script src="asset/js/docs.js"></script>
+    <!--<script src="asset/highlightjs/highlight.pack.js"></script>
+	  <script>hljs.initHighlightingOnLoad();</script>-->
+    <!--[if lt IE 9]>
+      <script src="asset/js/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <h1><a href="http://www.niuchaoqun.com" title="蛮-com | 醉里挑灯看剑">蛮-com | 醉里挑灯看剑</a></h1>
+          <a class="blog-nav-item" id="menu-index" href="index.html">首页</a>
+          <a class="blog-nav-item" id="menu-recommend" href="recommend.html">推荐</a>
+          <a class="blog-nav-item" id="menu-blog" href="archives.html">归档</a>
+          <a class="blog-nav-item" id="menu-about" href="about.html">关于</a>
+        </nav>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      $(function(){
+      	$('#menu-index').addClass('active');
+      });
+      </script>
+   <div class="container" id="content-wrap">
+      <div class="row">
+        <div class="col-sm-9 blog-main">
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14543825447680.html">HBase Indexer 整合 Solr</a></h2>
+			            <p class="blog-post-meta">2016/2/2
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>Lily HBase Indexer提供了快速、简单的HBase的内容检索方案，它可以帮助你在Solr中建立HBase的数据索引，从而通过Solr进行数据检索。由于索引过程是异步的，所以并不影响HBase的写负载，同时借助 SolrCloud 可实现分布式索引。</p>
+
+<p>该项目起源于多年研究HBase索引方案的平台Lily。</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">Lily HBase Indexer</a>
+</li>
+<li>
+<a href="#toc_1">工作机制</a>
+</li>
+<li>
+<a href="#toc_2">独立安装</a>
+<ul>
+<li>
+<a href="#toc_3">要求：</a>
+</li>
+<li>
+<a href="#toc_4">复制 jar 包到HBase</a>
+</li>
+<li>
+<a href="#toc_5">运行 solr</a>
+</li>
+<li>
+<a href="#toc_6">运行 HBase-indexer</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">Cloudear CDH 集成Solr</a>
+<ul>
+<li>
+<a href="#toc_8">创建测试表，增加复制参数</a>
+</li>
+<li>
+<a href="#toc_9">修改已存在的测试表</a>
+</li>
+<li>
+<a href="#toc_10">创建索引配置文件</a>
+</li>
+<li>
+<a href="#toc_11">创建Solr索引</a>
+</li>
+<li>
+<a href="#toc_12">查看索引</a>
+</li>
+<li>
+<a href="#toc_13">更新数据测试</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_14">常用操作</a>
+</li>
+<li>
+<a href="#toc_15">索引配置</a>
+<ul>
+<li>
+<a href="#toc_16">全局索引属性</a>
+</li>
+<li>
+<a href="#toc_17">索引元素定义</a>
+</li>
+<li>
+<a href="#toc_18">配置范例</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_19">数据批量导入</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">Lily HBase Indexer</h2>
+
+<p>参考：<br/>
+<a href="http://ngdata.github.io/hbase-indexer/">http://ngdata.github.io/hbase-indexer/</a><br/>
+<a href="https://github.com/NGDATA/hbase-indexer/wiki">https://github.com/NGDATA/hbase-indexer/wiki</a></p>
+
+<h2 id="toc_1">工作机制</h2>
+
+<p>HBase Indexer 通过HBase 的复制功能来实现，当数据写入HBase Region 时，数据会被异步复制到 HBase索引协处理器，索引优化器创建文档并推送到 SolrCloud Servers 中。</p>
+
+<p>借助Zookeeper，索引，HBase都可以水平扩展。</p>
+
+<p>通常索引节点和 Solr 节点失效都不会导致数据丢失。</p>
+
+<h2 id="toc_2">独立安装</h2>
+
+<h3 id="toc_3">要求：</h3>
+
+<ul>
+<li>HBase 0.94.x</li>
+<li>Solr4.x</li>
+<li>zookeeper 3.x</li>
+</ul>
+
+<p>HBase Indexer 依赖 Zookeeper，所以需要配置自己的Zookeeper配置段与HBase的配置段：<br/>
+conf/hbase-indexer-site.xml</p>
+
+<pre><code>&lt;property&gt;
+  &lt;name&gt;hbaseindexer.zookeeper.connectstring&lt;/name&gt;
+  &lt;value&gt;zookeeperhost&lt;/value&gt;
+&lt;/property&gt;
+&lt;property&gt;
+  &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;
+  &lt;value&gt;zookeeperhost&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
+
+<p>HBase 开启复制机制，hbase-site.xml</p>
+
+<pre><code>&lt;configuration&gt;
+  &lt;!-- SEP is basically replication, so enable it --&gt;
+  &lt;property&gt;
+    &lt;name&gt;hbase.replication&lt;/name&gt;
+    &lt;value&gt;true&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;replication.source.ratio&lt;/name&gt;
+    &lt;value&gt;1.0&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;replication.source.nb.capacity&lt;/name&gt;
+    &lt;value&gt;1000&lt;/value&gt;
+  &lt;/property&gt;
+  &lt;property&gt;
+    &lt;name&gt;replication.replicationsource.implementation&lt;/name&gt;
+    &lt;value&gt;com.ngdata.sep.impl.SepReplicationSource&lt;/value&gt;
+  &lt;/property&gt;
+&lt;/configuration&gt;
+</code></pre>
+
+<h3 id="toc_4">复制 jar 包到HBase</h3>
+
+<pre><code>cp lib/hbase-sep-* $HBASE_HOME/lib
+</code></pre>
+
+<h3 id="toc_5">运行 solr</h3>
+
+<pre><code>cd $SOLR_HOME/example
+java -Dbootstrap_confdir=./solr/collection1/conf -Dcollection.configName=myconf -DzkHost=localhost:2181/solr  -jar start.jar
+</code></pre>
+
+<h3 id="toc_6">运行 HBase-indexer</h3>
+
+<pre><code>cd $INDEXER_HOME
+./bin/hbase-indexer server
+</code></pre>
+
+<h2 id="toc_7">Cloudear CDH 集成Solr</h2>
+
+<p>Cloudear CDH 套件中集成了该组件，可以通过服务添加。虽然CDH的组件版本比要求更新，但是 Cloudera 做好了兼容性补丁，并且免去了一些配置，和jar包的复制。</p>
+
+<p>直接添加这两个服务即可，Solr的分布式依赖Zookeeper组件，另外需要注意的是 Solr 需要在配置界面，进行初始化以后才能启动。</p>
+
+<p>安装完成后，启动HBase-Indexer与Solr，然后需要以下几步：</p>
+
+<ul>
+<li>配置 HBase ，打开的复制配置，通过CDH管理界面</li>
+<li>创建一个基于SolrCloud 的 Core，和独立安装不同，Core和索引会创建到 HDFS 上，可通过 CDH自带的命令 solrctl完成</li>
+</ul>
+
+<pre><code># 初始化目录
+solrctl instancedir --generate /opt/lib/solr/collection1
+# 修改solr字段配置
+vi $HOME/collection1/conf/schema.xml
+# 生成HDFS目录
+solrctl instancedir --create collection1 /opt/lib/solr/collection1
+# 创建SolrCloud 的Core，可指定分片数和副本数量
+solrctl collection --create collection1 -s 3 -r 1
+</code></pre>
+
+<h3 id="toc_8">创建测试表，增加复制参数</h3>
+
+<pre><code>hbase&gt; create &#39;test:content_k&#39;, { NAME =&gt; &#39;info&#39;, REPLICATION_SCOPE =&gt; &#39;1&#39; }
+</code></pre>
+
+<h3 id="toc_9">修改已存在的测试表</h3>
+
+<pre><code>hbase&gt; disable &#39;test:content_k&#39;
+hbase&gt; alter &#39;test:content_k&#39;, {NAME=&gt;&#39;d&#39;,REPLICATION_SCOPE =&gt; 1}
+hbase&gt; enable &#39;test:content_k&#39;
+</code></pre>
+
+<h3 id="toc_10">创建索引配置文件</h3>
+
+<pre><code>vi index_test_content_k.xml
+
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;indexer table=&quot;test:content_k&quot;&gt;
+  &lt;field name=&quot;md5_s&quot; value=&quot;d:md5&quot;/&gt;
+  &lt;field name=&quot;title_s&quot; value=&quot;d:title&quot;/&gt;
+  &lt;field name=&quot;catid_i&quot; value=&quot;d:catid&quot; type=&quot;int&quot;/&gt;
+  &lt;field name=&quot;modelid_i&quot; value=&quot;d:modelid&quot; type=&quot;int&quot;/&gt;
+  &lt;field name=&quot;published_i&quot; value=&quot;d:published&quot; type=&quot;int&quot;/&gt;
+  &lt;field name=&quot;publishedby_i&quot; value=&quot;d:publishedby&quot; type=&quot;int&quot;/&gt;
+  &lt;field name=&quot;time_s&quot; value=&quot;d:time&quot;/&gt;
+  &lt;field name=&quot;datetime_s&quot; value=&quot;d:datetime&quot;/&gt;
+  &lt;field name=&quot;status_i&quot; value=&quot;d:status&quot; type=&quot;int&quot;/&gt;
+&lt;/indexer&gt;
+</code></pre>
+
+<h3 id="toc_11">创建Solr索引</h3>
+
+<pre><code>hbase-indexer add-indexer -n index_test_content_k -c index_test_content_k.xml \
+-cp solr.zk=hadoop-03,hadoop-02,hadoop-05:2181/solr -cp solr.collection=collection1
+</code></pre>
+
+<h3 id="toc_12">查看索引</h3>
+
+<pre><code>hbase-indexer list-indexers -z hadoop-03,hadoop-02,hadoop-05:2181
+</code></pre>
+
+<h3 id="toc_13">更新数据测试</h3>
+
+<p>注意：Solr是否立即更新依赖 autocommit 这项配置</p>
+
+<h2 id="toc_14">常用操作</h2>
+
+<h2 id="toc_15">索引配置</h2>
+
+<p>最简单的索引配置只有一个表名和一个字段，就像这样：</p>
+
+<pre><code>&lt;indexer table=&quot;mytable&quot;&gt;
+  &lt;field name=&quot;fieldname&quot; value=&quot;columnfamily:qualifier&quot; type=&quot;string&quot;/&gt;
+&lt;/indexer&gt;
+</code></pre>
+
+<h3 id="toc_16">全局索引属性</h3>
+
+<ul>
+<li>table</li>
+</ul>
+
+<p>指定被索引的 HBase 的表名，是索引配置的唯一必须值</p>
+
+<ul>
+<li>mapping-type</li>
+</ul>
+
+<p>映射类型，因为HBase是列式数据库，可能有高表和宽表的概念，所以该字段指定索引是基于行还是基于列，默认是基于行。</p>
+
+<ul>
+<li>read-row</li>
+</ul>
+
+<p>该属性有两个值，dynamic 与 never。默认是 dynamic</p>
+
+<p>当使用基于行的映射类型时，该属性比较重要，它决定了是否从 HBase 来更新已存在数据的索引。</p>
+
+<ul>
+<li>mapper</li>
+</ul>
+
+<p>自定义映射属性，默认是com.ngdata.hbaseindexer.parse.DefaultResultToSolrMapper</p>
+
+<ul>
+<li>unique-key-formatter</li>
+</ul>
+
+<p>唯一键格式，默认使用com.ngdata.hbaseindexer.uniquekey.StringUniqueKeyFormatter，会将 HBase 的Row Key作为字符串来处理，当然你可以扩展该属性。</p>
+
+<ul>
+<li>unique-key-field</li>
+</ul>
+
+<p>指定 Solr 的唯一键，默认是id这个字段</p>
+
+<ul>
+<li>row-field</li>
+</ul>
+
+<p>指定 Solr 用于存储 HBase Rowkey 的字段名，默认为空，意味着rowkey 不会存储在Solr的索引中</p>
+
+<ul>
+<li>column-family-field</li>
+</ul>
+
+<p>指定 Solr 用于存储 HBase 列族的字段名，默认为空，同上。</p>
+
+<ul>
+<li>table-name-field</li>
+</ul>
+
+<p>指定 Solr 用于存储 HBase 表名称的字段名，默认为空，同上。</p>
+
+<h3 id="toc_17">索引元素定义</h3>
+
+<p>索引元素只有三种类型：</p>
+
+<ul>
+<li>field</li>
+</ul>
+
+<p>该类型定义一个独立的用于 Solr 索引的字段，包含三个属性</p>
+
+<p>name， 索引字段名称<br/>
+value, 索引值，来源于 HBase 的值，可以有三种表示方法：</p>
+
+<pre><code>mycolumnfamily:myqualifier
+mycolumnfamily:my*
+mycolumnfamily:*
+</code></pre>
+
+<p>source, 决定用于索引的类型，有两种类型：value 与 qualifier， 表示值还是列标识符</p>
+
+<p>type， 指定 HBase的索引数据类型，因为HBase 存储所有的数据类型都是字节数组，而Solr一般都是作为文本来进行索引，所以需要字节数组向真实数据类型的转换。这个属性值可以为 HBase 的 Byte类所支持的所有类型： int, long, string ,boolean, float, double, short, bigdecimalj。当然你也可以自定义。</p>
+
+<ul>
+<li>param</li>
+</ul>
+
+<p>定义了一个键值对，具体使用场景不明。</p>
+
+<h3 id="toc_18">配置范例</h3>
+
+<pre><code>&lt;!--
+   Do row-based indexing on table &quot;table1&quot;, never re-reading updated content.
+   Store the unique document id in Solr field called &quot;custom-id&quot;.
+   Additionally store the row key in a Solr field called &quot;custom-row&quot;, and store the 
+   column family in a Solr field called &quot;custom-family&quot;.
+
+   Perform conversion of byte array keys using the class &quot;com.mycompany.MyKeyFormatter&quot;.
+--&gt; 
+&lt;indexer
+    table=&quot;table1&quot;
+    mapping-type=&quot;row&quot;
+    read-row=&quot;never&quot;
+    unique-key-field=&quot;custom-id&quot;
+    row-field=&quot;custom-row&quot;
+    column-family-field=&quot;custom-family&quot;
+    table-name-field=&quot;custom-table&quot;
+    unique-key-formatter=&quot;com.mycompany.MyKeyFormatter&quot;
+    &gt;
+
+  &lt;!-- A float-based field taken from any qualifier in the column family &quot;colfam&quot; --&gt;
+  &lt;field name=&quot;field1&quot; value=&quot;colfam:*&quot; source=&quot;qualifier&quot; type=&quot;float&quot;/&gt;
+
+  &lt;param name=&quot;globalKeyA&quot; value=&quot;globalValueA&quot;/&gt;
+  &lt;param name=&quot;globalKeyB&quot; value=&quot;globalValueB&quot;/&gt;
+
+&lt;/indexer&gt;r
+</code></pre>
+
+<h2 id="toc_19">数据批量导入</h2>
+
+<p>批量导入已存在的 HBase 表数据，HBase-Indexer提供了MR工具，来完成批量导入功能</p>
+
+<p>直接导入 </p>
+
+<pre><code>sudo -u hdfs hadoop jar hbase-indexer-mr-1.5-cdh5.5.1-job.jar --hbase-indexer-zk hadoop-02:2181,hadoop-03:2181,hadoop-05:2181 --hbase-indexer-name index_test_content_k --reducers 0
+</code></pre>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+          <div class="sidebar-module">
+            <h4>分类</h4>
+            
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="bigdata.html">大数据&nbsp;(21)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        
+	        	<a href="solr.html">Solr&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="server.html">服务器&nbsp;(2)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="linux.html">Linux&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="webserver.html">Webserver&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="db.html">数据库&nbsp;(4)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mysql.html">MySQL&nbsp;(4)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="program.html">编程语言&nbsp;(1)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	   
+            </ol>
+          </div>
+          <div class="sidebar-module">
+            <h4>最近文章</h4>
+	  
+	      
+		        <a href="14661548403888.html" title="基于Cloudera CDH的Hadoop平台搭建">基于Cloudera CDH的Hadoop平台搭建</a><br />
+	     
+	  
+	      
+		        <a href="14661279980383.html" title="Linux服务器部署规范（CentOS 6）">Linux服务器部署规范（CentOS 6）</a><br />
+	     
+	  
+	      
+		        <a href="14643975993511.html" title="TokuDB 引擎 （Percona Server）">TokuDB 引擎 （Percona Server）</a><br />
+	     
+	  
+	      
+		        <a href="14603696258384.html" title="Cloudera 集群修改IP">Cloudera 集群修改IP</a><br />
+	     
+	  
+	      
+		        <a href="14589730453584.html" title="MySQL 开发人员规范">MySQL 开发人员规范</a><br />
+	     
+	  
+	      
+		        <a href="14580995696531.html" title="Solr 5.5.1 单机版安装部署">Solr 5.5.1 单机版安装部署</a><br />
+	     
+	  
+	      
+		        <a href="14574190257937.html" title="Nginx 常用编译参数说明及扩展模块介绍">Nginx 常用编译参数说明及扩展模块介绍</a><br />
+	     
+	  
+	      
+		        <a href="14568951982132.html" title="Solr 优化">Solr 优化</a><br />
+	     
+	  
+	      
+		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
+	     
+	  
+	      
+		        <a href="14557148853181.html" title="Solr 常见错误记录">Solr 常见错误记录</a><br />
+	     
+	  
+	      
+		        <a href="14556094264580.html" title="Solr 常用指令">Solr 常用指令</a><br />
+	     
+	  
+	      
+		        <a href="14543953736059.html" title="Solr 4.10 手册">Solr 4.10 手册</a><br />
+	     
+	  
+	      
+		        <a href="14543825447680.html" title="HBase Indexer 整合 Solr">HBase Indexer 整合 Solr</a><br />
+	     
+	  
+	      
+		        <a href="14541202136915.html" title="CentOS/Mac 下安装 JDK 1.7">CentOS/Mac 下安装 JDK 1.7</a><br />
+	     
+	  
+	      
+		        <a href="14541188482835.html" title="MySQL存储过程模拟数据插入">MySQL存储过程模拟数据插入</a><br />
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+          </div>
+          <div class="sidebar-module">
+            <h4>好友链接</h4>
+            <a href="http://www.phpboy.net" title="徐典阳">PHPBoy-专注WEB架构N年</a><br />
+            <a href="http://onbing.com" title="宴兵兵">Binglog-涓涓细流汇成大海</a><br />
+          </div>
+          <div class="sidebar-module">
+            <h4>关于</h4>
+            <p><a target="_blank" href="about.html">关于蛮-com</a></p>
+          </div>
+        </div><!-- /.blog-sidebar -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->  <footer class="blog-footer">
+      <p>CopyRight &copy; 2010-2016 本站内容采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
+      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://www.mweb.im">MWeb</a> 强力驱动</p>
+    </footer>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="asset/js/ie10-viewport-bug-workaround.js"></script>
+    
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?11d84d21f7b7ebd8c51896d5f3678f45";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+  </body>
+</html>

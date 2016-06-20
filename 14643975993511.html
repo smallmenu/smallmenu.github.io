@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>TokuDB 引擎 （Percona Server） - 蛮-com | 醉里挑灯看剑</title>
+    <meta name="keywords" content="大数据,数据仓库,数据挖掘,Linux,运维,PHP,后端,架构师,smallmenu,niuchaoqun,蛮-com">
+    <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <link href="atom.xml" rel="alternate" title="蛮-com | 醉里挑灯看剑" type="application/atom+xml">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link href="asset/css/bootstrap.min.css" rel="stylesheet">
+    <link href="asset/css/style.css" rel="stylesheet">
+    <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <script src="asset/js/jquery.min.js"></script>
+    <script src="asset/js/bootstrap.min.js"></script>
+    <script src="asset/js/docs.js"></script>
+    <!--<script src="asset/highlightjs/highlight.pack.js"></script>
+	  <script>hljs.initHighlightingOnLoad();</script>-->
+    <!--[if lt IE 9]>
+      <script src="asset/js/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <h1><a href="http://www.niuchaoqun.com" title="蛮-com | 醉里挑灯看剑">蛮-com | 醉里挑灯看剑</a></h1>
+          <a class="blog-nav-item" id="menu-index" href="index.html">首页</a>
+          <a class="blog-nav-item" id="menu-recommend" href="recommend.html">推荐</a>
+          <a class="blog-nav-item" id="menu-blog" href="archives.html">归档</a>
+          <a class="blog-nav-item" id="menu-about" href="about.html">关于</a>
+        </nav>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      $(function(){
+      	$('#menu-index').addClass('active');
+      });
+      </script>
+   <div class="container" id="content-wrap">
+      <div class="row">
+        <div class="col-sm-9 blog-main">
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14643975993511.html">TokuDB 引擎 （Percona Server）</a></h2>
+			            <p class="blog-post-meta">2016/5/28
+				            &nbsp;分类于 
+							
+							    <a class='category' href='mysql.html'>MySQL</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>Percona Server可以看做是Linux上优化过的MySQL，Percona团队都是MySQL专家，比如Percona针对InnoDB优化的XtraDB 引擎是兼容InnoDB的，Percona还提供了TokuDB版本的Percona Server，TokuDB是一个面向大数据，支持事务的存储引擎，有着非常好的随机写性能，并且支持在线 DDL。</p>
+
+<p>Percona Server 可以看作是 MySQL 的增强版，因为和MySQL几乎完全兼容，在使用 yum 安装的时候只是包名不一样，安装后的产物都几乎相同。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>特性：</p>
+
+<ul>
+<li>高压缩比，默认使用zlib进行压缩，尤其是对字符串(varchar,text等)类型有非常高的压缩比，比较适合存储日志、原始数据等。一般有5-10倍压缩比。</li>
+<li>在线添加索引，不影响读写操作</li>
+<li>HCADER 特性，支持在线字段增加、删除、扩展、重命名操作，（瞬间或秒级完成）</li>
+<li>支持完整的 ACID 事务机制</li>
+<li>非常快的写入性能（索引的原因）</li>
+<li>支持show processlist 进度查看</li>
+</ul>
+
+<p>缺点：</p>
+
+<ul>
+<li>读响应时间比InnoDB长，因为压缩解压缩的原因。CPU占用会高2-3倍，但由于压缩后空间小，IO开销低</li>
+<li>不支持外键，据说触发器等高级特性也尽量不要使用。</li>
+<li>其他未知的坑</li>
+</ul>
+
+<p>适用场景：</p>
+
+<ul>
+<li>访问频率不高的数据或历史数据归档</li>
+<li>数据表非常大并且时不时还需要进行DDL操作</li>
+</ul>
+
+<p>更多介绍参见官网：<a href="https://www.percona.com/doc/percona-server/5.6/tokudb/tokudb_intro.html">https://www.percona.com/doc/percona-server/5.6/tokudb/tokudb_intro.html</a></p>
+
+<h2 id="toc_0">与 Oracle MySQL的版本区别</h2>
+
+<pre><code class="language-bash"># Percona Server
+mysql  Ver 14.14 Distrib 5.6.30-76.3, for Linux (x86_64) using  6.0
+Server version: 5.6.30-76.3 Percona Server (GPL), Release 76.3, Revision 3850db5
+
+# Oracle MySQL
+mysql  Ver 14.14 Distrib 5.6.20, for Linux (x86_64) using  EditLine wrapper
+Server version: 5.6.20-log Source distribution
+</code></pre>
+
+<h2 id="toc_1">安装 Percona Server</h2>
+
+<p>官网：<a href="https://www.percona.com/">https://www.percona.com/</a></p>
+
+<p>使用官方 yum 源安装：</p>
+
+<pre><code># 安装repo
+yum install http://www.percona.com/downloads/percona-release/redhat/0.1-3/percona-release-0.1-3.noarch.rpm
+
+# 检查安装成功
+yum list | grep Percona-Server
+
+# 安装 server, client, devel
+yum install Percona-Server-server-56 Percona-Server-client-56 Percona-Server-devel-56
+
+# 直接使用默认配置启动 （个人习惯启动脚本为mysqld）
+mv /etc/init.d/mysql /etc/init.d/mysqld
+/etc/init.d/mysqld start
+
+# 客户端连接检查
+mysql -uroot
+Server version: 5.6.30-76.3 Percona Server (GPL), Release 76.3, Revision 3850db5
+</code></pre>
+
+<p>实际上以上与mysql-server，mysql-devel， mysql-client正好对应</p>
+
+<p>安装后推荐使用我们的配置对照修改各项配置，目录位置等：</p>
+
+<p>修改完后重新启动 MySQL 服务</p>
+
+<h2 id="toc_2">安装 TokuDB 引擎</h2>
+
+<pre><code># 自动依赖安装jemalloc模块，安装后需重启服务
+yum install Percona-Server-tokudb-56
+
+# 执行自动化安装脚本，要求MySQL服务在启动状态
+ps_tokudb_admin --enable -uroot
+
+# TokuDB 要求关闭操作系统透明大页面功能，我们需要加到系统启动/etc/rc.local中，同时需要审视你自己的应用
+echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled
+echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag
+
+# 再次重启，登陆安装成功后查看
+mysql&gt; SHOW ENGINES;
+</code></pre>
+
+<h2 id="toc_3">TokuDB 引擎使用</h2>
+
+<h3 id="toc_4">压缩率测试</h3>
+
+<p>某某数据，600W+记录，属于宽表，其中主要为Text类型长文本，压缩率高达1：7，最终空间大小对比：</p>
+
+<pre><code># MYSIAM 70G / TokuDB 8G
+70G     data/test/xxxxx_myisam.MYD
+
+ToKuDB 
+8.1G    tokudata/_test_xxxxx_main_34_1_1d_B_0.tokudb
+</code></pre>
+
+<p>某某基本信息数据，属于高表，4000W+记录，压缩率1:2.5，空间大小对比：</p>
+
+<pre><code># MyISAM 30G / TokuDB 12G
+27G yyyyy_160525.MYD
+2.8G yyyyy_160525.MYI
+ 
+963M _test_yyyyy_tokudb_key_Key_10_1_1d_B_1.tokudb
+178M _test_yyyyy_tokudb_key_Updated_10_1_1d_B_2.tokudb
+11G _test_yyyyy_tokudb_main_10_1_1d_B_0.tokudb
+</code></pre>
+
+<p>当我们把 TokuDB 表记录插如到2.5亿，占用空间仅 46G，此时如果是 MyISAM 应该要破百G</p>
+
+<pre><code>1.7G    /opt/mysql/data/_test_sql_3f84_b_key_Key_5a_3_1d.tokudb
+993M    /opt/mysql/data/_test_sql_3f84_b_key_Updated_5a_4_1d.tokudb
+44G     /opt/mysql/data/_test_sql_3f84_b_main_5a_2_1d.tokudb
+</code></pre>
+
+<h3 id="toc_5">索引动态创建与删除</h3>
+
+<p>TokuDB 允许你动态创建索引，而不影响插入、查询操作，该操作会再后台进行：</p>
+
+<pre><code>SET tokudb_create_index_online=on;
+CREATE INDEX index ON table (field_name);
+
+CREATE  UNIQUE INDEX `Key` ON `yyyyy_tokudb`(`Key`);
+</code></pre>
+
+<p><strong>注意：只能使用CREATE INDEX语句，而不能使用ALTER（同样会阻塞）</strong></p>
+
+<h3 id="toc_6">在线添加、删除字段、扩展字段、字段改名</h3>
+
+<p>该表为某某年报，600W+，8G，秒级完成：</p>
+
+<pre><code># 新增字段
+mysql&gt; ALTER TABLE `test`.`xxxxx_tokudb` ADD COLUMN `Test` varchar(255) AFTER `Html`
+Affected rows : 0, Time: 2.69sec
+
+# 删除已存在的字段
+mysql&gt; ALTER TABLE `test`.`xxxxx_tokudb` DROP COLUMN `xxxxxEmail`;
+Affected rows : 0, Time: 2.03sec
+</code></pre>
+
+<pre><code>mysql&gt; ALTER TABLE `test`.`yyyyy_tokudb` ADD COLUMN `Test` text AFTER `Updated`;
+Query OK, 0 rows affected (2.74 sec)
+
+mysql&gt; ALTER TABLE `test`.`yyyyy_tokudb` DROP COLUMN `Test`;    
+Query OK, 0 rows affected (1.53 sec)
+
+mysql&gt; ALTER TABLE `test`.`yyyyy_tokudb` DROP COLUMN `Boss`;
+Query OK, 0 rows affected (1.54 sec)
+</code></pre>
+
+<p><strong>注意：</strong></p>
+
+<ul>
+<li>扩展字段长度，只支持char, varchar, varbinary, integer 类型，并且不能是主键与二级索引键。</li>
+<li>增加、删除、扩建字段长度，更改列名，都需要<strong>独立的单语句操作</strong>。否则会引起阻塞。（一次只进行一个操作）</li>
+<li>避免再添加、删除索引期间进行增、删、扩、更操作</li>
+<li>避免删除一个在索引中的列，这种情况需要先删除索引，再删除字段</li>
+<li>更改列名不支持以下类型：TIME, ENUM, BLOB, TINYBLOB, MEDIUMBLOB, LONGBLOB</li>
+</ul>
+
+<h3 id="toc_7">查询测试</h3>
+
+<p>针对某某数据 4100W+，对MyISAM与TokuDB两种引擎，进行SELECT * FROM全表扫描，游标读取并获取数据</p>
+
+<pre><code>SELECT * FROM yyyyy_myisam
+2016-05-30 10:15:11,538 INFO [main] (EnterpriseTokuDB.java:103) - Memory:max/total/free 25612/25612/24589
+2016-05-30 10:22:10,629 INFO [main] (EnterpriseTokuDB.java:105) - loop 41000000 : 4329 ms
+
+SELECT * FROM yyyyy_tokudb
+2016-05-30 10:23:12,410 INFO [main] (EnterpriseTokuDB.java:103) - Memory:max/total/free 25612/25612/24589
+2016-05-30 10:30:07,614 INFO [main] (EnterpriseTokuDB.java:105) - loop 41000000 : 4359 ms
+</code></pre>
+
+<p>两者均耗时共 7分 左右</p>
+
+<p>TokuDB获取数据时候需要解压缩，所以响应时间增多，但由于数据只有MyISAM的1/3，降低了IO。整体读响应时间相差无几。</p>
+
+<h3 id="toc_8">更新测试</h3>
+
+<p>按行读取 TokuDB 表，边读边update，update使用JDBC的addBatch与executeBatch</p>
+
+<p>平均10W条更新，50秒左右。</p>
+
+<pre><code>SELECT `id`,`key` FROM yyyyy_tokudb
+ UPDATE yyyyy_tokudb SET IndustryCode=?, RegisterNum=? WHERE id = ?
+2016-05-30 14:51:52,542 INFO [main] (EnterpriseTokuDB.java:175) - Memory:max/total/free 24696/24696/24180
+2016-05-30 14:51:52,543 INFO [main] (EnterpriseTokuDB.java:177) - loop 100000 : 59669 ms
+2016-05-30 14:52:47,135 INFO [main] (EnterpriseTokuDB.java:175) - Memory:max/total/free 24696/24696/23794
+2016-05-30 14:52:47,135 INFO [main] (EnterpriseTokuDB.java:177) - loop 200000 : 54592 ms
+2016-05-30 14:53:37,694 INFO [main] (EnterpriseTokuDB.java:175) - Memory:max/total/free 24696/24696/23407
+2016-05-30 14:53:37,694 INFO [main] (EnterpriseTokuDB.java:177) - loop 300000 : 50558 ms
+</code></pre>
+
+<p>按行读取 MyISAM 表，不好意思经常无法测试，服务器出现了： Waiting for table level lock<br/>
+一直阻塞住。 在未阻塞的情况下还是挺快的，10W条20秒左右，没有更深入的研究了。</p>
+
+<h3 id="toc_9">导入导出</h3>
+
+<p>尽量使用 LOAD DATA，比mysqldump要快，并且可以用 show processlist 看到进度</p>
+
+<h2 id="toc_10">使用问题</h2>
+
+<ol>
+<li>SELECT COUNT(*) 和 InnoDB 相同，需要全表扫描。</li>
+<li><code>AUTO_INCREMENT</code> 不能通过 ALT 语句回退，比如你插入了10000 ID，<code>AUTO_INCREMENT</code>变为10001，这时候你删除ID=10000 记录，想将<code>AUTO_INCRMENT</code> 重设为10001，这不支持</li>
+</ol>
+
+<h2 id="toc_11">参考文档</h2>
+
+<p>TokuDB简介：<a href="http://mysql.taobao.org/monthly/2015/04/02/">http://mysql.taobao.org/monthly/2015/04/02/</a></p>
+
+<p>TokuDB数据文件大小计算：<a href="http://mysql.taobao.org/monthly/2015/06/10/">http://mysql.taobao.org/monthly/2015/06/10/</a></p>
+
+<p>TokuDB索引结构--Fractal Tree：<a href="http://mysql.taobao.org/monthly/2016/04/09/">http://mysql.taobao.org/monthly/2016/04/09/</a></p>
+
+<p>TokuDB 使用简单说明：<a href="http://highdb.com/tokudb-%E7%89%B9%E6%80%A7%E6%A6%82%E8%A7%88/">http://highdb.com/tokudb-%E7%89%B9%E6%80%A7%E6%A6%82%E8%A7%88/</a></p>
+
+<p>mysql从innodb到tokudb引擎时遇到的问题：<a href="http://xiaorui.cc/2016/02/02/mysql%E4%BB%8Einnodb%E5%88%B0tokudb%E5%BC%95%E6%93%8E%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/">http://xiaorui.cc/2016/02/02/mysql%E4%BB%8Einnodb%E5%88%B0tokudb%E5%BC%95%E6%93%8E%E6%97%B6%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98/</a></p>
+
+<p>TokuDB的索引结构–分形树的实现：<a href="http://www.bitstech.net/?s=tokudb">http://www.bitstech.net/?s=tokudb</a></p>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+          <div class="sidebar-module">
+            <h4>分类</h4>
+            
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="bigdata.html">大数据&nbsp;(21)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        
+	        	<a href="solr.html">Solr&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="server.html">服务器&nbsp;(2)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="linux.html">Linux&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="webserver.html">Webserver&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="db.html">数据库&nbsp;(4)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mysql.html">MySQL&nbsp;(4)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="program.html">编程语言&nbsp;(1)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	   
+            </ol>
+          </div>
+          <div class="sidebar-module">
+            <h4>最近文章</h4>
+	  
+	      
+		        <a href="14661548403888.html" title="基于Cloudera CDH的Hadoop平台搭建">基于Cloudera CDH的Hadoop平台搭建</a><br />
+	     
+	  
+	      
+		        <a href="14661279980383.html" title="Linux服务器部署规范（CentOS 6）">Linux服务器部署规范（CentOS 6）</a><br />
+	     
+	  
+	      
+		        <a href="14643975993511.html" title="TokuDB 引擎 （Percona Server）">TokuDB 引擎 （Percona Server）</a><br />
+	     
+	  
+	      
+		        <a href="14603696258384.html" title="Cloudera 集群修改IP">Cloudera 集群修改IP</a><br />
+	     
+	  
+	      
+		        <a href="14589730453584.html" title="MySQL 开发人员规范">MySQL 开发人员规范</a><br />
+	     
+	  
+	      
+		        <a href="14580995696531.html" title="Solr 5.5.1 单机版安装部署">Solr 5.5.1 单机版安装部署</a><br />
+	     
+	  
+	      
+		        <a href="14574190257937.html" title="Nginx 常用编译参数说明及扩展模块介绍">Nginx 常用编译参数说明及扩展模块介绍</a><br />
+	     
+	  
+	      
+		        <a href="14568951982132.html" title="Solr 优化">Solr 优化</a><br />
+	     
+	  
+	      
+		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
+	     
+	  
+	      
+		        <a href="14557148853181.html" title="Solr 常见错误记录">Solr 常见错误记录</a><br />
+	     
+	  
+	      
+		        <a href="14556094264580.html" title="Solr 常用指令">Solr 常用指令</a><br />
+	     
+	  
+	      
+		        <a href="14543953736059.html" title="Solr 4.10 手册">Solr 4.10 手册</a><br />
+	     
+	  
+	      
+		        <a href="14543825447680.html" title="HBase Indexer 整合 Solr">HBase Indexer 整合 Solr</a><br />
+	     
+	  
+	      
+		        <a href="14541202136915.html" title="CentOS/Mac 下安装 JDK 1.7">CentOS/Mac 下安装 JDK 1.7</a><br />
+	     
+	  
+	      
+		        <a href="14541188482835.html" title="MySQL存储过程模拟数据插入">MySQL存储过程模拟数据插入</a><br />
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+          </div>
+          <div class="sidebar-module">
+            <h4>好友链接</h4>
+            <a href="http://www.phpboy.net" title="徐典阳">PHPBoy-专注WEB架构N年</a><br />
+            <a href="http://onbing.com" title="宴兵兵">Binglog-涓涓细流汇成大海</a><br />
+          </div>
+          <div class="sidebar-module">
+            <h4>关于</h4>
+            <p><a target="_blank" href="about.html">关于蛮-com</a></p>
+          </div>
+        </div><!-- /.blog-sidebar -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->  <footer class="blog-footer">
+      <p>CopyRight &copy; 2010-2016 本站内容采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
+      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://www.mweb.im">MWeb</a> 强力驱动</p>
+    </footer>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="asset/js/ie10-viewport-bug-workaround.js"></script>
+    
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?11d84d21f7b7ebd8c51896d5f3678f45";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+  </body>
+</html>

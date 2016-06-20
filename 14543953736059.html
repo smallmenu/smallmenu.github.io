@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>Solr 4.10 手册 - 蛮-com | 醉里挑灯看剑</title>
+    <meta name="keywords" content="大数据,数据仓库,数据挖掘,Linux,运维,PHP,后端,架构师,smallmenu,niuchaoqun,蛮-com">
+    <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <link href="atom.xml" rel="alternate" title="蛮-com | 醉里挑灯看剑" type="application/atom+xml">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link href="asset/css/bootstrap.min.css" rel="stylesheet">
+    <link href="asset/css/style.css" rel="stylesheet">
+    <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <script src="asset/js/jquery.min.js"></script>
+    <script src="asset/js/bootstrap.min.js"></script>
+    <script src="asset/js/docs.js"></script>
+    <!--<script src="asset/highlightjs/highlight.pack.js"></script>
+	  <script>hljs.initHighlightingOnLoad();</script>-->
+    <!--[if lt IE 9]>
+      <script src="asset/js/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <h1><a href="http://www.niuchaoqun.com" title="蛮-com | 醉里挑灯看剑">蛮-com | 醉里挑灯看剑</a></h1>
+          <a class="blog-nav-item" id="menu-index" href="index.html">首页</a>
+          <a class="blog-nav-item" id="menu-recommend" href="recommend.html">推荐</a>
+          <a class="blog-nav-item" id="menu-blog" href="archives.html">归档</a>
+          <a class="blog-nav-item" id="menu-about" href="about.html">关于</a>
+        </nav>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      $(function(){
+      	$('#menu-index').addClass('active');
+      });
+      </script>
+   <div class="container" id="content-wrap">
+      <div class="row">
+        <div class="col-sm-9 blog-main">
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14543953736059.html">Solr 4.10 手册</a></h2>
+			            <p class="blog-post-meta">2016/2/2
+				            &nbsp;分类于 
+							
+							    <a class='category' href='solr.html'>Solr</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>本文档参考自 apache-solr-ref-guide-4.10.pdf<br/>
+测试环境使用 Solr 为 CDH 最新发行版本：solr-4.10.3-cdh5.5.1 （官方 4.10.3 发布于2014-12-29）<br/>
+当前 Solr 官方最新版为：5.5.1 （截至到2016-06-18）</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">开始</a>
+<ul>
+<li>
+<a href="#toc_1">安装</a>
+</li>
+<li>
+<a href="#toc_2">JDK 环境</a>
+</li>
+<li>
+<a href="#toc_3">运行</a>
+</li>
+<li>
+<a href="#toc_4">运行机制</a>
+</li>
+<li>
+<a href="#toc_5">增加测试文档</a>
+</li>
+<li>
+<a href="#toc_6">查询测试文档</a>
+</li>
+<li>
+<a href="#toc_7">概览</a>
+</li>
+<li>
+<a href="#toc_8">更进一步</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_9">Solr 管理用户接口 Web GUI</a>
+<ul>
+<li>
+<a href="#toc_10">查询窗口</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_11">文档、字段、模式设计</a>
+<ul>
+<li>
+<a href="#toc_12">概述</a>
+<ul>
+<li>
+<a href="#toc_13">Solr是怎样理解这个世界的</a>
+</li>
+<li>
+<a href="#toc_14">字段解析</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_15">Solr 字段类型</a>
+<ul>
+<li>
+<a href="#toc_16">字段类型的定义</a>
+</li>
+<li>
+<a href="#toc_17">字段类型的属性</a>
+</li>
+<li>
+<a href="#toc_18">Solr 内置的字段类型</a>
+</li>
+<li>
+<a href="#toc_19">字段属性客户使用案例</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_20">字段定义</a>
+</li>
+<li>
+<a href="#toc_21">拷贝字段</a>
+</li>
+<li>
+<a href="#toc_22">动态字段</a>
+</li>
+<li>
+<a href="#toc_23">其他元素</a>
+<ul>
+<li>
+<a href="#toc_24">Unique Key</a>
+</li>
+<li>
+<a href="#toc_25">Default Search Field</a>
+</li>
+<li>
+<a href="#toc_26">Query Parser Default Operator</a>
+</li>
+<li>
+<a href="#toc_27">Similarity</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_28">DocValues</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_29">索引与基本数据操作</a>
+<ul>
+<li>
+<a href="#toc_30">Simple Post Tool</a>
+</li>
+<li>
+<a href="#toc_31">Uploading Data with Index Handlers</a>
+</li>
+<li>
+<a href="#toc_32">Uploading Structured Data Store Data with the Data Import Handler</a>
+<ul>
+<li>
+<a href="#toc_33">概念</a>
+</li>
+<li>
+<a href="#toc_34">配置</a>
+</li>
+<li>
+<a href="#toc_35">示例(1) 单表</a>
+</li>
+<li>
+<a href="#toc_36">示例(2) 多表</a>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_37">检索</a>
+</li>
+<li>
+<a href="#toc_38">配置优化</a>
+</li>
+<li>
+<a href="#toc_39">SolrCloud</a>
+</li>
+</ul>
+
+
+<h1 id="toc_0">开始</h1>
+
+<h2 id="toc_1">安装</h2>
+
+<p>下载：<a href="https://archive.cloudera.com/cdh5/cdh/5/solr-4.10.3-cdh5.5.1.tar.gz">https://archive.cloudera.com/cdh5/cdh/5/solr-4.10.3-cdh5.5.1.tar.gz</a></p>
+
+<p>Solr 4 可以作为 Java servlet 运行在Tomcat Jetty或Resin中，Solr发行版中包含了一个运行在Jetty的Example范例，你可以使用这个Example作为模板部署你的实例，推荐使用搭载了Jetty Server的Solr，因为它做了一些性能优化。</p>
+
+<p>备注：从Solr 5.0开始，Solr已经是个独立的服务。</p>
+
+<h2 id="toc_2">JDK 环境</h2>
+
+<p>1.7+</p>
+
+<h2 id="toc_3">运行</h2>
+
+<p>Solr 解压后可直接运行，bin/solr脚本默认会将主目录定位到example目录，运行后会包含一个 collection1 的 Core，以下为主要指令说明：</p>
+
+<pre><code># 查看帮助
+bin/solr --help
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th><sup>选项</sup></th>
+<th><sup>说明</sup></th>
+<th><sup>示例</sup></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>start</td>
+<td>启动</td>
+<td>bin/solr start</td>
+</tr>
+<tr>
+<td>stop</td>
+<td>停止 -all 参数</td>
+<td>bin/solr stop</td>
+</tr>
+<tr>
+<td>-f</td>
+<td>前台运行，使用-e运行范例时无效</td>
+<td>bin/solr -f</td>
+</tr>
+<tr>
+<td>-h</td>
+<td>hostname 默认为localhost</td>
+<td>bin/solr start -h search.solr.com</td>
+</tr>
+<tr>
+<td>-p</td>
+<td>监听端口，默认为8983</td>
+<td>bin/solr start -p8989</td>
+</tr>
+<tr>
+<td>-m</td>
+<td>指定JVM -Xms -Xmx的 最大堆栈内存</td>
+<td>bin/solr start -m 2g</td>
+</tr>
+<tr>
+<td>-d</td>
+<td>定义Solr server 路径，默认为example/</td>
+<td>bin/solr start -d [serverdir]</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>定义Solr home 路径，默认为example/solr</td>
+<td>bin/solr start -s [homedir]</td>
+</tr>
+<tr>
+<td>-e</td>
+<td>运行内置 example</td>
+<td>bin/solr start -e dih</td>
+</tr>
+<tr>
+<td>-cloud</td>
+<td>-c 启动SolrCloud模式，默认会启动一个内置的Zookeeper，如果是外部的Zookeeper，需要指定-z参数</td>
+<td></td>
+</tr>
+<tr>
+<td>-z</td>
+<td>Zookeeper列表</td>
+<td>bin/solr start -c -z server1:2181,server2:2181</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>额外的 JVM 信息</td>
+<td>bin/solr start -a &quot;-Xdebug -Dxx=yy&quot;</td>
+</tr>
+<tr>
+<td>-V</td>
+<td>启动调试信息</td>
+<td>bin/solr -V</td>
+</tr>
+</tbody>
+</table>
+
+<p>运行成功可通过地址访问管理界面：</p>
+
+<pre><code>http://localhost:8983/solr/
+</code></pre>
+
+<blockquote>
+<p>备注：通过查看文档，新版本 Solr 5 指令略有不同，增加了更多的工具，比如status, create 等，并且范例也多了一些。</p>
+</blockquote>
+
+<h2 id="toc_4">运行机制</h2>
+
+<p>Solr 4 实际上内置了一个Jetty Server，通过bin/solr启动内置的Jetty，当然你也可以使用外部的 Jetty来运行。</p>
+
+<p>如果你需要-d运行一个独立的Solr实例，你可以复制example作为模板，以下是目录结构：</p>
+
+<pre><code>├── contexts   # Jetty配置
+├── etc  # Jetty配置
+├── lib  # 库
+├── logs  # 日志
+├── resources  # 配置文件
+├── scripts # 存放一些脚本，比如SolrCloud的脚本
+├── solr  # Solr 的默认home目录，存放core等配置
+├── start.jar  # jetty启动jar
+└── webapps  # 包含solr.war的目录
+</code></pre>
+
+<p>接下来就可以通过自带的脚本启动新的Solr实例了</p>
+
+<pre><code>bin/solr -d /usr/local/server/solr/home/
+</code></pre>
+
+<h2 id="toc_5">增加测试文档</h2>
+
+<p>启动Solr后，可以添加一些测试文档</p>
+
+<p>Solr 自带了一些测试文档，和一个工具post.jar，这些在目录 example/exampledocs/ 下，查看帮助：</p>
+
+<pre><code>java -jar post.jar -help
+java -jar post.jar *.xml
+java -Durl=http://localhost:8983/solr/collection1/update -jar post.jar *.xml
+</code></pre>
+
+<blockquote>
+<p>备注：使用post.jar添加文档我没有测试成功，可能是由于缺少jar包或者mac环境的原因，不过可以使用目录下自带的post.sh脚本来提交文档。</p>
+</blockquote>
+
+<pre><code>./post.sh *.xml
+</code></pre>
+
+<h2 id="toc_6">查询测试文档</h2>
+
+<p>通过上面的步骤，现在我们可以尝试进行一些查询，通过构造查询字符串，比如，</p>
+
+<pre><code># 在所有的文档字段中查找video关键字
+http://localhost:8983/solr/select?q=video
+
+# 在name字段中，查找black关键字：
+http://localhost:8983/solr/select?q=name:black
+
+# 搜索价格区间，并按照类别分组，返回指定字段
+http://localhost:8983/solr/select?q=price:[0%20TO%20400]&amp;fl=id,name,price&amp;facet=true&amp;facet.field=cat
+</code></pre>
+
+<h2 id="toc_7">概览</h2>
+
+<p>Solr 基于 Apache Lucene 项目，是一个高性能、分布式、全文检索引擎。</p>
+
+<p><strong>复制</strong><br/>
+当查询量过大时，可通过复制功能，master-&gt;slave(1,2,3)，简单轮询，缓冲查询负载</p>
+
+<p><strong>分片</strong><br/>
+当文档数量过大，索引过大，超出单机限制时，可以将索引分片。这时候查询会分布到多个分片服务器上，查询时合并返回结果。(shard1,shard2）</p>
+
+<p><strong>复制+分片</strong><br/>
+当文档数和查询都巨大时，可能需要联合使用复制和分片功能，Solr提供SolrCloud 架构。<br/>
+<code><br/>
+(<br/>
+  shard1(master-&gt;slave(1,2,3))<br/>
+  shard2(master-&gt;slave(1,2,3))<br/>
+  shard3(master-&gt;slave(1,2,3))<br/>
+)<br/>
+</code></p>
+
+<h2 id="toc_8">更进一步</h2>
+
+<p>当 solr 运行在应用服务器中，需要一个主配置目录权限，主配置目录会包含一些重要的配置信息，以及索引数据。</p>
+
+<p>一个典型的目录结构：</p>
+
+<pre><code>&lt;solr-home-dir&gt;
+  solr.xml
+  core1/
+    conf/
+       solrconfig.xml
+       schema.xml
+    data/
+  core1/
+    conf/
+       solrconfig.xml
+       schema.xml
+    data/
+</code></pre>
+
+<p>solr.xml<br/>
+主配置，指定了solr core的配置信息，如配置Solr支持多个cores</p>
+
+<p>solrconfig.xml<br/>
+针对core的配置，控制一些高级特性，比如指定索引数据保存的路径等</p>
+
+<p>schema.xml<br/>
+针对core的配置，描述了solr应该怎样去索引文档，可以定义一个文档的集合字段，字段类型，具有非常丰富和强大的配置选项。</p>
+
+<blockquote>
+<p><strong>SolrCloud</strong> 模式下会将core的conf/配置信息通过Zookeeper进行管理</p>
+</blockquote>
+
+<h1 id="toc_9">Solr 管理用户接口 Web GUI</h1>
+
+<p>Dashborad 仪表板<br/>
+Logging 日志以及日志级别<br/>
+Cloud Screens SolrCloud 模式下运行时显示有关节点的信息。<br/>
+Core Admin 核心的管理信息。<br/>
+Java Properties Java属性。<br/>
+Thread Dump 每个线程的详细信息与状态信息。<br/>
+Core-Specific Tools 核心工具</p>
+
+<ul>
+<li>Analysis  分析特定字段中的数据。</li>
+<li>Dataimport 有关数据导入处理程序的当前状态信息。</li>
+<li>Documents 提供允许您直接从浏览器中执行各种Solr的索引的命令。</li>
+<li>Files 显示当前的核心配置文件solrconfig.xml中和schema.xml</li>
+<li>ping </li>
+<li>Plugins/Stats  插件/统计，显示统计插件和其它安装的组件。</li>
+<li>Query  提交关于核心的各种元素的结构化查询。</li>
+<li>Replication -显示你的核心目前的副本状态，并让您启用/禁用副本。</li>
+<li>Schema Browser 显示模式的结构。</li>
+</ul>
+
+<h2 id="toc_10">查询窗口</h2>
+
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Request-Handler</td>
+<td>指定请求查询处理类型</td>
+</tr>
+<tr>
+<td>q</td>
+<td>主查询</td>
+</tr>
+<tr>
+<td>fq</td>
+<td>过滤器，对主查询结果进行过滤，不影响评分</td>
+</tr>
+<tr>
+<td>sort</td>
+<td>排序，创建索引非多值属性都可以作为排序字段，还可以通过文档评分 score 进行排序</td>
+</tr>
+<tr>
+<td>start,rows</td>
+<td>开始,偏移量</td>
+</tr>
+<tr>
+<td>fl</td>
+<td>字段列表，通过alias:field实现别名</td>
+</tr>
+<tr>
+<td>wt</td>
+<td>返回格式</td>
+</tr>
+<tr>
+<td>indent</td>
+<td>缩进换行，是否可读</td>
+</tr>
+<tr>
+<td>debugQuery</td>
+<td>调试信息</td>
+</tr>
+<tr>
+<td>dismax</td>
+<td>dismax 查询分析器</td>
+</tr>
+<tr>
+<td>edismax</td>
+<td>扩展查询分析器</td>
+</tr>
+<tr>
+<td>hl</td>
+<td>高亮</td>
+</tr>
+<tr>
+<td>facet</td>
+<td>分类或维度</td>
+</tr>
+<tr>
+<td>spatial</td>
+<td>数据的空间或地理空间搜索</td>
+</tr>
+<tr>
+<td>spellcheck</td>
+<td>拼写检查</td>
+</tr>
+</tbody>
+</table>
+
+<h1 id="toc_11">文档、字段、模式设计</h1>
+
+<h2 id="toc_12">概述</h2>
+
+<p>Solr的基础原理很简单，你将一些数据信息提交给它，然后向它提出问题，找到你想要找到的信息，你将信息提交给Solr的过程称之为建索引(indexing)或数据更新(updating)，当你提交问题，称之为查询(query)。</p>
+
+<p>Schema是定义Solr如何将输入的文档建立索引的。</p>
+
+<h3 id="toc_13">Solr是怎样理解这个世界的</h3>
+
+<p>Solr的基本单元是文档（document）,文档是描述信息的一组数据。一个食谱文档可能会包含原材料、操作教程、准备的时间、制作的时间、需要的工具等等。描述一个人的文档可能包含名字、个人简介、喜欢的颜色、鞋子的大小。描述一本书的文档可能包含书名、作者、出版时间、页数等。</p>
+
+<p>在Solr看来，文档是由字段（field）组成的，代表更具体的某类信息。鞋码可以是一个字段，姓和名都可以是一个字段。</p>
+
+<p>字段可以包含各种类型的数据，比如一个名字字段是文本类型的，鞋码应该是浮点型的，这样就可以是6或9.5的。很显然字段的定义是很灵活的，你也可以将鞋码定义成文本类型，只有当你正确的定义了字段，Solr才能正确的解析这些内容，你的用户才能获得更好的查询结果。</p>
+
+<p>在Solr中通过定义字段的类型来表示该字段是什么类型的数据，如何解析这个字段，以及如何处理对这个字段的查询。</p>
+
+<p>当你向Solr中添加一个文档，Solr会将文档解析成各个字段然后添加到索引中，当发起查询时，Solr会快速的查找索引并返回匹配的文档结果。</p>
+
+<h3 id="toc_14">字段解析</h3>
+
+<p>字段解析是告诉Solr对提交的数据如何建立索引，一个更确切的描述这一过程的词可以是processing或digestion，但官方的名称是analysis.</p>
+
+<p>比如一个描述人的文档中的个人简介的字段，这个字段的每个文字都需要建立索引，这样你才能快速找到哪个人和数学或计算机有关。</p>
+
+<p>然而个人简介可能包含很多文字，像“的”、“吗”、“啊”这类词可能并不需要关注。另外英文中经常有首字母大写的单词，比如包含“Ketchup”，而用户需要查询“ketchup”，你当然需要Solr也能查找到包含大写字母的文档。</p>
+
+<p>上面提到的这些都是字段解析。对于个人简介字段，你需要告诉Solr如何将文本内容进行分词，比如需要告诉Solr将所有词处理成小写，并移除停用词。</p>
+
+<p>字段解析是字段类型的很重要的部分。</p>
+
+<h2 id="toc_15">Solr 字段类型</h2>
+
+<h3 id="toc_16">字段类型的定义</h3>
+
+<p>包含以下四点：</p>
+
+<p>字段类型的名称（必须有）<br/>
+实现类名（必须有）<br/>
+如果字段类型是TextField，需要包含该字段类型的分词器<br/>
+字段类型属性-取决于实现类，某些属性是你必须的</p>
+
+<p>字段类型是在schema.xml中的types标签中定义的。每个字段类型定义在fieldType标签中，以下是text_general类型的定义：</p>
+
+<pre><code>&lt;fieldType name=&quot;text_general&quot; class=&quot;solr.TextField&quot; positionIncrementGap=&quot;100&quot;&gt;
+  &lt;analyzer type=&quot;index&quot;&gt;
+    &lt;tokenizer class=&quot;solr.StandardTokenizerFactory&quot;/&gt;
+    &lt;filter class=&quot;solr.StopFilterFactory&quot; ignoreCase=&quot;true&quot; words=&quot;stopwords.txt&quot; /&gt;
+    &lt;!-- in this example, we will only use synonyms at query time
+    &lt;filter class=&quot;solr.SynonymFilterFactory&quot; synonyms=&quot;index_synonyms.txt&quot; ignoreCase=&quot;true&quot; expand=&quot;false&quot;/&gt;
+    --&gt;
+    &lt;filter class=&quot;solr.LowerCaseFilterFactory&quot;/&gt;
+  &lt;/analyzer&gt;
+  &lt;analyzer type=&quot;query&quot;&gt;
+    &lt;tokenizer class=&quot;solr.StandardTokenizerFactory&quot;/&gt;
+    &lt;filter class=&quot;solr.StopFilterFactory&quot; ignoreCase=&quot;true&quot; words=&quot;stopwords.txt&quot; /&gt;
+    &lt;filter class=&quot;solr.SynonymFilterFactory&quot; synonyms=&quot;synonyms.txt&quot; ignoreCase=&quot;true&quot; expand=&quot;true&quot;/&gt;
+    &lt;filter class=&quot;solr.LowerCaseFilterFactory&quot;/&gt;
+  &lt;/analyzer&gt;
+&lt;/fieldType&gt;
+</code></pre>
+
+<p>示例中的第一行包含类型的名称 text_general 和实现类名 solr.TextField 。其他部分是对字段解析的定义。</p>
+
+<p>实现类来保证字段会被正确的处理，schema.xml中类名，solr是org.apapche.solr.schema或者org.apache.solr.analysis的缩写。因此，solr.TextField实际是org.apache.solr.schema.TextField类。</p>
+
+<p>字段类型属性 实现类定义了该类型的大部分实现行为，另外可以定义可选属性。如以下示例中定义了另外两个属性sortMissingLast和omitNorms：</p>
+
+<pre><code>&lt;fieldType name=&quot;date&quot; class=&quot;solr.TrieDateField&quot; sortMissingLast=&quot;true&quot; omitNorms=&quot;true&quot;/&gt;
+</code></pre>
+
+<h3 id="toc_17">字段类型的属性</h3>
+
+<p>主要包含以下三类：</p>
+
+<ul>
+<li>类型实现类的属性</li>
+<li>通用属性</li>
+<li>可覆盖的默认属性</li>
+</ul>
+
+<p>通用属性：</p>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>name</td>
+<td>字段类型的名称，建议名称仅包含字母数字和下划线，不以数字开头，虽然目前并没有严格限制</td>
+</tr>
+<tr>
+<td>class</td>
+<td>该类型用于存储和索引字段数据的类名，可以使用“solr.”来简写类名，如果使用第三方类则需要写全类名。“solr.TextField”的完整类名是“org.apache.solr.schema.TextField”.</td>
+</tr>
+<tr>
+<td>positionIncrementGap　</td>
+<td>用于多值类型的字段，指定各值之间的距离，防止出现假词组匹配出现</td>
+</tr>
+<tr>
+<td>autoGeneratePhraseQueries</td>
+<td>　用于文本类型字段，如果为true，Solr自动将临近的词作为词组查询，如果为false，则词组必须用双引号引起来才被认为是词组</td>
+</tr>
+<tr>
+<td>docValuesFormat</td>
+<td>自定义DocValuesFormat，需要在solrconfig.xml中定义SchemaCodecFactory</td>
+</tr>
+<tr>
+<td>postingsFormat</td>
+<td>自定义PostingFormat，需要在solrconfig.xml中定义SchemaCodecFactory</td>
+</tr>
+</tbody>
+</table>
+
+<p>可覆盖的默认属性：</p>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+<th>可选</th>
+<th>默认</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>indexed</td>
+<td>如果为true，字段的值可以用于查询</td>
+<td>true/false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>stored</td>
+<td>如果为true，字段的值可以在查询结果中返回</td>
+<td>true/false</td>
+<td>true</td>
+</tr>
+<tr>
+<td>docValues</td>
+<td>如果为true，字段的值会被放到一个基于列的结构中</td>
+<td>true/false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>sortMissingFirst, sortMissingLast</td>
+<td>当没有指定排序字段时，文档的排序方式。在Solr3.5以后，只对数值类型、Trie和日期类型有效</td>
+<td>true/false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>multiValued</td>
+<td>如果为true，表示该类型的字段在一个文档中可以包含多个值</td>
+<td>true/false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>omitNorms</td>
+<td>如果为true，会忽略该字段的norm计算（禁用基于文档长度的计算和该字段索引时的评分计算，节省内存）。默认对所有原始类型（非分词的字段类型）为true，如int, float, data, bool, string.只有全文本字段或者需要在建索引时计算评分时才需要norms</td>
+<td>true/false</td>
+<td>*</td>
+</tr>
+<tr>
+<td>omitTermFreqAndPositions</td>
+<td>如果为true，忽略词频、位置信息，禁用会对性能有一定提升，而且会减少索引的存储空间。当基于位置的查询应用到该属性为true的字段时会查不到文档。该属性对非文本类型字段默认为true。</td>
+<td>true/false</td>
+<td>*</td>
+</tr>
+<tr>
+<td>omitPositions</td>
+<td>和omitTermFreqAndPositions类似，但保留了词频信息</td>
+<td>true/false</td>
+<td>*</td>
+</tr>
+<tr>
+<td>termVectors,termPositions,termOffsets</td>
+<td>这些选项决定Solr是否保存每个文档的词向量（term vector），可以选择性的包含位置信息、每个词在向量中的偏移距离。可以加快高亮和其他辅助功能的执行速度，但会比较大的影响索引文件的大小。一般情况下这些信息并不是必要的。</td>
+<td>true/false</td>
+<td>false</td>
+</tr>
+<tr>
+<td>required</td>
+<td>表明该字段是必须字段，如果提交的文档中该类型字段缺少，则Solr会拒绝添加文档。该属性默认是false</td>
+<td>true/false</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="toc_18">Solr 内置的字段类型</h3>
+
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>BinaryField</td>
+<td>存储二进制数据</td>
+</tr>
+<tr>
+<td>BoolField</td>
+<td>保存true或false。以“1”、“t”或“T”开头的值都被转换为true，其他值则为false</td>
+</tr>
+<tr>
+<td>CollationField</td>
+<td>支持基于Unicode的排序规则和范围查询。如果你可以使用ICU4J，ICUCollationField会是一个更好的选择。</td>
+</tr>
+<tr>
+<td>CurrencyField</td>
+<td>支持货币和汇率。</td>
+</tr>
+<tr>
+<td>ExternalFileField</td>
+<td>从磁盘上的文件中获取值。</td>
+</tr>
+<tr>
+<td>EnumField</td>
+<td>可以定义一组枚举值，但枚举值按字母顺序或数值顺序排序往往不合理，（例如枚举值是损伤程度）.该类型会附带一个配置文件，列出枚举值的顺序。</td>
+</tr>
+<tr>
+<td>ICUCollationField</td>
+<td>支持基于Unicode的排序规则和范围查询。</td>
+</tr>
+<tr>
+<td>LatLonType</td>
+<td>地理位置搜索：一组经度和维度值（latitude/longitude），该类型是维度值（latitude）。</td>
+</tr>
+<tr>
+<td>PointType</td>
+<td>地理位置搜索：任意n维的点。可以用来搜索蓝图或CAD图。</td>
+</tr>
+<tr>
+<td>RandomSortField</td>
+<td>该类型字段并不包含值，以该类型字段排序的查询会以随机形式排序。通过动态字段来使用这个特性。</td>
+</tr>
+<tr>
+<td>SpatialRecursivePrefixTreeFieldType</td>
+<td>地理位置搜索：接受“维度，经度”格式的字符串或其他熟知类型的值。简称RPT。</td>
+</tr>
+<tr>
+<td>StrField</td>
+<td>String类型（UTF-8编码的字符串或Unicode）</td>
+</tr>
+<tr>
+<td>TextField</td>
+<td>文本类型，一般包含多个单词</td>
+</tr>
+<tr>
+<td>TrieDateField</td>
+<td>日期类型，表示精确到毫秒的时间。参见precisionStep=&quot;0&quot;可以让日期排序更快索引文件更小；默认precisionStep=&quot;8&quot;可以有更好的范围查询效率。</td>
+</tr>
+<tr>
+<td>TrieDoubleField</td>
+<td>Double类型（64位IEEE浮点型）。precisionStep=&quot;0&quot;可以让日期排序更快索引文件更小；默认precisionStep=&quot;8&quot;可以有更好的范围查询效率。</td>
+</tr>
+<tr>
+<td>TrieField</td>
+<td>如果使用该类型，需要包含type属性，合法的属性值有integer、long、float、double、date。这种方式和使用对应类型的Trie字段一样。precisionStep=&quot;0&quot;可以让日期排序更快索引文件更小；默认precisionStep=&quot;8&quot;可以有更好的范围查询效率。</td>
+</tr>
+<tr>
+<td>TrieFloatField</td>
+<td>浮点型（32位IEEE浮点型）。precisionStep=&quot;0&quot;可以让日期排序更快索引文件更小；默认precisionStep=&quot;8&quot;可以有更好的范围查询效率。</td>
+</tr>
+<tr>
+<td>TrieIntField</td>
+<td>整型（32位有符号整型）。precisionStep=&quot;0&quot;可以让日期排序更快索引文件更小；默认precisionStep=&quot;8&quot;可以有更好的范围查询效率。</td>
+</tr>
+<tr>
+<td>TrieLongField</td>
+<td>长整形（64位有符号整型）。precisionStep=&quot;0&quot;可以让日期排序更快索引文件更小；默认precisionStep=&quot;8&quot;可以有更好的范围查询效率。</td>
+</tr>
+<tr>
+<td>UUIDField</td>
+<td>Universally Unique Identifier (UUID).当传入值“NEW”时，Solr会创建一个新的UUID。注意：不建议在使用SolrCloud时创建一个默认值是“NEW”的UUIDField类型的实例，而且UUID不能是unique字段，因为每一份文档的复制都会创建一个UUID值。建议在添加文档的时候使用UUIDUpdateProcessorFactory来生成UUID值。</td>
+</tr>
+</tbody>
+</table>
+
+<h3 id="toc_19">字段属性客户使用案例</h3>
+
+<p>以下是一些客户使用案例总结：</p>
+
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>indexed</th>
+<th>stored</th>
+<th>multiValued</th>
+<th>omitNorms</th>
+<th>termVectors</th>
+<th>termPositions</th>
+<th>docValues</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>search within field （搜索）　</td>
+<td>　true　</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>retrieve contents （结果返回）</td>
+<td></td>
+<td>true　</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>use as unique key （唯一键）　</td>
+<td>true</td>
+<td></td>
+<td>false</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>sort on field （排序）</td>
+<td>true 7</td>
+<td></td>
+<td>false</td>
+<td>true 1</td>
+<td></td>
+<td></td>
+<td>true 7</td>
+</tr>
+<tr>
+<td></td>
+<td>use field boosts 5</td>
+<td></td>
+<td></td>
+<td></td>
+<td>false</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>document boosts affect searches within field</td>
+<td></td>
+<td></td>
+<td></td>
+<td>false</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>highlighting （高亮）</td>
+<td>true 4</td>
+<td>true</td>
+<td></td>
+<td></td>
+<td>true2</td>
+<td>　true 3</td>
+<td></td>
+</tr>
+<tr>
+<td>faceting 5</td>
+<td>true7</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td>true7</td>
+</tr>
+<tr>
+<td>add multiple values, maintaining order</td>
+<td></td>
+<td></td>
+<td>true</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>field length affects doc score</td>
+<td></td>
+<td></td>
+<td></td>
+<td>false</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MoreLikeThis 5</td>
+<td></td>
+<td></td>
+<td></td>
+<td>true 6</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<ol>
+<li>建议但非必需</li>
+<li>如果存在，将被使用。非必需</li>
+<li>如果 termVectors=true</li>
+<li>必需定义这个字段，其实并不需要indexed</li>
+<li>参见：优化、过滤章节</li>
+<li>Term vectors are not mandatory here. If not true, then a stored field is analyzed. So term vectors are recommended, but only required if stored=false.</li>
+<li>indexed 与 docValues 需要其中一个, 并不需要全部为true. 但 DocValues 会在某些场景拥有特殊效果</li>
+</ol>
+
+<h2 id="toc_20">字段定义</h2>
+
+<p>字段同样定义在 schema.xml 文件, 下面定义了一个名称为price，类型float，默认值为0.0的字段，indexed 与 stored属性被指定，同时会继承所有内置的float类型的其他属性。</p>
+
+<pre><code>&lt;field name=&quot;price&quot; type=&quot;float&quot; default=&quot;0.0&quot; indexed=&quot;true&quot; stored=&quot;true&quot;/&gt;
+</code></pre>
+
+<h2 id="toc_21">拷贝字段</h2>
+
+<p>Solr 提供了一种手段，你可以拷贝已经定义的字段，应用于新字段上，可以将多个字段拷贝到一个字段上。</p>
+
+<pre><code>&lt;copyField source=&quot;title&quot; dest=&quot;text&quot; /&gt;
+&lt;copyField source=&quot;content&quot; dest=&quot;text&quot; /&gt;
+</code></pre>
+
+<h2 id="toc_22">动态字段</h2>
+
+<p>动态字段允许你不需要明确的在schema.xml声明你的字段，而借助一个表达式来匹配您的字段，当未匹配到任何字段时，才会进行动态字段的匹配。</p>
+
+<pre><code>&lt;dynamicField name=&quot;*_i&quot; type=&quot;int&quot; indexed=&quot;true&quot;  stored=&quot;true&quot;/&gt;
+</code></pre>
+
+<p>建议您在配置文件中包含所有的基础动态字段，这一般很有用</p>
+
+<h2 id="toc_23">其他元素</h2>
+
+<h3 id="toc_24">Unique Key</h3>
+
+<p>通过uniqueKey来指定你期望唯一键字段，依赖您的应用架构，并不是必需的。</p>
+
+<pre><code>&lt;uniqueKey&gt;id&lt;/uniqueKey&gt;
+</code></pre>
+
+<h3 id="toc_25">Default Search Field</h3>
+
+<p>默认搜索字段，通过 df 参数来指定，默认 df 是 text 字段</p>
+
+<h3 id="toc_26">Query Parser Default Operator</h3>
+
+<p>默认操作符解析，通过q.op 参数指定</p>
+
+<h3 id="toc_27">Similarity</h3>
+
+<p>相似度或者相关度，Solr 搜索时给予文档的评分，通常是为了自定义排序，可以定义一个全局的配置也可以为每个字段定义</p>
+
+<h2 id="toc_28">DocValues</h2>
+
+<p>Solr 4.2 增加了这个特性，DocValues 主要控制 Solr 为了某种目的更好的创建索引。Solr 为了提高检索效率，默认使用倒排索引，在某些情景，如排序、分类维度、高亮，并不能更好的执行。</p>
+
+<p>具体不是很理解，需要深入了解。</p>
+
+<h1 id="toc_29">索引与基本数据操作</h1>
+
+<h2 id="toc_30">Simple Post Tool</h2>
+
+<p>官方提供的简单提交测试数据的工具</p>
+
+<h2 id="toc_31">Uploading Data with Index Handlers</h2>
+
+<p>Solr 提供的默认索引接口</p>
+
+<h2 id="toc_32">Uploading Structured Data Store Data with the Data Import Handler</h2>
+
+<p>Solr 提供了很强大的数据导入工具，DIH，可以从关系数据库、XML等数据源导入数据生成索引。甚至是基于http协议的RSS等。可参考：<a href="https://wiki.apache.org/solr/DataImportHandler">https://wiki.apache.org/solr/DataImportHandler</a></p>
+
+<p>需要在 solrconfig.xml 中的 <lib>配置段显式的引用 DataImportHandler jars</p>
+
+<p>如果是MySQL数据库，你还需要增加mysql驱动所在的目录，比如mysql-connector-java-5.1.38-bin.jar在contrib/dataimporthandler-extras/lib/目录下：</p>
+
+<pre><code>&lt;lib dir=&quot;${solr.install.dir:../../../..}/contrib/dataimporthandler-extras/lib/&quot; regex=&quot;.*\.jar&quot; /&gt;
+&lt;lib dir=&quot;${solr.install.dir:../../../..}/dist/&quot; regex=&quot;solr-dataimporthandler-.*\.jar&quot; /&gt;
+</code></pre>
+
+<p>或者全路径：</p>
+
+<pre><code>&lt;lib dir=&quot;/opt/cloudera/parcels/CDH/lib/solr/&quot; regex=&quot;mysql-connector-java-.*\.jar&quot; /&gt;
+&lt;lib dir=&quot;/opt/cloudera/parcels/CDH/lib/solr/&quot; regex=&quot;solr-dataimporthandler-.*\.jar&quot; /&gt;
+</code></pre>
+
+<h3 id="toc_33">概念</h3>
+
+<p>DataSource, 数据源，定义了数据来源，可包括数据库、DSN、HTTP来源<br/>
+Entity, 实体，概念上一个实体对应了一个文档集合，包含了多个字段，对于RDBMS，一个实体对应了一个视图或表，可能是通过一个或多个SQL语句来生成<br/>
+Processor，处理器，实体处理器是用来处理、转换数据源的<br/>
+Transformer, 转换器，每组通过数据源获取的字段即可都可以应用转换，这个过程可以修改字段，创建新字段，或者从单行生成多行，内置了一些转换器，例如可以转换时间格式、去除HTML标记等等。</p>
+
+<h3 id="toc_34">配置</h3>
+
+<ul>
+<li>solrconfig.xml</li>
+</ul>
+
+<p>注册DIH接口：</p>
+
+<pre><code>&lt;requestHandler name=&quot;/dataimport&quot; class=&quot;org.apache.solr.handler.dataimport.DataImportHandler&quot;&gt;
+    &lt;lst name=&quot;defaults&quot;&gt;
+      &lt;str name=&quot;config&quot;&gt;/path/to/data-config.xml&lt;/str&gt;
+    &lt;/lst&gt;
+  &lt;/requestHandler&gt;
+
+</code></pre>
+
+<p>config参数指定了DIH的配置文件，其中定义了包括数据源、如何获取数据、获取什么数据以及处理过程。</p>
+
+<ul>
+<li>DIH 配置文件</li>
+</ul>
+
+<p>比较长，省略</p>
+
+<ul>
+<li>DIH 命令</li>
+</ul>
+
+<p>abort，取消<br/>
+delta-import，增量，<br/>
+full-import，全量，会启动一个新的线程，不会阻塞Solr的查询。<br/>
+reload-config，重载配置<br/>
+status，状态</p>
+
+<ul>
+<li>Property Writer 属性写入器</li>
+</ul>
+
+<p>可选。为增量查询定义了日期格式、语言等配置</p>
+
+<ul>
+<li>DataSource</li>
+</ul>
+
+<p>定义了数据来源和类型，主要包含以下几种，ContentStreamDataSource，FileReaderDataSource，FileDataSource，JdbcDataSource，URLDataSource</p>
+
+<pre><code>&lt;dataSource type=&quot;JdbcDataSource&quot; driver=&quot;com.mysql.jdbc.Driver&quot; url=&quot;jdbc:mysql://localhost/dbname&quot; user=&quot;db_username&quot; password=&quot;db_password&quot;/&gt;
+</code></pre>
+
+<p>可以定义多个数据源多个实体：</p>
+
+<pre><code>&lt;dataSource type=&quot;JdbcDataSource&quot; name=&quot;ds-1&quot; driver=&quot;com.mysql.jdbc.Driver&quot; url=&quot;jdbc:mysql://db1-host/dbname&quot; user=&quot;db_username&quot; password=&quot;db_password&quot;/&gt;
+&lt;dataSource type=&quot;JdbcDataSource&quot; name=&quot;ds-2&quot; driver=&quot;com.mysql.jdbc.Driver&quot; url=&quot;jdbc:mysql://db2-host/dbname&quot; user=&quot;db_username&quot; password=&quot;db_password&quot;/&gt;
+
+&lt;entity name=&quot;one&quot; dataSource=&quot;ds-1&quot; ...&gt;
+   ..
+&lt;/entity&gt;
+&lt;entity name=&quot;two&quot; dataSource=&quot;ds-2&quot; ...&gt;
+   ..
+&lt;/entity&gt;
+</code></pre>
+
+<ul>
+<li>EntityProcessors</li>
+</ul>
+
+<p>实体处理器解析、转换数据添加到 Solr 索引中，包括以下属性：</p>
+
+<p>datasource， 数据源名称，如果有多个数据源，必须<br/>
+name， 必须，实体名称<br/>
+pk，它和schema.xml中的uniqueKey没有关系。uniqueKey决定了索引的主键标识，主键重复会进行覆盖，而pk只是用来做增量索引时使用。当然，它们可以是同一个值。<br/>
+Processor，当数据源不是RDBMS时必须<br/>
+onError，abort|skip|continue<br/>
+preImportDeleteQuery<br/>
+postImportDeleteQuery<br/>
+rootEntity<br/>
+transformer<br/>
+cacheImpl<br/>
+cacheKey<br/>
+cacheLoopup</p>
+
+<ul>
+<li>SQL Entity Processor</li>
+</ul>
+
+<p>query<br/>
+deltaQuery<br/>
+parentDeltaQuery<br/>
+deletedPkQuery<br/>
+deltaImportQuery</p>
+
+<h3 id="toc_35">示例(1) 单表</h3>
+
+<p>创建测试表item：</p>
+
+<pre><code>CREATE TABLE `item` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL DEFAULT &#39;&#39;,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `isdeleted` tinyint(1) NOT NULL DEFAULT &#39;0&#39;,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+</code></pre>
+
+<p>使用 -e dih 启动Solr后，修改db-data-config.xml，其中字段的映射关系是可以省略的：</p>
+
+<pre><code>&lt;dataConfig&gt;
+    &lt;dataSource driver=&quot;com.mysql.jdbc.Driver&quot; url=&quot;jdbc:mysql://localhost/solr&quot; user=&quot;root&quot; password=&quot;123123&quot; batchSize=&quot;-1&quot; /&gt;
+    &lt;document&gt;
+        &lt;entity name=&quot;item&quot; pk=&quot;id&quot; query=&quot;SELECT * from item WHERE isdeleted = 0 &quot;
+                deltaImportQuery=&quot;SELECT * FROM item WHERE id = ${dataimporter.delta.id}&quot;
+                deltaQuery=&quot;SELECT id FROM item WHERE updated &gt; &#39;${dataimporter.last_index_time}&#39; &quot; 
+                deletedPkQuery=&quot;SELECT id FROM item WHERE isdeleted = 1 AND updated &gt; &#39;${dataimporter.last_index_time}&#39;&quot;&gt;
+        &lt;/entity&gt;
+    &lt;/document&gt;
+&lt;/dataConfig&gt;
+</code></pre>
+
+<blockquote>
+<ol>
+<li>增量索引要求，需要增加一个更新时间戳字段：updated，Solr通过这个字段来确定上次索引以后哪些行需要更新</li>
+<li>增量索引如果需要删除索引，需要增加一个标记删除的字段：isdeleted</li>
+<li>物理删除表记录，并不会同步删除索引，不过可以通过触发器，增加一个额外delete表来进行实现，较复杂</li>
+</ol>
+</blockquote>
+
+<p>可以定义多个实体，每个实体对应一个表，但是要保证主键的唯一性，否则新的数据会覆盖旧的数据，如下所示，item2表中含有相同的主键数据将会覆盖item的索引：</p>
+
+<pre><code>&lt;dataConfig&gt;
+    &lt;dataSource driver=&quot;com.mysql.jdbc.Driver&quot; url=&quot;jdbc:mysql://localhost/solr&quot; user=&quot;root&quot; password=&quot;123123&quot; batchSize=&quot;-1&quot; /&gt;
+    &lt;document&gt;
+        &lt;entity name=&quot;item&quot; pk=&quot;id&quot; query=&quot;select * FROM item WHERE isdeleted = 0 &quot;
+                deltaImportQuery=&quot;SELECT * FROM item WHERE id = ${dataimporter.delta.id}&quot;
+                deltaQuery=&quot;SELECT id FROM item WHERE updated &gt; &#39;${dataimporter.last_index_time}&#39; &quot; 
+                deletedPkQuery=&quot;SELECT id FROM item WHERE isdeleted = 1 AND updated &gt; &#39;${dataimporter.last_index_time}&#39;&quot;&gt;
+        &lt;/entity&gt;
+        &lt;entity name=&quot;item2&quot; pk=&quot;id&quot; query=&quot;select * from item2 where isdeleted = 0 &quot;
+                deltaImportQuery=&quot;SELECT * FROM item2 WHERE id = ${dataimporter.delta.id}&quot;
+                deltaQuery=&quot;SELECT id FROM item2 WHERE updated &gt; &#39;${dataimporter.last_index_time}&#39; &quot; 
+                deletedPkQuery=&quot;SELECT id FROM item2 WHERE isdeleted = 1 AND updated &gt; &#39;${dataimporter.last_index_time}&#39;&quot;&gt;
+        &lt;/entity&gt;
+    &lt;/document&gt;
+&lt;/dataConfig&gt;
+</code></pre>
+
+<h3 id="toc_36">示例(2) 多表</h3>
+
+<p>已知有以下DB结构，item与feature是一对多关系，item与category是多对多关系</p>
+
+<pre><code>CREATE TABLE `item` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL DEFAULT &#39;&#39;,
+  `created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `isdeleted` tinyint(1) NOT NULL DEFAULT &#39;0&#39;,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `feature` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) unsigned NOT NULL,
+  `description` varchar(32) NOT NULL DEFAULT &#39;&#39;,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `category` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `catname` varchar(32) NOT NULL DEFAULT &#39;&#39;,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE `item_category` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `item_id` int(11) unsigned NOT NULL,
+  `category_id` int(11) unsigned NOT NULL,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+</code></pre>
+
+<p>Entity支持嵌套，同时schema.xml中定义了多值属性，所以可以很好的解决一对多的关系。</p>
+
+<p>官方示例中item_category的pk=&quot;item_id,category_id&quot;，这样会报错，换成pk=&quot;item_id&quot;即可。</p>
+
+<pre><code>&lt;dataConfig&gt;
+    &lt;dataSource driver=&quot;com.mysql.jdbc.Driver&quot; url=&quot;jdbc:mysql://localhost/solr&quot; user=&quot;root&quot; password=&quot;123123&quot; batchSize=&quot;-1&quot; /&gt;
+    &lt;document&gt;
+        &lt;entity name=&quot;item&quot; pk=&quot;id&quot; query=&quot;select * from item where isdeleted = 0&quot;
+                 deltaImportQuery=&quot;SELECT * from item WHERE id=${dataimporter.delta.id}&quot;
+                deltaQuery=&quot;select id from item where updated &gt; &#39;${dataimporter.last_index_time}&#39;&quot;
+                deletedPkQuery=&quot;select id from item where isdeleted = 1 AND updated &gt; &#39;${dataimporter.last_index_time}&#39;&quot;&gt;
+            &lt;field column=&quot;name&quot; name=&quot;name&quot; /&gt;
+
+            &lt;entity name=&quot;feature&quot; pk=&quot;item_id&quot;   
+                    query=&quot;select description from feature where item_id = ${item.id}&quot;
+                    deltaQuery=&quot;select item_id from feature where updated &gt; &#39;${dataimporter.last_index_time}&#39;&quot;
+                    parentDeltaQuery=&quot;select id from item where id = ${feature.item_id}&quot;&gt;
+                &lt;field column=&quot;description&quot; name=&quot;features&quot; /&gt;
+            &lt;/entity&gt;
+
+            &lt;entity name=&quot;item_category&quot; pk=&quot;item_id&quot;  
+                    query=&quot;select category_id from item_category where item_id = ${item.id}&quot;
+                    deltaQuery=&quot;select item_id, category_id from item_category where updated &gt; &#39;${dataimporter.last_index_time}&#39;&quot;
+                    parentDeltaQuery=&quot;select id from item where id = ${item_category.item_id}&quot;&gt;
+                &lt;entity name=&quot;category&quot; pk=&quot;id&quot;  
+                        query=&quot;select catname from category where id = ${item_category.category_id}&quot;
+                        deltaQuery=&quot;select id from category where updated &gt; &#39;${dataimporter.last_index_time}&#39;&quot;
+                        parentDeltaQuery=&quot;select item_id, category_id from item_category where category_id = ${category.id}&quot;&gt;
+                    &lt;field column=&quot;catname&quot; name=&quot;cat&quot; /&gt;
+                &lt;/entity&gt;
+            &lt;/entity&gt;
+        &lt;/entity&gt;
+    &lt;/document&gt;
+&lt;/dataConfig&gt;
+</code></pre>
+
+<blockquote>
+<ol>
+<li>ParentDeltaQuery属性决定了，当表发生更新操作的时候，会更新索引，这个特性真是牛X</li>
+<li>item表可通过标记删除，来处理记录删除的问题，但其他表都要标记这显然太麻烦了</li>
+<li>item_category 关联表记录的删除，不会更新索引，但我们修改时一般是删除旧记录创建新纪录，这样就没问题，前提是必须要选择一个category。</li>
+<li>feature 表记录删除，也可以参考上面处理，或者可能你需要update一下item表?</li>
+<li>category 表记录的删除比较尴尬，当category表记录删除的时候，一般你还会关联删除iteam_category表（或者外键删除），不知道怎么解决？</li>
+</ol>
+</blockquote>
+
+<p><strong>注意</strong></p>
+
+<p>Solr可能增量索引有时区的问题，你需要修改一下默认的时区配置，本地模式修改：</p>
+
+<pre><code>vi bin/solr.in.sh
+SOLR_TIMEZONE=&quot;Asia/Shanghai&quot;
+</code></pre>
+
+<p>CDH 模式修改<code>Solr Server 的 Java 配置选项</code></p>
+
+<h1 id="toc_37">检索</h1>
+
+<h1 id="toc_38">配置优化</h1>
+
+<h1 id="toc_39">SolrCloud</h1>
+
+<p>SolrCloud 是Solr为了支持新的分布式特性而命名的。从4.0版本开始支持，提供高可用、分布式集群方案。</p>
+
+<p>Collection：集合。单一索引，作为SolrCloud模式下访问集群的入口，<br/>
+Shard：分片。单一索引的一部分逻辑表现（也成为分片）<br/>
+Replica：副本。一个分片的物理表现，<br/>
+Leader：选举Leader。副本中被选举为Leader提供索引服务的副本。一个分片有多个副本，只能有一个Leader，<br/>
+SolrCore：索引核心，<br/>
+Node：节点。Solr的单独实例，一个实例可以管理多个Cores，作为一个集合的一部分。<br/>
+Cluster：集群，所有节点组成一个集群。</p>
+
+<p>分布式模式下：</p>
+
+<p>Collection 集合作为一个逻辑上索引，会跨越多个服务器，运行在某台服务器上Collection的一部分是一个Core。</p>
+
+<p>单节点：</p>
+
+<p>一个实例会有多个 Collection，因为无法分布式，所以每个Collection都是一个Core。</p>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+          <div class="sidebar-module">
+            <h4>分类</h4>
+            
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="bigdata.html">大数据&nbsp;(21)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        
+	        	<a href="solr.html">Solr&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="server.html">服务器&nbsp;(2)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="linux.html">Linux&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="webserver.html">Webserver&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="db.html">数据库&nbsp;(4)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mysql.html">MySQL&nbsp;(4)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="program.html">编程语言&nbsp;(1)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	   
+            </ol>
+          </div>
+          <div class="sidebar-module">
+            <h4>最近文章</h4>
+	  
+	      
+		        <a href="14661548403888.html" title="基于Cloudera CDH的Hadoop平台搭建">基于Cloudera CDH的Hadoop平台搭建</a><br />
+	     
+	  
+	      
+		        <a href="14661279980383.html" title="Linux服务器部署规范（CentOS 6）">Linux服务器部署规范（CentOS 6）</a><br />
+	     
+	  
+	      
+		        <a href="14643975993511.html" title="TokuDB 引擎 （Percona Server）">TokuDB 引擎 （Percona Server）</a><br />
+	     
+	  
+	      
+		        <a href="14603696258384.html" title="Cloudera 集群修改IP">Cloudera 集群修改IP</a><br />
+	     
+	  
+	      
+		        <a href="14589730453584.html" title="MySQL 开发人员规范">MySQL 开发人员规范</a><br />
+	     
+	  
+	      
+		        <a href="14580995696531.html" title="Solr 5.5.1 单机版安装部署">Solr 5.5.1 单机版安装部署</a><br />
+	     
+	  
+	      
+		        <a href="14574190257937.html" title="Nginx 常用编译参数说明及扩展模块介绍">Nginx 常用编译参数说明及扩展模块介绍</a><br />
+	     
+	  
+	      
+		        <a href="14568951982132.html" title="Solr 优化">Solr 优化</a><br />
+	     
+	  
+	      
+		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
+	     
+	  
+	      
+		        <a href="14557148853181.html" title="Solr 常见错误记录">Solr 常见错误记录</a><br />
+	     
+	  
+	      
+		        <a href="14556094264580.html" title="Solr 常用指令">Solr 常用指令</a><br />
+	     
+	  
+	      
+		        <a href="14543953736059.html" title="Solr 4.10 手册">Solr 4.10 手册</a><br />
+	     
+	  
+	      
+		        <a href="14543825447680.html" title="HBase Indexer 整合 Solr">HBase Indexer 整合 Solr</a><br />
+	     
+	  
+	      
+		        <a href="14541202136915.html" title="CentOS/Mac 下安装 JDK 1.7">CentOS/Mac 下安装 JDK 1.7</a><br />
+	     
+	  
+	      
+		        <a href="14541188482835.html" title="MySQL存储过程模拟数据插入">MySQL存储过程模拟数据插入</a><br />
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+          </div>
+          <div class="sidebar-module">
+            <h4>好友链接</h4>
+            <a href="http://www.phpboy.net" title="徐典阳">PHPBoy-专注WEB架构N年</a><br />
+            <a href="http://onbing.com" title="宴兵兵">Binglog-涓涓细流汇成大海</a><br />
+          </div>
+          <div class="sidebar-module">
+            <h4>关于</h4>
+            <p><a target="_blank" href="about.html">关于蛮-com</a></p>
+          </div>
+        </div><!-- /.blog-sidebar -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->  <footer class="blog-footer">
+      <p>CopyRight &copy; 2010-2016 本站内容采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
+      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://www.mweb.im">MWeb</a> 强力驱动</p>
+    </footer>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="asset/js/ie10-viewport-bug-workaround.js"></script>
+    
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?11d84d21f7b7ebd8c51896d5f3678f45";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+  </body>
+</html>

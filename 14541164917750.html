@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>Flume + Kafka + Storm 部署指南 - 蛮-com | 醉里挑灯看剑</title>
+    <meta name="keywords" content="大数据,数据仓库,数据挖掘,Linux,运维,PHP,后端,架构师,smallmenu,niuchaoqun,蛮-com">
+    <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <link href="atom.xml" rel="alternate" title="蛮-com | 醉里挑灯看剑" type="application/atom+xml">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link href="asset/css/bootstrap.min.css" rel="stylesheet">
+    <link href="asset/css/style.css" rel="stylesheet">
+    <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <script src="asset/js/jquery.min.js"></script>
+    <script src="asset/js/bootstrap.min.js"></script>
+    <script src="asset/js/docs.js"></script>
+    <!--<script src="asset/highlightjs/highlight.pack.js"></script>
+	  <script>hljs.initHighlightingOnLoad();</script>-->
+    <!--[if lt IE 9]>
+      <script src="asset/js/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <h1><a href="http://www.niuchaoqun.com" title="蛮-com | 醉里挑灯看剑">蛮-com | 醉里挑灯看剑</a></h1>
+          <a class="blog-nav-item" id="menu-index" href="index.html">首页</a>
+          <a class="blog-nav-item" id="menu-recommend" href="recommend.html">推荐</a>
+          <a class="blog-nav-item" id="menu-blog" href="archives.html">归档</a>
+          <a class="blog-nav-item" id="menu-about" href="about.html">关于</a>
+        </nav>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      $(function(){
+      	$('#menu-index').addClass('active');
+      });
+      </script>
+   <div class="container" id="content-wrap">
+      <div class="row">
+        <div class="col-sm-9 blog-main">
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14541164917750.html">Flume + Kafka + Storm 部署指南</a></h2>
+			            <p class="blog-post-meta">2016/1/30
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hadoop.html'>Hadoop</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>Flume是Cloudera提供的一个高可用的，高可靠的，分布式的海量日志采集、聚合和传输的系统，Flume支持在日志系统中定制各类数据发送方，用于收集数据；同时，Flume提供对数据进行简单处理，并写到各种数据接受方（可定制）的能力。<br/>
+当前Flume有两个版本Flume 0.9X版本的统称Flume-og，Flume1.X版本的统称Flume-ng</p>
+
+<p>Kafka是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据。 这种动作（网页浏览，搜索和其他用户的行动）是在现代网络上的许多社会功能的一个关键因素。 这些数据通常是由于吞吐量的要求而通过处理日志和日志聚合来解决。 </p>
+
+<p>Storm是一个分布式的、容错的实时计算系统,为分布式实时计算提供了一组通用原语，可被用于“流处理”之中，实时处理消息并更新数据库。这是管理队列及工作者集群的另一种方式。 Storm也可被用于连续计算（continuous computation），对数据流做连续查询，在计算时就将结果以流的形式输出给用户。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">环境要求</h2>
+
+<ul>
+<li>JDK 1.7+  JAVA环境</li>
+<li>Maven 3.*  项目构建工具</li>
+<li>Zookeeper 分布式开放源码的分布式应用程序协调服务，Kafka与Storm必须</li>
+</ul>
+
+<h3 id="toc_1">JDK</h3>
+
+<h4 id="toc_2">MAC</h4>
+
+<p>查看JDK版本 java -version</p>
+
+<p>Mac 自带的 JDK 为1.6版本，到 Oracle 官方网站下载：</p>
+
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html">http://www.oracle.com/technetwork/java/javase/downloads/java-archive-downloads-javase7-521261.html</a></p>
+
+<p>根据苹果的官方说明，Mac OS X 10.5 及以后的版本应该使用 /usr/libexec/java_home 命令来确定 JAVA_HOME</p>
+
+<h4 id="toc_3">CentOS</h4>
+
+<ul>
+<li>CentOS 系统自带JDK的情况</li>
+</ul>
+
+<p>CentOS自带的应该是OpenJDK，是JDK的开源版本，通过yum install java 安装的：</p>
+
+<pre><code>java -version
+openjdk version &quot;1.8.0_51&quot;
+OpenJDK Runtime Environment (build 1.8.0_51-b16)
+OpenJDK 64-Bit Server VM (build 25.51-b03, mixed mode)
+
+</code></pre>
+
+<p>进一步查看JDK rpm包信息，输出类似：</p>
+
+<pre><code>rpm -qa | grep java
+tzdata-java-2015e-1.el6.noarch
+java-1.8.0-openjdk-1.8.0.51-0.b16.el6_6.x86_64
+java-1.8.0-openjdk-headless-1.8.0.51-0.b16.el6_6.x86_64
+</code></pre>
+
+<p>卸载系统自带的OpenJDK，可执行以下操作：yum remove java</p>
+
+<ul>
+<li>可能安装过 Oracle JDK 的旧版本</li>
+</ul>
+
+<pre><code>java -version
+java version &quot;1.7.0_80&quot;
+Java(TM) SE Runtime Environment (build 1.7.0_80-b15)
+Java HotSpot(TM) 64-Bit Server VM (build 24.80-b11, mixed mode)
+</code></pre>
+
+<p>卸载后安装：</p>
+
+<pre><code>rpm -qa | grep jdk
+rpm -e jdk
+rpm -ivh jdk-7-linux-x64.rpm
+java -version
+</code></pre>
+
+<h4 id="toc_4">JDK环境变量</h4>
+
+<p>vi /etc/profile</p>
+
+<pre><code>JAVA_HOME=/usr/java/jdk1.7.0
+PATH=$PATH:$JAVA_HOME/bin
+CLASSPATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JAVA_HOME/lib;
+export JAVA_HOME PATH CLASSPATH
+
+</code></pre>
+
+<p>source /etc/profile</p>
+
+<p>echo $JAVA_HOME</p>
+
+<p>PS:</p>
+
+<ol>
+<li><p>CLASSPATH 这个环境变量在Storm下貌似没有用 </p></li>
+<li><p>有个神奇的工具 alternatives 还可以切换java版本：</p></li>
+</ol>
+
+<pre><code>alternatives --config java
+
+  选择    命令
+*  1           /usr/lib/jvm/java-1.8.0-openjdk-1.8.0.51-0.b16.el6_6.x86_64/jre/bin/java
+ + 2           /usr/java/jdk1.7.0_80/bin/java
+
+按 Enter 来保存当前选择[+]，或键入选择号码：
+</code></pre>
+
+<h4 id="toc_5">Maven</h4>
+
+<p>Maven是基于项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，即pom.xml配置文件，报告和文档的软件项目管理工具。</p>
+
+<p>个人理解类似C下面的Makefile，用于编译打包jar，解决包依赖。</p>
+
+<p>官网：</p>
+
+<p><a href="http://maven.apache.org/">http://maven.apache.org/</a></p>
+
+<p>文档：</p>
+
+<p><a href="http://maven.apache.org/install.html">http://maven.apache.org/install.html</a></p>
+
+<p>下载：</p>
+
+<p><a href="http://apache.fayea.com/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz">http://apache.fayea.com/maven/maven-3/3.3.3/binaries/apache-maven-3.3.3-bin.tar.gz</a></p>
+
+<p>解压到/usr/local/server/maven</p>
+
+<p>将/usr/local/server/maven/bin写入PATH</p>
+
+<p>检测安装成功与否，这个需要在项目目录下执行可能才正常:</p>
+
+<pre><code>mvn -v
+Apache Maven 3.3.3 (7994120775791599e205a5524ec3e0dfe41d4a06; 2015-04-22T19:57:37+08:00)
+Maven home: /usr/local/server/maven
+Java version: 1.7.0_80, vendor: Oracle Corporation
+Java home: /Library/Java/JavaVirtualMachines/jdk1.7.0_80.jdk/Contents/Home/jre
+Default locale: zh_CN, platform encoding: ISO8859-1
+OS name: &quot;mac os x&quot;, version: &quot;10.10.2&quot;, arch: &quot;x86_64&quot;, family: &quot;mac&quot;
+
+</code></pre>
+
+<h2 id="toc_6">Flume</h2>
+
+<p>官网：</p>
+
+<p><a href="http://flume.apache.org/">http://flume.apache.org/</a></p>
+
+<p>用户手册：</p>
+
+<p><a href="http://flume.apache.org/FlumeUserGuide.html">http://flume.apache.org/FlumeUserGuide.html</a><br/>
+<a href="https://cwiki.apache.org/confluence/display/FLUME/Getting+Started">https://cwiki.apache.org/confluence/display/FLUME/Getting+Started</a></p>
+
+<p>应当重点关注手册的 source, sink, 以及过滤器部分</p>
+
+<p>扩展阅读：</p>
+
+<p>Flume NG：Flume 发展史上的第一次革命：<a href="http://www.ibm.com/developerworks/cn/data/library/bd-1404flumerevolution/index.html">http://www.ibm.com/developerworks/cn/data/library/bd-1404flumerevolution/index.html</a></p>
+
+<h3 id="toc_7">安装</h3>
+
+<p>Flume源码编译需要JDK 1.6+, Apache Maven 3.x，一般使用二进制包即可。</p>
+
+<p>wget <a href="http://www.apache.org/dyn/closer.cgi/flume/1.6.0/apache-flume-1.6.0-bin.tar.gz">http://www.apache.org/dyn/closer.cgi/flume/1.6.0/apache-flume-1.6.0-bin.tar.gz</a></p>
+
+<p>解压到/usr/local/server/flume</p>
+
+<p>cp conf/flume-conf.properties.template conf/flume.conf</p>
+
+<p>cp conf/flume-env.sh.template conf/flume-env.sh</p>
+
+<h3 id="toc_8">简单示例</h3>
+
+<p>令avro监听作为数据来源，内存作为管道，file_roll作为去向。运行结果是从avro读取的数据输出到文件中：</p>
+
+<pre><code>vi example.conf
+agent.channels = memory
+agent.sources = avro
+agent.sinks = file
+
+agent.channels.memory.type = memory
+
+agent.sources.avro.channels = memory
+agent.sources.avro.type = avro
+agent.sources.avro.bind = 0.0.0.0
+agent.sources.avro.port = 41414
+
+agent.sinks.file.channel = memory
+agent.sinks.file.type = file_roll
+agent.sinks.file.sink.directory = /tmp/flume
+</code></pre>
+
+<p>在客户端运行agent，其中</p>
+
+<ul>
+<li>flume-ng agent 是客户端指令</li>
+<li>-n 表示agent 名称</li>
+<li>-Dproperty 用于传递 java option 参数</li>
+</ul>
+
+<pre><code>/usr/local/server/flume/bin/flume-ng agent -n agent --conf /usr/local/server/flume/conf/ -f /usr/local/server/flume/conf/example.conf -Dflume.root.logger=DEBUG,console
+</code></pre>
+
+<p>可通过 <code>netstat -tunlp</code> flume自动启动了一个监听在41414端口的avro服务端</p>
+
+<p>flume 自带了avro客户端脚本，用于向服务端写数据: avro-client</p>
+
+<p>下面运行avro客户端并输出 /etc/passwd 文件内容到avro服务端</p>
+
+<pre><code>/usr/local/server/flume/bin/flume-ng avro-client --conf /usr/local/server/flume/conf/ -H localhost -p 41414 -F /etc/passwd -Dflume.root.logger=DEBUG,console
+</code></pre>
+
+<p>运行正常的话。查看/tmp/flume目录下是否含有/etc/passwd的内容。</p>
+
+<h2 id="toc_9">Kafka</h2>
+
+<p>官网：</p>
+
+<p><a href="http://kafka.apache.org/">http://kafka.apache.org/</a></p>
+
+<p>文档：</p>
+
+<p><a href="http://kafka.apache.org/08/documentation.html">http://kafka.apache.org/08/documentation.html</a></p>
+
+<p>扩展阅读：</p>
+
+<p><a href="http://www.ibm.com/developerworks/cn/opensource/os-cn-kafka/index.html">http://www.ibm.com/developerworks/cn/opensource/os-cn-kafka/index.html</a></p>
+
+<h3 id="toc_10">安装</h3>
+
+<p>下载：</p>
+
+<p><a href="https://www.apache.org/dyn/closer.cgi?path=/kafka/0.8.2.0/kafka_2.10-0.8.2.0.tgz">https://www.apache.org/dyn/closer.cgi?path=/kafka/0.8.2.0/kafka_2.10-0.8.2.0.tgz</a></p>
+
+<p>解压到/usr/local/server/kafka</p>
+
+<p>Kafka 依赖zookeeper 运行，本身有内置zookeeper，直接分别启动：</p>
+
+<pre><code>/usr/local/server/kafka/bin/zookeeper-server-start.sh /usr/local/server/kafka/config/zookeeper.properties
+
+/usr/local/server/kafka/bin/kafka-server-start.sh /usr/local/server/kafka/config/server.properties
+
+</code></pre>
+
+<p>默认 Zookeeper 监听 2181，Kafka 监听 9092</p>
+
+<p>如果是自行安装的zookeeper，则需要修改从server.properties中的 Zookeeper 相关的配置段</p>
+
+<h3 id="toc_11">简单示例</h3>
+
+<p>测试 Kafka 单机是否正常，命令行创建一个话题 log：</p>
+
+<pre><code>/usr/local/server/kafka/bin/kafka-topics.sh --create --topic log --partitions 1 --zookeeper localhost:2181 --replication-factor 1
+</code></pre>
+
+<p>列出当前话题：</p>
+
+<pre><code>/usr/local/server/kafka/bin/kafka-topics.sh --list --zookeeper localhost:2181
+</code></pre>
+
+<p>向话题log发送内容，提示符后面随便输入字符：</p>
+
+<pre><code>/usr/local/server/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic log
+</code></pre>
+
+<p>接收话题log的消息：</p>
+
+<pre><code>/usr/local/server/kafka/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic log --from-beginning
+</code></pre>
+
+<p>如果有专门的日志汇总服务器，大概是flume-&gt;avro-&gt;kafka情景：</p>
+
+<pre><code>collecter：
+/usr/local/server/flume/bin/flume-ng agent -n collecter --conf /usr/local/server/flume/conf/ -f /usr/local/server/flume/conf/collecter.conf -Dflume.root.logger=DEBUG,console
+
+agent：
+/usr/local/server/flume/bin/flume-ng agent -n agent --conf /usr/local/server/flume/conf/ -f /usr/local/server/flume/conf/agent.conf -Dflume.root.logger=DEBUG,console
+</code></pre>
+
+<h1 id="toc_12"></h1>
+
+<h2 id="toc_13">Storm</h2>
+
+<p>官网：</p>
+
+<p><a href="http://storm.apache.org/">http://storm.apache.org/</a></p>
+
+<p>下载：<br/>
+<a href="http://www.apache.org/dyn/closer.cgi/storm/apache-storm-0.9.4/apache-storm-0.9.4.tar.gz">http://www.apache.org/dyn/closer.cgi/storm/apache-storm-0.9.4/apache-storm-0.9.4.tar.gz</a><br/>
+解压到/usr/local/server/storm</p>
+
+<p>文档：<br/>
+<a href="http://storm.apache.org/documentation/Home.html">http://storm.apache.org/documentation/Home.html</a></p>
+
+<h3 id="toc_14">安装</h3>
+
+<p>Storm 提供了本机部署的方法，配置文件几乎不需要做任何更改</p>
+
+<p>Storm 默认配置文件会使用默认的 Zookeeper 端口</p>
+
+<p>因为我们在启动 Kafka 的时候启动了一个默认的，所以直接就可以运行</p>
+
+<p>依次启动：</p>
+
+<pre><code>storm nimbus
+storm supervisor
+storm ui
+</code></pre>
+
+<ul>
+<li>nimbus 主节点。用于分配代码、布置任务及故障检测。</li>
+<li>supervisor 工作节点。用于监听工作，开始并终止工作进程。Nimbus和Supervisor都能快速失败，而且是无状态的，这样一来它们就变得十分健壮，两者的协调工作是由ZooKeeper来完成的，节点一般是/storm</li>
+<li>ui 可视化管理界面，可用于查看管理topology，以及运行日志</li>
+</ul>
+
+<p>storm ui 默认运行在 8080 端口</p>
+
+<p><a href="http://localhost:8080/">http://localhost:8080/</a></p>
+
+<h3 id="toc_15">示例</h3>
+
+<p>storm 程序包中自带了example目录，现在我们来尝试运行一下。示例文档：<br/>
+<a href="https://github.com/apache/storm/tree/master/examples/storm-starter">https://github.com/apache/storm/tree/master/examples/storm-starter</a></p>
+
+<p>进入到storm的example目录，使用mvn构建storm本地库，这些jar包会自动下载生成到external/目录下</p>
+
+<pre><code>cd /usr/local/server/storm/examples/storm-starter
+mvn clean install -DskipTests=true
+</code></pre>
+
+<p>没有用到多语言特性的example，可以直接在Storm的本地编译并运行</p>
+
+<pre><code>mvn compile exec:java -Dstorm.topology=storm.starter.ExclamationTopology
+</code></pre>
+
+<p>提交到Storm集群，我们需要生成jar，并提交到Storm集群</p>
+
+<pre><code>// 生成jar包
+mvn clean package
+// 本地运行
+storm jar storm-starter-*.jar storm.starter.RollingTopWords
+// 提交到远程Storm运行
+storm jar storm-starter-*.jar storm.starter.RollingTopWords topology-name
+</code></pre>
+
+<p>一般本地运行和远程运行是通过传递的参数来控制的</p>
+
+<h3 id="toc_16">运行 logserver Topology</h3>
+
+<p>logserver 当前源码地址为：<a href="https://github.com/langwan/storm_monitor/tree/master/log">https://github.com/langwan/storm_monitor/tree/master/log</a></p>
+
+<p>我们需要熟悉一下 Eclipse，了解如何调试编写Java代码，和构建 Maven 项目</p>
+
+<p>进入到log源码目录，重复上面的几个步骤：</p>
+
+<pre><code>mvn compile exec:java -Dstorm.topology=com.cmstop.logserver.App
+// 打包
+mvn package
+// 本地运行
+storm jar logserver-*.jar com.cmstop.logserver.App
+// 远程运行
+storm jar logserver-*.jar com.cmstop.logserver.App logserver [config DIR]
+</code></pre>
+
+<p>logserver的远程运行需要额外两个参数，分别是topology name与config path</p>
+
+<p>提交到Storm运行后，我们可以通过Storm UI 查看运行状态</p>
+
+<h2 id="toc_17">基于docker 环境下部署 Storm</h2>
+
+<p>docker hub 与Storm相关的镜像主要有以下几个，这些镜像可以通过docker-compose来进行运行管理：</p>
+
+<pre><code>wurstmeister/base 
+wurstmeister/zookeeper
+wurstmeister/storm-ui 
+wurstmeister/storm  
+wurstmeister/storm-nimbus
+wurstmeister/storm-supervisor
+wurstmeister/kafka
+</code></pre>
+
+<p>wurstmeister 的 storm docker 使用supervisor来进行进程管理，别与storm-supervisor搞混了，他在wurstmeister/base中安装，然后配置路径是/etc/supervisor/，详情参看这里：</p>
+
+<p><a href="http://supervisord.org/index.html">http://supervisord.org/index.html</a></p>
+
+<p>上面说了storm的东西是无状态的，分布式消息依靠zookeeper，所以supervisor的功能就是监控进程状态，如果退出了，自动重启。</p>
+
+<p>最后看一下docker-compose.yml，这个是在一个机器上运行所有docker并且实现在容器内部通信情况：</p>
+
+<pre><code>vi docker-compose.yml
+
+zookeeper:
+  image: wurstmeister/zookeeper
+  ports:
+    - &quot;2181:2181&quot;
+    - &quot;22&quot;
+kafka:
+  image: wurstmeister/kafka
+  ports:
+    - &quot;9092:9092&quot;
+  links:
+    - zookeeper:zk
+  environment:
+    KAFKA_ADVERTISED_HOST_NAME: 10.171.200.57
+    KAFKA_CREATE_TOPICS: &quot;log:1:1&quot;
+  volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+nimbus:
+  image: wurstmeister/storm-nimbus
+  ports:
+    - &quot;49773:3773&quot;
+    - &quot;49772:3772&quot;
+    - &quot;6627:6627&quot;
+    - &quot;22&quot;
+  links:
+    - zookeeper:zk
+  volumes:
+    - /data/logserver:/data/logserver
+supervisor:
+  image: wurstmeister/storm-supervisor
+  ports:
+    - &quot;8000&quot;
+    - &quot;22&quot;
+  links:
+    - nimbus:nimbus
+    - zookeeper:zk
+  volumes:
+    - /data/logserver:/data/logserver
+ui:
+  image: wurstmeister/storm-ui
+  ports:
+    - &quot;8080:8080&quot;
+    - &quot;22&quot;
+  links:
+    - nimbus:nimbus
+    - zookeeper:zk
+  volumes:
+    - /data/logserver:/data/logserver
+</code></pre>
+
+<p>使用以下命令进行管理：</p>
+
+<pre><code>docker-compose up     创建并启动 -d 后台运行
+docker-compose start  启动
+docker-compose stop   停止
+docker-compose ps
+docker-compose logs
+</code></pre>
+
+<h3 id="toc_18">检验docker-compose是否成功</h3>
+
+<p>Kafka 会自动创建一个topic＝log的话题，通过下面查看</p>
+
+<pre><code>$KAFKA_HOME/bin/kafka-topics.sh  --list --zookeeper localhost:2181  
+</code></pre>
+
+<p>然后运行访问宿主IP:8080查看 storm ui 界面。</p>
+
+<h2 id="toc_19">线上环境部署</h2>
+
+<p>工作目录：/data/logserver/</p>
+
+<pre><code>
+├── logs
+│   └── store     # 日志收集目录
+└── storm-docker  # docker-compose运行目录
+    ├── config    # 配置文件，如果提交到Storm集群，需要将该路径作为参数
+    │   ├── kafka.properties
+    │   ├── main.properties
+    │   ├── mysql.properties
+    │   └── store.properties
+    ├── docker-compose.yml
+    └── logserver-0.1.0-jar-with-dependencies.jar
+</code></pre>
+
+<p>MySQL运行在宿主机器，数据库为cloud，相关表为host, monitor_log。</p>
+
+<p>日志收集目录为：/data/logserver/logs/store</p>
+
+<h3 id="toc_20">运行docker-compose，启动Storm以及相关组件</h3>
+
+<pre><code>cd /data/logserver/storm-docker
+
+docker-compose up -d
+</code></pre>
+
+<h3 id="toc_21">客户端机器运行flume：</h3>
+
+<pre><code>/usr/local/server/flume/bin/flume-ng agent -n agent --conf /usr/local/server/flume/conf/ -f /usr/local/server/flume/conf/cmstop-log.conf  -Dflume.root.logger=DEBUG,console
+</code></pre>
+
+<p>cmstop-log.conf 大概是这样</p>
+
+<pre><code>agent.sources = nginx mysql php redis mysqlslow phpslow
+agent.channels = memory
+agent.sinks = kafka
+
+agent.channels.memory.type = memory
+agent.channels.memory.capacity = 1000
+agent.channels.memory.transactionCapacity = 1000
+
+agent.sinks.kafka.type = com.cmstop.flume.sink.kafka.KafkaSink
+agent.sinks.kafka.channel = memory
+agent.sinks.kafka.topic = log
+agent.sinks.kafka.brokerList = 10.171.200.57:9092
+agent.sinks.kafka.requiredAcks = 1
+agent.sinks.kafka.batchSize = 20
+
+agent.sources.nginx.command = tail -F /data/weblogs/tengine/nginx_error.log
+agent.sources.mysql.command = tail -F /data/mysql/logs/mysql_error.log
+agent.sources.php.command = tail -F /data/weblogs/php/error.log
+agent.sources.redis.command = tail -F /data/weblogs/redis/redis.log
+agent.sources.mysqlslow.command = tail -F /data/logs/mysql/slow.log
+agent.sources.phpslow.command = tail -F /data/weblogs/php/site.log.slow
+
+agent.sources.nginx.type = exec
+agent.sources.nginx.channels = memory
+agent.sources.nginx.interceptors = i1 i2
+agent.sources.nginx.interceptors.i1.type = org.apache.flume.interceptor.HostInterceptor$Builder
+agent.sources.nginx.interceptors.i1.preserveExisting = true
+agent.sources.nginx.interceptors.i1.useIP = false
+agent.sources.nginx.interceptors.i1.hostHeader = hostname
+agent.sources.nginx.interceptors.i2.type = static
+agent.sources.nginx.interceptors.i2.key = type
+agent.sources.nginx.interceptors.i2.value = nginx.error
+
+agent.sources.mysql.type = exec
+agent.sources.mysql.channels = memory
+agent.sources.mysql.interceptors = i1 i2
+agent.sources.mysql.interceptors.i1.type = org.apache.flume.interceptor.HostInterceptor$Builder
+agent.sources.mysql.interceptors.i1.preserveExisting = true
+agent.sources.mysql.interceptors.i1.useIP = false
+agent.sources.mysql.interceptors.i1.hostHeader = hostname
+agent.sources.mysql.interceptors.i2.type = static
+agent.sources.mysql.interceptors.i2.key = type
+agent.sources.mysql.interceptors.i2.value = mysql.error
+
+agent.sources.php.type = exec
+agent.sources.php.channels = memory
+agent.sources.php.interceptors = i1 i2
+agent.sources.php.interceptors.i1.type = org.apache.flume.interceptor.HostInterceptor$Builder
+agent.sources.php.interceptors.i1.preserveExisting = true
+agent.sources.php.interceptors.i1.useIP = false
+agent.sources.php.interceptors.i1.hostHeader = hostname
+agent.sources.php.interceptors.i2.type = static
+agent.sources.php.interceptors.i2.key = type
+agent.sources.php.interceptors.i2.value = php.error
+
+agent.sources.redis.type = exec
+agent.sources.redis.channels = memory
+agent.sources.redis.interceptors = i1 i2
+agent.sources.redis.interceptors.i1.type = org.apache.flume.interceptor.HostInterceptor$Builder
+agent.sources.redis.interceptors.i1.preserveExisting = true
+agent.sources.redis.interceptors.i1.useIP = false
+agent.sources.redis.interceptors.i1.hostHeader = hostname
+agent.sources.redis.interceptors.i2.type = static
+agent.sources.redis.interceptors.i2.key = type
+agent.sources.redis.interceptors.i2.value = redis.error
+
+agent.sources.mysqlslow.type = exec
+agent.sources.mysqlslow.channels = memory
+agent.sources.mysqlslow.interceptors = i1 i2
+agent.sources.mysqlslow.interceptors.i1.type = org.apache.flume.interceptor.HostInterceptor$Builder
+agent.sources.mysqlslow.interceptors.i1.preserveExisting = true
+agent.sources.mysqlslow.interceptors.i1.useIP = false
+agent.sources.mysqlslow.interceptors.i1.hostHeader = hostname
+agent.sources.mysqlslow.interceptors.i2.type = static
+agent.sources.mysqlslow.interceptors.i2.key = type
+agent.sources.mysqlslow.interceptors.i2.value = mysql.slow
+
+agent.sources.phpslow.type = exec
+agent.sources.phpslow.channels = memory
+agent.sources.phpslow.interceptors = i1 i2
+agent.sources.phpslow.interceptors.i1.type = org.apache.flume.interceptor.HostInterceptor$Builder
+agent.sources.phpslow.interceptors.i1.preserveExisting = true
+agent.sources.phpslow.interceptors.i1.useIP = false
+agent.sources.phpslow.interceptors.i1.hostHeader = hostname
+agent.sources.phpslow.interceptors.i2.type = static
+agent.sources.phpslow.interceptors.i2.key = type
+agent.sources.phpslow.interceptors.i2.value = php.slow
+</code></pre>
+
+<p>可通过kafka消费者查看话题：</p>
+
+<pre><code>/data/server/kafka/bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic log --from-beginning
+</code></pre>
+
+<h3 id="toc_22">提交 Topology 到Storm</h3>
+
+<p>提交 Topology，其中192.168.42.62为docker中nimbus的IP地址，可通过UI查看：</p>
+
+<p>本地测试运行与远程提交：</p>
+
+<pre><code>// 本地
+storm jar logserver-0.1.0-jar-with-dependencies.jar com.cmstop.logserver.App -c nimbus.host=192.168.42.62
+// 远程
+storm jar logserver-0.1.0-jar-with-dependencies.jar com.cmstop.logserver.App logserver /data/logserver/storm-docker/config/ -c nimbus.host=192.168.42.62
+</code></pre>
+
+<p>因为我们在宿主机器上运行，所以需要 -c参数来指定提交位置</p>
+
+<h2 id="toc_23">问题总结</h2>
+
+<ol>
+<li><p>客户端 flume 接收到的hostname目前是localhost，但是客户端机器的hostname明明是cmstop-cloud</p></li>
+<li><p>日志里面有一下几个情况，nginx.error,php.error是以行来记录的，而mysql.error的日志可能是一大段，另外php.slow一般会根据进程池来配置多个slow文件，现在只监控了后台的slow</p></li>
+<li><p>docker 会自动分配容器的IP地址，这点不爽。docker-compose 虽然提供了方便，但是由于下载的那个源里面的脚本有点问题，不能重复运行。如果停止了需要执行一下步骤。</p></li>
+</ol>
+
+<pre><code>docker-compose stop   # 假如停止了
+docker-compose start  # 直接启动不行，因为他的脚本写的不严谨
+解决办法是：
+docker-compose stop
+docker-compose rm # 直接删掉
+docker-compose up # 重新运行
+</code></pre>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+          <div class="sidebar-module">
+            <h4>分类</h4>
+            
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="bigdata.html">大数据&nbsp;(21)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        
+	        	<a href="solr.html">Solr&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="server.html">服务器&nbsp;(2)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="linux.html">Linux&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="webserver.html">Webserver&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="db.html">数据库&nbsp;(4)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mysql.html">MySQL&nbsp;(4)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="program.html">编程语言&nbsp;(1)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	   
+            </ol>
+          </div>
+          <div class="sidebar-module">
+            <h4>最近文章</h4>
+	  
+	      
+		        <a href="14661548403888.html" title="基于Cloudera CDH的Hadoop平台搭建">基于Cloudera CDH的Hadoop平台搭建</a><br />
+	     
+	  
+	      
+		        <a href="14661279980383.html" title="Linux服务器部署规范（CentOS 6）">Linux服务器部署规范（CentOS 6）</a><br />
+	     
+	  
+	      
+		        <a href="14643975993511.html" title="TokuDB 引擎 （Percona Server）">TokuDB 引擎 （Percona Server）</a><br />
+	     
+	  
+	      
+		        <a href="14603696258384.html" title="Cloudera 集群修改IP">Cloudera 集群修改IP</a><br />
+	     
+	  
+	      
+		        <a href="14589730453584.html" title="MySQL 开发人员规范">MySQL 开发人员规范</a><br />
+	     
+	  
+	      
+		        <a href="14580995696531.html" title="Solr 5.5.1 单机版安装部署">Solr 5.5.1 单机版安装部署</a><br />
+	     
+	  
+	      
+		        <a href="14574190257937.html" title="Nginx 常用编译参数说明及扩展模块介绍">Nginx 常用编译参数说明及扩展模块介绍</a><br />
+	     
+	  
+	      
+		        <a href="14568951982132.html" title="Solr 优化">Solr 优化</a><br />
+	     
+	  
+	      
+		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
+	     
+	  
+	      
+		        <a href="14557148853181.html" title="Solr 常见错误记录">Solr 常见错误记录</a><br />
+	     
+	  
+	      
+		        <a href="14556094264580.html" title="Solr 常用指令">Solr 常用指令</a><br />
+	     
+	  
+	      
+		        <a href="14543953736059.html" title="Solr 4.10 手册">Solr 4.10 手册</a><br />
+	     
+	  
+	      
+		        <a href="14543825447680.html" title="HBase Indexer 整合 Solr">HBase Indexer 整合 Solr</a><br />
+	     
+	  
+	      
+		        <a href="14541202136915.html" title="CentOS/Mac 下安装 JDK 1.7">CentOS/Mac 下安装 JDK 1.7</a><br />
+	     
+	  
+	      
+		        <a href="14541188482835.html" title="MySQL存储过程模拟数据插入">MySQL存储过程模拟数据插入</a><br />
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+          </div>
+          <div class="sidebar-module">
+            <h4>好友链接</h4>
+            <a href="http://www.phpboy.net" title="徐典阳">PHPBoy-专注WEB架构N年</a><br />
+            <a href="http://onbing.com" title="宴兵兵">Binglog-涓涓细流汇成大海</a><br />
+          </div>
+          <div class="sidebar-module">
+            <h4>关于</h4>
+            <p><a target="_blank" href="about.html">关于蛮-com</a></p>
+          </div>
+        </div><!-- /.blog-sidebar -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->  <footer class="blog-footer">
+      <p>CopyRight &copy; 2010-2016 本站内容采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
+      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://www.mweb.im">MWeb</a> 强力驱动</p>
+    </footer>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="asset/js/ie10-viewport-bug-workaround.js"></script>
+    
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?11d84d21f7b7ebd8c51896d5f3678f45";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+  </body>
+</html>

@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>MySQL 开发人员规范 - 蛮-com | 醉里挑灯看剑</title>
+    <meta name="keywords" content="大数据,数据仓库,数据挖掘,Linux,运维,PHP,后端,架构师,smallmenu,niuchaoqun,蛮-com">
+    <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <link href="atom.xml" rel="alternate" title="蛮-com | 醉里挑灯看剑" type="application/atom+xml">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link href="asset/css/bootstrap.min.css" rel="stylesheet">
+    <link href="asset/css/style.css" rel="stylesheet">
+    <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <script src="asset/js/jquery.min.js"></script>
+    <script src="asset/js/bootstrap.min.js"></script>
+    <script src="asset/js/docs.js"></script>
+    <!--<script src="asset/highlightjs/highlight.pack.js"></script>
+	  <script>hljs.initHighlightingOnLoad();</script>-->
+    <!--[if lt IE 9]>
+      <script src="asset/js/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <h1><a href="http://www.niuchaoqun.com" title="蛮-com | 醉里挑灯看剑">蛮-com | 醉里挑灯看剑</a></h1>
+          <a class="blog-nav-item" id="menu-index" href="index.html">首页</a>
+          <a class="blog-nav-item" id="menu-recommend" href="recommend.html">推荐</a>
+          <a class="blog-nav-item" id="menu-blog" href="archives.html">归档</a>
+          <a class="blog-nav-item" id="menu-about" href="about.html">关于</a>
+        </nav>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      $(function(){
+      	$('#menu-index').addClass('active');
+      });
+      </script>
+   <div class="container" id="content-wrap">
+      <div class="row">
+        <div class="col-sm-9 blog-main">
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14589730453584.html">MySQL 开发人员规范</a></h2>
+			            <p class="blog-post-meta">2016/3/26
+				            &nbsp;分类于 
+							
+							    <a class='category' href='mysql.html'>MySQL</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>对于Web线上业务推荐使用 InnoDB，这也是现在 MySQL 默认的数据引擎。</p>
+
+<p>虽然 MyISAM 非常适用于读远大于写的场景，但是请不要在同一个库中混用这两种引擎，因为目前大数据量情况下的备份和容灾还没有好的方案。</p>
+
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">字符集</h2>
+
+<p>字符集使用 utf8，如果表需要存储文本字段（如评论，内容等），现在最好使用：utf8mb4</p>
+
+<p>utf8mb4 比 utf8 多占了一个字节，但是除非你现在能确定你的业务场景绝对不会延伸到移动端。（如手机的emoji表情）</p>
+
+<p>我们更应当在编译或配置文件my.cnf中强制指定服务器级别的字符集，这样应用层不再需要 SET NAMES：</p>
+
+<pre><code>[client]
+default-character-set = utf8
+[mysqld]
+character-set-server = utf8
+</code></pre>
+
+<h2 id="toc_1">数据类型</h2>
+
+<h3 id="toc_2">数值型</h3>
+
+<p>尽量选择小的数据类型，小的数据长度，但要留有一定的冗余。</p>
+
+<p>TINYINT (1字节) </p>
+
+<p>SMALLINT(2字节)</p>
+
+<p>MEDIUMINT(3字节)</p>
+
+<p>INT (4字节)</p>
+
+<p>BIGINT(8字节)</p>
+
+<h3 id="toc_3">字符串</h3>
+
+<p>varchar 最大的长度是255，声明更大的长度会转换为Text，在InnoDB引擎上，应当使用varchar代替char</p>
+
+<h3 id="toc_4">日期时间</h3>
+
+<p>应当优先使用 DATE（3字节）、DATETIME（8字节），他们比字符串占用空间更小</p>
+
+<p>TIMESTAMP(3字节) 特别适合存储记录类的时间（1970-01-01 ~ 2038-01-19），如创建时间、更新时间，并且可以设置默认值与更新默认值。并且这个类型存储为UTC时间，存入和读取的时候会自动进行时区转换</p>
+
+<p>DATETIME 适合存储任意范围的时间（1000-01-01 ~ 9999-12-31），可以使用 NOW() 自动插入当前时间，比较适合存储超出范围、以及相对不变化的时间</p>
+
+<p>还可以使用 INT(10) 来直接存储时间戳，时间范围限制同 TIMESTAMP，主要是查询速度快，适合大量范围查询（网上这么说），缺点是不直观，需要使用 from_unixtime() 转换才能看到结果。</p>
+
+<h2 id="toc_5">表名与字段名</h2>
+
+<p>表名、字段名尽量能够表达意思，字段最好增加注释。</p>
+
+<p>表名：一律小写，多个单词用下划线分隔，单词用单数不用复数，如：member, member_detail</p>
+
+<p>字段名：一律小写，多个单词用下划线分隔，字段名不加表名，如：id, name, start_time</p>
+
+<p>关联表：关联表的主键id，可以不用下划线，如 memberid （有争议，我觉得member_id有个下划线好难看）</p>
+
+<p>常用字段命名（供参考，约定后保持统一）：</p>
+
+<pre><code>添加时间：created timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+添加人：createby
+更新时间：updated timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+更新人：updateby
+删除时间：deleted timestamp
+删除人：deleteby
+删除标志：delete tinyint
+状态标志：status  如果状态值较多、较复杂，建议使用 enum 类型
+</code></pre>
+
+<h2 id="toc_6">引擎对比</h2>
+
+<p>主要是 MyISAM 与 InnoDB 的对比</p>
+
+<h3 id="toc_7">缓存</h3>
+
+<p>MyISAM 仅仅缓存索引，不会缓存实际数据信息，他会将这一工作交给操作系统级别的文件系统缓存。所以 MyISAM 缓存优化工作集中在索引缓存优化上，而禁用缓存需要两步：</p>
+
+<pre><code>echo 3 &gt; /proc/sys/vm/drop_caches
+SELECT SQL_NO_CACHE * FROM ...
+</code></pre>
+
+<p>InnoDB 有自己的缓存，不仅仅缓存索引，还缓存表数据，只要你内存足够大。比如在做数据迁移的时候，有时候可以采用倒读的方法。</p>
+
+<h3 id="toc_8">内存占用</h3>
+
+<p>缓存机制基本上决定了内存占用情况。</p>
+
+<p>InnoDB 内存占用较大，并且由 <code>innodb_buffer_pool_size</code> 参数控制，对于独立的 InnoDB 数据库服务器一般要配置为物理内存大小的70%-80%，原因就是它的缓存机制。</p>
+
+<h3 id="toc_9">磁盘占用</h3>
+
+<p>MyISAM 存储索引与数据是独立存储的。</p>
+
+<p>InnoDB索引与数据整体存储在.ibd文件，一定要开启 <code>innodb_file_per_table</code> 选项，否则 InnoDB 会将所有表存在共享空间中。</p>
+
+<p>整体上 MyISAM 磁盘占用约比 InnoDB 小20%左右。</p>
+
+<h3 id="toc_10">安全性</h3>
+
+<p>InnoDB 安全系数很高，<code>innodb_flush_log_at_trx_commit</code> 参数会控制刷写机制，表基本上不会坏，目前我只遇到过因为文件系统崩溃导致数据无法恢复的情况。</p>
+
+<p>MyISAM 在频繁写和更新的时候，经常容易坏，虽然很容易修复（有时也无法修复），但在坏表期间会影响线上业务。</p>
+
+<h3 id="toc_11">锁定</h3>
+
+<p>MyISAM 是表级锁定，写入的时候阻塞读取，还会在读取的时候阻塞写入，尤其是你使用 mysqldump 的时候</p>
+
+<p>InnoDB 是行级锁定，但也不绝对，比如SQL无法确定表的行范围时也会进行表锁</p>
+
+<h3 id="toc_12">事务支持、外键</h3>
+
+<p>InnoDB 支持事务，对稍微大一点规模的Web业务，基本都会需要这个功能，会员注册你要写 member, member_detail 两张表，用户下订单，每个订单可能是一条记录，这样的插入、更新操作都要保证原子性。</p>
+
+<p>注意：需要非常谨慎的使用外键、触发器</p>
+
+<h3 id="toc_13">并发</h3>
+
+<p>MyISAM 的表级锁定决定了在写场景多的情况下多用户并发很差，而 InnoDB 的以下三个参数还可以更好控制并发：</p>
+
+<pre><code>innodb_thread_concurrency  # 独立数据库一般为CPU核数
+innodb_read_io_threads
+innodb_write_io_threads
+</code></pre>
+
+<h3 id="toc_14">写入与更新</h3>
+
+<p>并发性能好，并不能说明写入效率高，在千万级别的单条插入我没感觉到两者差异，但MyISAM的批量插入性能非常高。</p>
+
+<p>另外 MyISAM 还可以调整 <code>bulk_insert_buffer_size</code> 参数来提高批量插入的速度。</p>
+
+<p>LOAD DATA 也非常快，底层应该也是采用的批量插入。</p>
+
+<p>很明显索引过多会影响插入性能。</p>
+
+<h3 id="toc_15">其他</h3>
+
+<p>MyISAM 不带 Where 条件的 COUNT(*) 非常快，而 InnoDB 需要全表扫描。</p>
+
+<h2 id="toc_16">SQL MODE</h2>
+
+<pre><code>
+5.6.6 开始 MySQL 的默认sql_mode为 `NO_ENGINE_SUBSTITUTION`，之前的版本为空。
+
+5.7.5 开始增加了ONLY_FULL_GROUP_BY, STRICT_TRANS_TABLES
+
+5.7.7 开始增加了NO_AUTO_CREATE_USER
+
+5.7.8 开始增加了ERROR_FOR_DIVISION_BY_ZERO, NO_ZERO_DATE, NO_ZERO_IN_DATE
+
+所以，5.7 最新默认sql_mode为 ONLY_FULL_GROUP_BY, STRICT_TRANS_TABLES, NO_ZERO_IN_DATE, NO_ZERO_DATE, ERROR_FOR_DIVISION_BY_ZERO, NO_AUTO_CREATE_USER, NO_ENGINE_SUBSTITUTION
+
+</code></pre>
+
+<h3 id="toc_17">参数说明</h3>
+
+<pre><code>NO_ENGINE_SUBSTITUTION  禁用时，当表引擎不存在的时候会自动转换，否则会报错
+ERROR_FOR_DIVISION_BY_ZERO 数据库对于除以 0 情况的处理，比如  MOD(N, 0)
+NO_AUTO_CREATE_USER  指定 GRANT 语句必须完善认证信息，比如设置密码
+NO_ZERO_DATE  指定是否 0000-00-00 是合法的日期格式
+NO_ZERO_IN_DATE  更严格的日期格式限制，比如 2010-00-01 或 2010-01-00
+ONLY_FULL_GROUP_BY 官方解释没看懂
+</code></pre>
+
+<p>（以上为个人理解和整理，如有错误请指教）</p>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+          <div class="sidebar-module">
+            <h4>分类</h4>
+            
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="bigdata.html">大数据&nbsp;(21)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        
+	        	<a href="solr.html">Solr&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="server.html">服务器&nbsp;(2)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="linux.html">Linux&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="webserver.html">Webserver&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="db.html">数据库&nbsp;(4)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mysql.html">MySQL&nbsp;(4)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="program.html">编程语言&nbsp;(1)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	   
+            </ol>
+          </div>
+          <div class="sidebar-module">
+            <h4>最近文章</h4>
+	  
+	      
+		        <a href="14661548403888.html" title="基于Cloudera CDH的Hadoop平台搭建">基于Cloudera CDH的Hadoop平台搭建</a><br />
+	     
+	  
+	      
+		        <a href="14661279980383.html" title="Linux服务器部署规范（CentOS 6）">Linux服务器部署规范（CentOS 6）</a><br />
+	     
+	  
+	      
+		        <a href="14643975993511.html" title="TokuDB 引擎 （Percona Server）">TokuDB 引擎 （Percona Server）</a><br />
+	     
+	  
+	      
+		        <a href="14603696258384.html" title="Cloudera 集群修改IP">Cloudera 集群修改IP</a><br />
+	     
+	  
+	      
+		        <a href="14589730453584.html" title="MySQL 开发人员规范">MySQL 开发人员规范</a><br />
+	     
+	  
+	      
+		        <a href="14580995696531.html" title="Solr 5.5.1 单机版安装部署">Solr 5.5.1 单机版安装部署</a><br />
+	     
+	  
+	      
+		        <a href="14574190257937.html" title="Nginx 常用编译参数说明及扩展模块介绍">Nginx 常用编译参数说明及扩展模块介绍</a><br />
+	     
+	  
+	      
+		        <a href="14568951982132.html" title="Solr 优化">Solr 优化</a><br />
+	     
+	  
+	      
+		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
+	     
+	  
+	      
+		        <a href="14557148853181.html" title="Solr 常见错误记录">Solr 常见错误记录</a><br />
+	     
+	  
+	      
+		        <a href="14556094264580.html" title="Solr 常用指令">Solr 常用指令</a><br />
+	     
+	  
+	      
+		        <a href="14543953736059.html" title="Solr 4.10 手册">Solr 4.10 手册</a><br />
+	     
+	  
+	      
+		        <a href="14543825447680.html" title="HBase Indexer 整合 Solr">HBase Indexer 整合 Solr</a><br />
+	     
+	  
+	      
+		        <a href="14541202136915.html" title="CentOS/Mac 下安装 JDK 1.7">CentOS/Mac 下安装 JDK 1.7</a><br />
+	     
+	  
+	      
+		        <a href="14541188482835.html" title="MySQL存储过程模拟数据插入">MySQL存储过程模拟数据插入</a><br />
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+          </div>
+          <div class="sidebar-module">
+            <h4>好友链接</h4>
+            <a href="http://www.phpboy.net" title="徐典阳">PHPBoy-专注WEB架构N年</a><br />
+            <a href="http://onbing.com" title="宴兵兵">Binglog-涓涓细流汇成大海</a><br />
+          </div>
+          <div class="sidebar-module">
+            <h4>关于</h4>
+            <p><a target="_blank" href="about.html">关于蛮-com</a></p>
+          </div>
+        </div><!-- /.blog-sidebar -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->  <footer class="blog-footer">
+      <p>CopyRight &copy; 2010-2016 本站内容采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
+      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://www.mweb.im">MWeb</a> 强力驱动</p>
+    </footer>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="asset/js/ie10-viewport-bug-workaround.js"></script>
+    
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?11d84d21f7b7ebd8c51896d5f3678f45";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+  </body>
+</html>

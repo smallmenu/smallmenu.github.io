@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>Nginx 常用编译参数说明及扩展模块介绍 - 蛮-com | 醉里挑灯看剑</title>
+    <meta name="keywords" content="大数据,数据仓库,数据挖掘,Linux,运维,PHP,后端,架构师,smallmenu,niuchaoqun,蛮-com">
+    <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <link href="atom.xml" rel="alternate" title="蛮-com | 醉里挑灯看剑" type="application/atom+xml">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link href="asset/css/bootstrap.min.css" rel="stylesheet">
+    <link href="asset/css/style.css" rel="stylesheet">
+    <link href="asset/highlightjs/styles/github.css" media="screen, projection" rel="stylesheet" type="text/css">
+    <script src="asset/js/jquery.min.js"></script>
+    <script src="asset/js/bootstrap.min.js"></script>
+    <script src="asset/js/docs.js"></script>
+    <!--<script src="asset/highlightjs/highlight.pack.js"></script>
+	  <script>hljs.initHighlightingOnLoad();</script>-->
+    <!--[if lt IE 9]>
+      <script src="asset/js/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <h1><a href="http://www.niuchaoqun.com" title="蛮-com | 醉里挑灯看剑">蛮-com | 醉里挑灯看剑</a></h1>
+          <a class="blog-nav-item" id="menu-index" href="index.html">首页</a>
+          <a class="blog-nav-item" id="menu-recommend" href="recommend.html">推荐</a>
+          <a class="blog-nav-item" id="menu-blog" href="archives.html">归档</a>
+          <a class="blog-nav-item" id="menu-about" href="about.html">关于</a>
+        </nav>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      $(function(){
+      	$('#menu-index').addClass('active');
+      });
+      </script>
+   <div class="container" id="content-wrap">
+      <div class="row">
+        <div class="col-sm-9 blog-main">
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14574190257937.html">Nginx 常用编译参数说明及扩展模块介绍</a></h2>
+			            <p class="blog-post-meta">2016/3/8
+				            &nbsp;分类于 
+							
+							    <a class='category' href='webserver.html'>Webserver</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <span id="more"></span><!-- more -->
+
+<h2 id="toc_0">模块介绍</h2>
+
+<h3 id="toc_1">--with-debug</h3>
+
+<p>默认未启用</p>
+
+<p>使用场景：开启调试模式，可用于配置文件修改立即生效，不需要重启Nginx</p>
+
+<h3 id="toc_2">--with-http_ssl_module</h3>
+
+<p>默认未启用</p>
+
+<p>使用场景：HTTP SSL 使用场景</p>
+
+<h3 id="toc_3">--with-http_realip_module</h3>
+
+<p>默认未启用</p>
+
+<p>使用场景：当本机的nginx处于一个反向代理的后端时获取到真实的用户IP</p>
+
+<pre><code>set_real_ip_from  10.10.10.10;
+real_ip_header    X-Forwarded-For;
+</code></pre>
+
+<p>set_real_ip_from 指令是告诉nginx，10.10.10.10是我们的反向代理服务器（信任服务器，记住这个名词，下面会提到），不是真实的用户IP，real_ip_header 则是告诉nginx真正的用户IP是存在X-Forwarded-For请求头中</p>
+
+<p>real_ip_recursive 用来控制多组反向代理服务器的情况</p>
+
+<h3 id="toc_4">--with-http_addition_module</h3>
+
+<p>默认未启用</p>
+
+<p>使用场景：用于向HTTP正文响应的头部尾部增加内容</p>
+
+<pre><code>location / {
+    add_before_body /before_action;
+    add_after_body  /after_action;
+}
+</code></pre>
+
+<h3 id="toc_5">--with-http_sub_module</h3>
+
+<p>默认未启用</p>
+
+<p>使用场景：用于替换HTTP正文响应的内容</p>
+
+<pre><code>location / {
+    sub_filter &#39;&lt;a href=&quot;http://127.0.0.1:8080/&#39;  &#39;&lt;a href=&quot;https://$host/&#39;;
+    sub_filter &#39;&lt;img src=&quot;http://127.0.0.1:8080/&#39; &#39;&lt;img src=&quot;https://$host/&#39;;
+    sub_filter_once on;
+}
+</code></pre>
+
+<h3 id="toc_6">--with-http_secure_link_module</h3>
+
+<p>默认未启用</p>
+
+<p>使用场景：安全链接模块，比如用于多长时间失效的下载连接</p>
+
+<h3 id="toc_7">--with-http_stub_status_module</h3>
+
+<p>默认未启用</p>
+
+<p>使用场景：输出Nginx状态信息，用于监控场景</p>
+
+<pre><code>location /basic_status {
+    stub_status;
+}
+</code></pre>
+
+<h3 id="toc_8">--with-http_gunzip_module</h3>
+
+<p>默认未启用</p>
+
+<p>使用场景：为不支持gzip解压缩的客户端，提供gunzip功能，比如数据为了节省磁盘空间，已经gzip压缩，但需要提供给手机客户端。</p>
+
+<pre><code>location /storage/ {
+    gunzip on;
+}
+</code></pre>
+
+<h3 id="toc_9">--with-http_image_filter_module</h3>
+
+<p>默认未启用</p>
+
+<p>使用场景：提供了一些图片的过滤算法，依赖GD库</p>
+
+<pre><code>location /img/ {
+    proxy_pass   http://backend;
+    image_filter resize 150 100;
+    image_filter rotate 90;
+    error_page   415 = /empty;
+}
+</code></pre>
+
+<h3 id="toc_10">--with-http_flv_module --with-http_mp4_module</h3>
+
+<p>默认未开启</p>
+
+<p>使用场景：视频相关，mp4，flv</p>
+
+<h2 id="toc_11">第三方模块</h2>
+
+<h3 id="toc_12">ngx_devel_kit</h3>
+
+<p><a href="https://github.com/simpl/ngx_devel_kit/">https://github.com/simpl/ngx_devel_kit/</a></p>
+
+<p>ngx_devel_kit 模块是一个拓展 Nginx 服务器核心功能的模块，第三方模块开发可以基于它来快速实现。它提供函数和宏处理一些基本任务，减轻第三方模块开发的代码量。<br/>
+开发者如果要依赖这个模块做开发，需要将这个模块一并参与编译，同时需要在自己的模块配置中声明所需要使用的特性。</p>
+
+<h3 id="toc_13">lua-nginx-module</h3>
+
+<p><a href="https://github.com/openresty/lua-nginx-module/">https://github.com/openresty/lua-nginx-module/</a></p>
+
+<p>nginx_lua_module 是 Nginx 第三方模块,它能将 Lua 语言嵌入到nginx配置中，从而使用 Lua 就极大增强了 Nginx 的处理能力。</p>
+
+<p>建议使用LuaJIT作为Lua解析器</p>
+
+<h3 id="toc_14">echo-nginx-module</h3>
+
+<p><a href="https://github.com/openresty/echo-nginx-module">https://github.com/openresty/echo-nginx-module</a></p>
+
+<p>echo-nginx-module 允许你使用在Nginx配置文件中使用&quot;echo&quot;, &quot;sleep&quot;, &quot;time&quot;, &quot;exec&quot;等指令。</p>
+
+<h2 id="toc_15">Nginx 1.7.7 with Lua 编译参数参考</h2>
+
+<pre><code>wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz 
+tar xvzf LuaJIT-2.0.3.tar.gz
+make 
+make install 
+
+export LUAJIT_LIB=/usr/local/lib 
+export LUAJIT_INC=/usr/local/include/luajit-2.0/ 
+</code></pre>
+
+<p>编译参数：</p>
+
+<pre><code>./configure \
+--user=nginx \
+--group=nginx \
+--prefix=/usr/local/tengine \
+--conf-path=/usr/local/tengine/conf/nginx.conf \
+--pid-path=/usr/local/tengine/tengine.pid \
+--with-http_ssl_module \
+--with-http_realip_module \
+--with-http_addition_module \
+--with-http_sub_module \
+--with-http_flv_module \
+--with-http_mp4_module \
+--with-http_secure_link_module \
+--with-http_stub_status_module \
+--with-http_gunzip_module \
+--with-http_gzip_static_module \
+--with-http_image_filter_module \
+--without-mail_pop3_module \
+--without-mail_imap_module \
+--without-mail_smtp_module \
+--add-module=/usr/local/src/lua-nginx-module-0.9.13 \
+--add-module=/usr/local/src/ngx_devel_kit-0.2.19 \
+--add-module=/usr/local/src/echo-nginx-module-0.53 
+</code></pre>
+
+<pre><code># 如果出现启动nginx，出现动态链接库缺失，请： 
+vi /etc/ld.so.conf.d/user_lib.conf 
+增加 /usr/local/lib 
+
+ldconfig 后生效 
+</code></pre>
+
+<h2 id="toc_16">修改 Nginx Server 名称</h2>
+
+<pre><code>修改源码 nginx.h
+
+#define NGINX_VAR          &quot;NGINX-XX&quot;
+
+or
+
+#define TENGINE            &quot;Tengine-xx&quot;
+</code></pre>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+          <div class="sidebar-module">
+            <h4>分类</h4>
+            
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="bigdata.html">大数据&nbsp;(21)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        
+	        	<a href="solr.html">Solr&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="server.html">服务器&nbsp;(2)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="linux.html">Linux&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="webserver.html">Webserver&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="db.html">数据库&nbsp;(4)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mysql.html">MySQL&nbsp;(4)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="program.html">编程语言&nbsp;(1)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	   
+            </ol>
+          </div>
+          <div class="sidebar-module">
+            <h4>最近文章</h4>
+	  
+	      
+		        <a href="14661548403888.html" title="基于Cloudera CDH的Hadoop平台搭建">基于Cloudera CDH的Hadoop平台搭建</a><br />
+	     
+	  
+	      
+		        <a href="14661279980383.html" title="Linux服务器部署规范（CentOS 6）">Linux服务器部署规范（CentOS 6）</a><br />
+	     
+	  
+	      
+		        <a href="14643975993511.html" title="TokuDB 引擎 （Percona Server）">TokuDB 引擎 （Percona Server）</a><br />
+	     
+	  
+	      
+		        <a href="14603696258384.html" title="Cloudera 集群修改IP">Cloudera 集群修改IP</a><br />
+	     
+	  
+	      
+		        <a href="14589730453584.html" title="MySQL 开发人员规范">MySQL 开发人员规范</a><br />
+	     
+	  
+	      
+		        <a href="14580995696531.html" title="Solr 5.5.1 单机版安装部署">Solr 5.5.1 单机版安装部署</a><br />
+	     
+	  
+	      
+		        <a href="14574190257937.html" title="Nginx 常用编译参数说明及扩展模块介绍">Nginx 常用编译参数说明及扩展模块介绍</a><br />
+	     
+	  
+	      
+		        <a href="14568951982132.html" title="Solr 优化">Solr 优化</a><br />
+	     
+	  
+	      
+		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
+	     
+	  
+	      
+		        <a href="14557148853181.html" title="Solr 常见错误记录">Solr 常见错误记录</a><br />
+	     
+	  
+	      
+		        <a href="14556094264580.html" title="Solr 常用指令">Solr 常用指令</a><br />
+	     
+	  
+	      
+		        <a href="14543953736059.html" title="Solr 4.10 手册">Solr 4.10 手册</a><br />
+	     
+	  
+	      
+		        <a href="14543825447680.html" title="HBase Indexer 整合 Solr">HBase Indexer 整合 Solr</a><br />
+	     
+	  
+	      
+		        <a href="14541202136915.html" title="CentOS/Mac 下安装 JDK 1.7">CentOS/Mac 下安装 JDK 1.7</a><br />
+	     
+	  
+	      
+		        <a href="14541188482835.html" title="MySQL存储过程模拟数据插入">MySQL存储过程模拟数据插入</a><br />
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+          </div>
+          <div class="sidebar-module">
+            <h4>好友链接</h4>
+            <a href="http://www.phpboy.net" title="徐典阳">PHPBoy-专注WEB架构N年</a><br />
+            <a href="http://onbing.com" title="宴兵兵">Binglog-涓涓细流汇成大海</a><br />
+          </div>
+          <div class="sidebar-module">
+            <h4>关于</h4>
+            <p><a target="_blank" href="about.html">关于蛮-com</a></p>
+          </div>
+        </div><!-- /.blog-sidebar -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->  <footer class="blog-footer">
+      <p>CopyRight &copy; 2010-2016 本站内容采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
+      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://www.mweb.im">MWeb</a> 强力驱动</p>
+    </footer>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="asset/js/ie10-viewport-bug-workaround.js"></script>
+    
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?11d84d21f7b7ebd8c51896d5f3678f45";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+  </body>
+</html>
