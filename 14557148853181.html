@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Solr 常见错误记录 - 蛮-com | 醉里挑灯看剑</title>
+    <title>Solr 常见问题与错误记录 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -44,7 +44,7 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14557148853181.html">Solr 常见错误记录</a></h2>
+			            <h2 class="blog-post-title"><a href="14557148853181.html">Solr 常见问题与错误记录</a></h2>
 			            <p class="blog-post-meta">2016/2/17
 				            &nbsp;分类于 
 							
@@ -55,9 +55,31 @@
 			            <div class="content-responsive">
 			            <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">org.apache.solr.common.SolrException: Error initializing QueryElevationComponent</h2>
+<h2 id="toc_0">Solr 启动后一直阻塞住，Admin UI 显示loading</h2>
+
+<p>可能是由于Core启用了suggest组件所致，默认的solrconfig配置文件有suggest配置段。</p>
+
+<p>在Solr4时有个Bug，就是不能配置启动是否build suggest。</p>
+
+<p>Solr5以后，增加了以下配置可以控制启动不进行build suggest</p>
+
+<pre><code>&lt;str name=&quot;buildOnStartup&quot;&gt;false&lt;/str&gt;
+&lt;str name=&quot;buildOnCommit&quot;&gt;false&lt;/str&gt;
+</code></pre>
+
+<p>无论如何，启动时都不要重建suggest，否则这就是坑爹。如果没有使用suggest组件，直接把配置段干掉好了。</p>
+
+<h2 id="toc_1">org.apache.solr.common.SolrException: Error initializing QueryElevationComponent</h2>
 
 <p>如果你开启了 QueryElevationComponent 功能，但是schema 的 uniqueKey 类型又不是 string</p>
+
+<h2 id="toc_2">org.apache.lucene.store.LockObtainFailedException: Lock obtain timed out: NativeFSLock</h2>
+
+<p>在使用suggest组件时，build suggest出现了该问题。</p>
+
+<p>主要是在使用 AnalyzingInfixLookupFactory 这个接口时，一定要配置 indexPath 这个配置，并且当你有多个suggest的时候 indexPath 还要是不同的。</p>
+
+<p>猜想，suggest build的时候先build了一个name，在build 第二个name的时候因为目录有个lock，然后就跪了。</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->
@@ -164,7 +186,7 @@
 	     
 	  
 	      
-		        <a href="14557148853181.html" title="Solr 常见错误记录">Solr 常见错误记录</a><br />
+		        <a href="14557148853181.html" title="Solr 常见问题与错误记录">Solr 常见问题与错误记录</a><br />
 	     
 	  
 	      
@@ -210,8 +232,8 @@
         </div><!-- /.blog-sidebar -->
       </div><!-- /.row -->
     </div><!-- /.container -->  <footer class="blog-footer">
-      <p>CopyRight &copy; 2010-2016 本站内容采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
-      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://www.mweb.im">MWeb</a> 强力驱动</p>
+      <p>CopyRight &copy; 2010-2016 本站采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
+      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://zh.mweb.im/">MWeb</a> 强力驱动</p>
     </footer>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="asset/js/ie10-viewport-bug-workaround.js"></script>
