@@ -174,7 +174,15 @@ real_ip_header    X-Forwarded-For;
 
 <p>echo-nginx-module 允许你使用在Nginx配置文件中使用&quot;echo&quot;, &quot;sleep&quot;, &quot;time&quot;, &quot;exec&quot;等指令。</p>
 
-<h2 id="toc_15">Nginx 1.7.7 with Lua 编译参数参考</h2>
+<h3 id="toc_15">ngx_set_misc</h3>
+
+<p><a href="https://github.com/openresty/set-misc-nginx-module">https://github.com/openresty/set-misc-nginx-module</a></p>
+
+<p>ngx_set_misc 允许你直接对uri进行escape,unescape,md5等操作</p>
+
+<h3 id="toc_16">redis</h3>
+
+<h2 id="toc_17">Nginx 1.7.7 with Lua 编译参数参考</h2>
 
 <pre><code>wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz 
 tar xvzf LuaJIT-2.0.3.tar.gz
@@ -188,11 +196,9 @@ export LUAJIT_INC=/usr/local/include/luajit-2.0/
 <p>编译参数：</p>
 
 <pre><code>./configure \
---user=nginx \
---group=nginx \
---prefix=/usr/local/tengine \
---conf-path=/usr/local/tengine/conf/nginx.conf \
---pid-path=/usr/local/tengine/tengine.pid \
+--prefix=/usr/local/server/nginx \
+--conf-path=/usr/local/server/nginx/conf/nginx.conf \
+--pid-path=/usr/local/server/nginx/tengine.pid \
 --with-http_ssl_module \
 --with-http_realip_module \
 --with-http_addition_module \
@@ -204,12 +210,16 @@ export LUAJIT_INC=/usr/local/include/luajit-2.0/
 --with-http_gunzip_module \
 --with-http_gzip_static_module \
 --with-http_image_filter_module \
+--with-mail \
+--with-mail_ssl_module \
 --without-mail_pop3_module \
 --without-mail_imap_module \
 --without-mail_smtp_module \
 --add-module=/usr/local/src/lua-nginx-module-0.9.13 \
 --add-module=/usr/local/src/ngx_devel_kit-0.2.19 \
---add-module=/usr/local/src/echo-nginx-module-0.53 
+--add-module=/usr/local/src/echo-nginx-module-0.53 \
+--add-module=/usr/local/src/redis2-nginx-module-0.13 \
+--add-module=/usr/local/src/set-misc-nginx-module-0.30
 </code></pre>
 
 <pre><code># 如果出现启动nginx，出现动态链接库缺失，请： 
@@ -219,13 +229,38 @@ vi /etc/ld.so.conf.d/user_lib.conf
 ldconfig 后生效 
 </code></pre>
 
-<h2 id="toc_16">Tengine 2.1.2 with Lua 编译参数参考</h2>
+<h2 id="toc_18">Tengine 2.1.2 with Lua 编译参数参考</h2>
 
-<p>--prefix=/usr/local/server/tengine --conf-path=/usr/local/server/tengine/conf/nginx.conf --pid-path=/usr/local/server/tengine/nginx.pid --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gzip_static_module --with-http_random_index_module --with-http_ssl_module --with-http_secure_link_module --with-http_concat_module --add-module=/Users/ncq/Downloads/Sources/lua-nginx-module-0.9.13 --add-module=/Users/ncq/Downloads/Sources/ngx_devel_kit-0.2.19 --add-module=/Users/ncq/Downloads/Sources/echo-nginx-module-0.53 --with-debug --with-cc-opt=-Wno-deprecated-declarations</p>
+<pre><code>./configure \
+--prefix=/usr/local/server/tengine \
+--conf-path=/usr/local/server/tengine/conf/nginx.conf \
+--pid-path=/usr/local/sersver/tengine/nginx.pid \
+--without-http_ssl_module \
+--with-http_realip_module \
+--with-http_addition_module \
+--with-http_sub_module \
+--with-http_flv_module \
+--with-http_mp4_module \
+--with-http_secure_link_module \
+--with-http_stub_status_module \
+--with-http_gunzip_module \
+--with-http_gzip_static_module \
+--with-http_image_filter_module \
+--with-mail \
+--with-mail_ssl_module \
+--with-http_concat_module \
+--with-http_sysguard_module \
+--without-mail_pop3_module \
+--without-mail_imap_module \
+--without-mail_smtp_module \
+--add-module=/usr/local/src/lua-nginx-module-0.9.13 \
+--add-module=/usr/local/src/ngx_devel_kit-0.2.19 \
+--add-module=/usr/local/src/echo-nginx-module-0.53 \
+--add-module=/usr/local/src/redis2-nginx-module-0.13 \
+--add-module=/usr/local/src/set-misc-nginx-module-0.30
+</code></pre>
 
-<p>--prefix=/usr/local/server/tengine --conf-path=/usr/local/server/tengine/conf/nginx.conf --pid-path=/usr/local/server/tengine/nginx.pid --with-http_realip_module --with-http_addition_module --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gzip_static_module --with-http_random_index_module --without-http_ssl_module --with-http_secure_link_module --with-http_concat_module --add-module=/Users/ncq/Downloads/Sources/lua-nginx-module-0.9.13 --add-module=/Users/ncq/Downloads/Sources/ngx_devel_kit-0.2.19 --add-module=/Users/ncq/Downloads/Sources/echo-nginx-module-0.53 --with-debug --with-cc-opt=-Wno-deprecated-declarations</p>
-
-<h2 id="toc_17">修改 Nginx Server 名称</h2>
+<h2 id="toc_19">修改 Nginx Server 名称</h2>
 
 <pre><code>修改源码 nginx.h
 
