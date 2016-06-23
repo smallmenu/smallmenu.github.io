@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>HBase 之Thrift Server - 蛮-com | 醉里挑灯看剑</title>
+    <title>Mac 修改打开文件数限制 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,20 +39,80 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541167482772.html">HBase 之Thrift Server</a></h2>
-			            <p class="blog-post-meta">2016/1/30
+			            <h2 class="blog-post-title"><a href="14564968420622.html">Mac 修改打开文件数限制</a></h2>
+			            <p class="blog-post-meta">2016/6/26
 				            &nbsp;分类于 
 							
-							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							    <a class='category' href='mac.html'>Mac</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>通过 Thrift 操作 HBase</p>
+			            <p>Linux 一般可以通过/etc/security/limits.conf 配置文件修改，但Mac没有这个配置文件。</p>
+
+<p>如何修改 Mac 打开文件数限制？</p>
 
 <span id="more"></span><!-- more -->
 
-<p>thrift -gen php /opt/cloudera/parcels/CDH-5.5.1-1.cdh5.5.1.p0.11/lib/hue/apps/hbase/thrift/Hbase.thrift</p>
+<p>vi /Library/LaunchDaemons/limit.maxfiles.plist</p>
+
+<pre><code>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+  &lt;plist version=&quot;1.0&quot;&gt;
+    &lt;dict&gt;
+      &lt;key&gt;Label&lt;/key&gt;
+        &lt;string&gt;limit.maxfiles&lt;/string&gt;
+      &lt;key&gt;ProgramArguments&lt;/key&gt;
+        &lt;array&gt;
+          &lt;string&gt;launchctl&lt;/string&gt;
+          &lt;string&gt;limit&lt;/string&gt;
+          &lt;string&gt;maxfiles&lt;/string&gt;
+          &lt;string&gt;65536&lt;/string&gt;
+          &lt;string&gt;65536&lt;/string&gt;
+        &lt;/array&gt;
+      &lt;key&gt;RunAtLoad&lt;/key&gt;
+        &lt;true/&gt;
+      &lt;key&gt;ServiceIPC&lt;/key&gt;
+        &lt;false/&gt;
+    &lt;/dict&gt;
+  &lt;/plist&gt;
+</code></pre>
+
+<p>vi /Library/LaunchDaemons/limit.maxproc.plist</p>
+
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!DOCTYPE plist PUBLIC &quot;-//Apple/DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;
+  &lt;plist version=&quot;1.0&quot;&gt;
+    &lt;dict&gt;
+      &lt;key&gt;Label&lt;/key&gt;
+        &lt;string&gt;limit.maxproc&lt;/string&gt;
+      &lt;key&gt;ProgramArguments&lt;/key&gt;
+        &lt;array&gt;
+          &lt;string&gt;launchctl&lt;/string&gt;
+          &lt;string&gt;limit&lt;/string&gt;
+          &lt;string&gt;maxproc&lt;/string&gt;
+          &lt;string&gt;2048&lt;/string&gt;
+          &lt;string&gt;2048&lt;/string&gt;
+        &lt;/array&gt;
+      &lt;key&gt;RunAtLoad&lt;/key&gt;
+        &lt;true /&gt;
+      &lt;key&gt;ServiceIPC&lt;/key&gt;
+        &lt;false /&gt;
+    &lt;/dict&gt;
+  &lt;/plist&gt;
+
+</code></pre>
+
+<p>加载</p>
+
+<pre><code>sudo chown -R root:wheel /Library/LaunchDaemons/limit.maxproc.plist /Library/LaunchDaemons/limit.maxfiles.plist
+sudo chmod -R 644 /Library/LaunchDaemons/limit.maxproc.plist /Library/LaunchDaemons/limit.maxfiles.plist
+sudo launchctl load /Library/LaunchDaemons/limit.maxproc.plist 
+sudo launchctl load /Library/LaunchDaemons/limit.maxfiles.plist
+</code></pre>
+
+<p>最后通过 ulimit -a 验证修改</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->
