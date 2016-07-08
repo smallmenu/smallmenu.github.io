@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Java - 蛮-com | 醉里挑灯看剑</title>
+    <title>Lua 元表 metatable 与 类定义 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,47 +30,72 @@
       </div>
     </div>
     
-    <div class="container" id="content-wrap">
-      <script type="text/javascript">
+    <script type="text/javascript">
       $(function(){
       	$('#menu-index').addClass('active');
       });
       </script>
+   <div class="container" id="content-wrap">
       <div class="row">
         <div class="col-sm-9 blog-main">
-			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541202136915.html">CentOS/Mac 下安装 JDK 1.7</a></h2>
-			            <p class="blog-post-meta">2016/1/30 
+			            <h2 class="blog-post-title"><a href="14674693691952.html">Lua 元表 metatable 与 类定义</a></h2>
+			            <p class="blog-post-meta">2016/7/2
 				            &nbsp;分类于 
 							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
+							    <a class='category' href='lua.html'>Lua</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            
-						 
-						<a href="14541202136915.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			  
-          <nav>
-            <ul class="pager">
-            	<li class=""><a href="archives.html">归档</a></li>
-            
-            	<li class="  disabled "><a href="#index">上一页</a></li>
-            
-			
-            	<li class=" disabled "><a href="#index">下一页</a></li>
-            
-            </ul>
-          </nav>
-        </div><!-- /.blog-main -->
-       <!-- slider start -->
+			            <p>元表（metatable） 是 Lua 中的重要概念，每一个 table 都可以加上 metatable，以改变相应的 table 的行为。</p>
 
-  		<div class="col-sm-3 blog-sidebar">
+<p>Lua 中不能改变其他类型的元表（除了使用调试库），必须使用C API才能做到。</p>
+
+<p>元表也是普通的table，定义了原始值在某些特定操作下的行为。你可通过在值的原表中设置特定的字段来改变作用于该值的操作的某些行为特征。</p>
+
+<span id="more"></span><!-- more -->
+
+<pre><code>t = {} -- 普通的table
+mt = {} -- metatable
+setmetatable(t, mt) -- 设定mt为t的metatable
+getmetatable(t) -- 返回mt
+</code></pre>
+
+<p>metatable 可以包括任何东西，metatable 特有的键一般以__开头，例如 __index 和 __newindex，它们的值一般是函数或其他 table。</p>
+
+<p>我们称元表中的键为事件（event），称值为元方法（metamethod）</p>
+
+<h2 id="toc_0">元方法</h2>
+
+<h3 id="toc_1">__index</h3>
+
+<p>当你通过键来访问 table 的时候，如果这个键没有值，那么 Lua 就会寻找该 table 的 metatable（假定有metatable）中的 __index 键。如果 __index 包含一个表格，Lua 会在表格中查找相应的键。</p>
+
+<pre><code>mttable = { foo = 3 }
+t = setmetatable({}, { __index = mttable })
+t.foo -- 3
+t.bar -- nil
+</code></pre>
+
+<h2 id="toc_2">__call</h2>
+
+<p>__call 使得你可以像调用函数一样调用table</p>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
           <div class="sidebar-module">
             <h4>分类</h4>
             

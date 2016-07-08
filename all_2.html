@@ -40,6 +40,57 @@
         <div class="col-sm-9 blog-main">
 			
 					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14541166799354.html">HBase 之Block Cache 实现机制</a></h2>
+			            <p class="blog-post-meta">2016/1/30 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>HBase上Regionserver的内存分为两个部分：<br/>
+一部分作为Memstore，主要用来写，<br/>
+另一部分作为BlockCache，主要用于读。</p>
+
+
+						 
+						<a href="14541166799354.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14541166075496.html">HBase 之数据的导入与导出</a></h2>
+			            <p class="blog-post-meta">2016/1/30 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <ul>
+<li>使用Hbase的Put API
+不适合快速的导入大数据</li>
+<li>使用Hbase的bulkload工具
+大量数据导入最有效的方式，importtsv是个内置工具，以MapReduce任务的方式，可以将TSV文件转换成Hbase底层格式</li>
+<li>使用MapReduce任务
+从其他格式或者数据是动态产生，比较灵活，但是设计不当，会造成性能底下。</li>
+<li>Sqoop 导入
+将Hadoop和关系型数据库的数据互相转移的工具，通过mapReduce任务。</li>
+<li>DataX 不好用</li>
+<li>Kettle  不会用</li>
+</ul>
+
+
+						 
+						<a href="14541166075496.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14541165350405.html">HBase 之简介与基本概念</a></h2>
 			            <p class="blog-post-meta">2016/1/30 
 				            &nbsp;分类于 
@@ -141,12 +192,14 @@
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(3)</a>
+	        <a href="program.html">编程语言&nbsp;(5)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="php.html">PHP&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
@@ -165,6 +218,14 @@
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14675557326089.html" title="Lua 中的类与面向对象">Lua 中的类与面向对象</a><br />
+	     
+	  
+	      
+		        <a href="14674693691952.html" title="Lua 元表 metatable 与 类定义">Lua 元表 metatable 与 类定义</a><br />
+	     
 	  
 	      
 		        <a href="14671892872587.html" title="PHP Opcache 扩展">PHP Opcache 扩展</a><br />
@@ -216,14 +277,6 @@
 	  
 	      
 		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
-	     
-	  
-	      
-		        <a href="14557148853181.html" title="Solr 常见问题与错误记录">Solr 常见问题与错误记录</a><br />
-	     
-	  
-	      
-		        <a href="14556094264580.html" title="Solr 常用指令">Solr 常用指令</a><br />
 	     
 	  
 	      

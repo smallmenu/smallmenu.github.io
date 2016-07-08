@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Java - 蛮-com | 醉里挑灯看剑</title>
+    <title>Lua 中的类与面向对象 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,47 +30,217 @@
       </div>
     </div>
     
-    <div class="container" id="content-wrap">
-      <script type="text/javascript">
+    <script type="text/javascript">
       $(function(){
       	$('#menu-index').addClass('active');
       });
       </script>
+   <div class="container" id="content-wrap">
       <div class="row">
         <div class="col-sm-9 blog-main">
-			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541202136915.html">CentOS/Mac 下安装 JDK 1.7</a></h2>
-			            <p class="blog-post-meta">2016/1/30 
+			            <h2 class="blog-post-title"><a href="14675557326089.html">Lua 中的类与面向对象</a></h2>
+			            <p class="blog-post-meta">2016/7/3
 				            &nbsp;分类于 
 							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
+							    <a class='category' href='lua.html'>Lua</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            
-						 
-						<a href="14541202136915.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			  
-          <nav>
-            <ul class="pager">
-            	<li class=""><a href="archives.html">归档</a></li>
-            
-            	<li class="  disabled "><a href="#index">上一页</a></li>
-            
-			
-            	<li class=" disabled "><a href="#index">下一页</a></li>
-            
-            </ul>
-          </nav>
-        </div><!-- /.blog-main -->
-       <!-- slider start -->
+			            <p>类是创建对象的模板，对象是类的实例，Lua 中没有类的概念，所以我们只能使用现有的支持去模拟类的概念。</p>
 
-  		<div class="col-sm-3 blog-sidebar">
+<span id="more"></span><!-- more -->
+
+<h2 id="toc_0">table 实现成员变量与成员函数</h2>
+
+<p>Lua 的 table 就是一种对象，可以有成员变量(如下例 sound)，也可以有成员函数，(如下例 makesound)：</p>
+
+<pre><code>Dog = {sound = &#39;wolf&#39;}
+
+function Dog.makesound(v)
+    if v ~= nil then
+    Dog.sound = v
+  end  
+  print(Dog.sound)
+end
+
+dog1 = Dog
+dog2 = Dog
+
+dog1.makesound() -- wolf
+dog2.makesound() -- wolf
+dog1.makesound(&#39;wang&#39;) -- wang
+dog2.makesound(&#39;haha&#39;) -- haha
+dog1.makesound() -- haha  因为dog1,dog2都是Dog的引用，输出是一样的
+dog2.makesound() -- haha
+
+dog1 = nil  -- 只是解除了dog1的引用，对dog2无影响
+dog2.makesound() -- haha
+
+Dog = nil;  -- makesound执行时报错
+dog1.makesound() -- error attempt to index global &#39;Dog&#39; (a nil value)
+</code></pre>
+
+<p>首先 Lua 的table默认是引用类型，dog1与dog2都是全局变量Dog的引用。</p>
+
+<p>这个例子中，makesound 函数中使用了全局变量 Dog.sound 进行赋值操作，所以当 Dog = nil的时候，dog1.makesound() 函数执行的时候当然会报错。</p>
+
+<p>改造一下这个例子，makesound函数定义的时候我们引入一个self参数：</p>
+
+<pre><code>Dog = {sound = &#39;wolf&#39;}
+
+function Dog.makesound(self, v)
+    if v ~= nil then
+    self.sound = v
+  end  
+  print(self.sound)
+end
+
+dog1 = Dog
+dog2 = Dog
+
+dog1.makesound(dog1) -- wolf
+dog2.makesound(dog2) -- wolf
+dog1.makesound(dog1, &#39;wang&#39;) -- wang
+dog2.makesound(dog2, &#39;haha&#39;) -- haha
+dog1.makesound(dog1) -- haha
+dog2.makesound(dog2) -- haha
+
+Dog = nil;
+dog1.makesound(dog1) -- haha
+dog2.makesound(dog2) -- haha
+</code></pre>
+
+<p>makesound函数，使用第一个参数self来标识调用者，而不是使用全局变量，self 和 全局变量Dog 引用了同一个table，这样就可以工作了。</p>
+
+<p>不过对Dog = nil赋值以后，Dog这个全局变量的table不就是nil了吗，dog1, dog2都是对Dog的引用，dog1, dog2为何不是nil?</p>
+
+<p>要解释这个问题，要说 Lua 的 table 不是值而是对象，Dog = {sound = &#39;wolf&#39;} 实际上是创建了这个table 的引用，最终Dog,dog1,dog2都在引用这个 table</p>
+
+<p>Dog = nil，只是解除了 Dog 的引用，此时dog1, dog2还都在引用它。当对一个 table 的引用为 0 时，Lua的垃圾收集器最终会删除该table，并释放它所占用的内存空间。下面这个例子可以很好的解释：</p>
+
+<pre><code>local a = {} -- 创建一个table，并将它的引用存储在a
+a[&quot;x&quot;] = 10
+local b = a -- b与a引用同一个table
+print(b[&quot;x&quot;]) -- 10
+b[&quot;x&quot;] = 20 
+print(a[&quot;x&quot;])  -- 20
+
+b = nil -- 现在只有a还在引用table
+print(a[&quot;x&quot;]) -- 20
+a = nil -- 现在不存在对table的引用，等待Lua的垃圾回收
+</code></pre>
+
+<p>好，现在我们回来。使用 self 参数是所有面向对象语言的一个核心。大多数面向对象语言都对程序员隐藏了self参数，从而使得程序员不必显示地声明这个参数。毕竟，定义成员函数和调用的时候都多了一个参数好麻烦。</p>
+
+<p>Lua 也可以，当我们在定义函数和调用函数时，使用了冒号代替点号，则能隐藏self参数，这实际是个语法糖，我们重写上面的代码：</p>
+
+<pre><code>Dog = {sound = &#39;wolf&#39;}
+
+function Dog:makesound(v)
+    if v ~= nil then
+    self.sound = v
+  end  
+  print(self.sound)
+end
+
+dog1 = Dog
+dog2 = Dog
+
+dog1:makesound() -- wolf
+dog2:makesound() -- wolf
+dog1:makesound(&#39;wang&#39;) -- wang
+dog2:makesound(&#39;haha&#39;) -- haha
+dog1:makesound() -- haha
+dog2:makesound() -- haha
+</code></pre>
+
+<p>现在我们的对象有一个标识符（名称dog1），有成员变量和成员函数，但是他们都是一个全局对象的引用。我们可以把它当成是一个全局类来使用，它的变量是静态变量，方法是静态方法。</p>
+
+<p>我们如何才能创建拥有相似行为的多个对象呢？</p>
+
+<h2 id="toc_1">类</h2>
+
+<p>在Lua中，要表示一个类，只需创建一个专用作其他对象的原型（prototype）。原型也是一种常规的对象，也就是说我们可以直接通过原型去调用对应的方法。当其它对象（类的实例）遇到一个未知操作时，原型会先查找它。这很像 Javascript。</p>
+
+<p>而利用table 的元表与 __index 特有键就可以实现这种原型表述。对象a调用任何不存在的成员都会到对象b中查找。术语上，可以将b看作类，a看作对象。</p>
+
+<pre><code>setmetatable(a, {__index = b})
+</code></pre>
+
+<p>所以可以这样模拟一个类：</p>
+
+<pre><code>Dog = {sound = &#39;wolf&#39;}
+
+function Dog:new(o)
+  o = o or {}  -- 如果没有提供对象，则创造一个
+  local mt = { __index = Dog }  -- 构造metatable元表，__index = Dog 对象
+  return setmetatable(o, mt)  -- 返回创建的对象
+end
+
+function Dog:makesound(v)
+    if v ~= nil then
+    self.sound = v
+  end  
+  print(self.sound)
+end
+
+dog1 = Dog:new()
+dog2 = Dog:new()
+
+dog1:makesound() -- wolf
+dog2:makesound() -- wolf
+dog1:makesound(&#39;wang&#39;) -- wang
+dog2:makesound(&#39;haha&#39;) -- haha
+dog1:makesound() -- wang
+dog2:makesound() -- haha
+print(dog1.sound) -- wang
+print(dog2.sound) -- haha
+</code></pre>
+
+<p>由此我们可以理解为，dog1 与 dog2 都是 Dog 类的对象实例，由于metatable特性，导致调用dog1不存在的方法，会自动查找metatable中的 __index 键，最终调用了Dog的方法。另外sound可以看成类的public属性</p>
+
+<pre><code>dog1.sound 实际上 getmetatable(dog1).__index.sound
+dgo1:makesound() 实际上 getmetatable(dog1).__index:makesound()
+</code></pre>
+
+<p>这里还有一个小优化：</p>
+
+<pre><code>function Dog:new(o)
+  o = o or {}
+  self.__index = self
+  return setmetatable(o, self)  -- 不在需要创建一个额外的表，可以用Dog表本身作为metatable
+end
+</code></pre>
+
+<p>最后，我们给出Lua 类的最终姿势：</p>
+
+<pre><code>local _M = {}
+
+function _M:new(o)
+    o = o or {}
+    self.__index = self
+    return setmetatable(o, self) 
+end
+
+return _M
+</code></pre>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
           <div class="sidebar-module">
             <h4>分类</h4>
             

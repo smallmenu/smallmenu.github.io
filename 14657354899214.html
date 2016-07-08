@@ -70,13 +70,9 @@
 --enable-zip \
 --enable-mysqlnd \
 --enable-wddx \
+--enable-shmop \
 --enable-exif \
 --enable-soap \
---disable-rpath \
---disable-cgi \
---disable-mysqlnd-compression-support \
---disable-inifile \
---disable-flatfile \
 --with-iconv-dir \
 --with-zlib \
 --with-bz2 \
@@ -225,6 +221,7 @@
 <pre><code>--enable-wddx           Enable WDDX support
 --enable-exif           Enable EXIF (metadata from images) support
 --enable-soap           Enable SOAP support
+--enable-shmop          Enable shmop support
 </code></pre>
 
 <p>默认未开启的其他内置扩展：</p>
@@ -234,7 +231,6 @@
 --enable-sysvmsg        Enable sysvmsg support
 --enable-sysvsem        Enable System V semaphore support
 --enable-sysvshm        Enable the System V shared memory support
---enable-shmop          Enable shmop support
 --enable-debug          Compile with debugging symbols
 --enable-sigchild       Enable PHP&#39;s own SIGCHLD handler
 --enable-gd-jis-conv      GD: Enable JIS-mapped Japanese font support
@@ -243,7 +239,7 @@
 
 <h3 id="toc_5">内置开启可以关闭的扩展</h3>
 
-<p>默认开启，不常用的扩展，建议关闭：</p>
+<p>默认开启，不常用的扩展，可以关闭：</p>
 
 <pre><code>--disable-rpath         Disable passing additional runtime library
 --disable-cgi           Disable building CGI version of PHP
@@ -456,12 +452,14 @@
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(3)</a>
+	        <a href="program.html">编程语言&nbsp;(5)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="php.html">PHP&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
@@ -480,6 +478,14 @@
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14675557326089.html" title="Lua 中的类与面向对象">Lua 中的类与面向对象</a><br />
+	     
+	  
+	      
+		        <a href="14674693691952.html" title="Lua 元表 metatable 与 类定义">Lua 元表 metatable 与 类定义</a><br />
+	     
 	  
 	      
 		        <a href="14671892872587.html" title="PHP Opcache 扩展">PHP Opcache 扩展</a><br />
@@ -531,14 +537,6 @@
 	  
 	      
 		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
-	     
-	  
-	      
-		        <a href="14557148853181.html" title="Solr 常见问题与错误记录">Solr 常见问题与错误记录</a><br />
-	     
-	  
-	      
-		        <a href="14556094264580.html" title="Solr 常用指令">Solr 常用指令</a><br />
 	     
 	  
 	      

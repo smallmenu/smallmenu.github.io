@@ -184,13 +184,33 @@ real_ip_header    X-Forwarded-For;
 
 <h2 id="toc_17">Nginx 1.7.7 with Lua 编译参数参考</h2>
 
-<pre><code>wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz 
+<pre><code># 安装LuaJit
+wget http://luajit.org/download/LuaJIT-2.0.3.tar.gz 
 tar xvzf LuaJIT-2.0.3.tar.gz
 make 
 make install 
 
 export LUAJIT_LIB=/usr/local/lib 
 export LUAJIT_INC=/usr/local/include/luajit-2.0/ 
+
+
+# lua redis parse
+wget https://github.com/openresty/lua-redis-parser/archive/v0.12.tar.gz
+gmake CC=gcc LUA_INCLUDE_DIR=/usr/local/include/luajit-2.0/
+gmake install CC=gcc
+# 而 Mac 下需要
+make LDFLAGS=&#39;-bundle -undefined dynamic_lookup&#39; CC=gcc LUA_INCLUDE_DIR=/usr/local/include/luajit-2.0/
+make install LUA_LIB_DIR=/opt/lualib
+
+
+yum install libpcre libpcre-dev
+wget http://luarocks.org/releases/luarocks-2.3.0.tar.gz
+./configure --with-lua-include=/usr/local/include/luajit-2.0/
+make
+make bootstrap
+luarocks install lua-cjson
+luarocks install lrexlib-PCRE
+
 </code></pre>
 
 <p>编译参数：</p>
@@ -219,7 +239,7 @@ export LUAJIT_INC=/usr/local/include/luajit-2.0/
 --add-module=/usr/local/src/ngx_devel_kit-0.2.19 \
 --add-module=/usr/local/src/echo-nginx-module-0.53 \
 --add-module=/usr/local/src/redis2-nginx-module-0.13 \
---add-module=/usr/local/src/set-misc-nginx-module-0.30
+--add-module=/usr/local/src/set-misc-nginx-module-0.30 
 </code></pre>
 
 <pre><code># 如果出现启动nginx，出现动态链接库缺失，请： 
@@ -257,7 +277,7 @@ ldconfig 后生效
 --add-module=/usr/local/src/ngx_devel_kit-0.2.19 \
 --add-module=/usr/local/src/echo-nginx-module-0.53 \
 --add-module=/usr/local/src/redis2-nginx-module-0.13 \
---add-module=/usr/local/src/set-misc-nginx-module-0.30
+--add-module=/usr/local/src/set-misc-nginx-module-0.30 
 </code></pre>
 
 <h2 id="toc_19">修改 Nginx Server 名称</h2>
@@ -328,12 +348,14 @@ or
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(3)</a>
+	        <a href="program.html">编程语言&nbsp;(5)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="php.html">PHP&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
@@ -352,6 +374,14 @@ or
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14675557326089.html" title="Lua 中的类与面向对象">Lua 中的类与面向对象</a><br />
+	     
+	  
+	      
+		        <a href="14674693691952.html" title="Lua 元表 metatable 与 类定义">Lua 元表 metatable 与 类定义</a><br />
+	     
 	  
 	      
 		        <a href="14671892872587.html" title="PHP Opcache 扩展">PHP Opcache 扩展</a><br />
@@ -403,14 +433,6 @@ or
 	  
 	      
 		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
-	     
-	  
-	      
-		        <a href="14557148853181.html" title="Solr 常见问题与错误记录">Solr 常见问题与错误记录</a><br />
-	     
-	  
-	      
-		        <a href="14556094264580.html" title="Solr 常用指令">Solr 常用指令</a><br />
 	     
 	  
 	      
