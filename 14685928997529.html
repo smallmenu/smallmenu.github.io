@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Solr - 蛮-com | 醉里挑灯看剑</title>
+    <title>通过 logrotate 配置日志轮滚 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,167 +30,94 @@
       </div>
     </div>
     
-    <div class="container" id="content-wrap">
-      <script type="text/javascript">
+    <script type="text/javascript">
       $(function(){
       	$('#menu-index').addClass('active');
       });
       </script>
+   <div class="container" id="content-wrap">
       <div class="row">
         <div class="col-sm-9 blog-main">
-			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14667381787643.html">Solr Suggest 组件</a></h2>
-			            <p class="blog-post-meta">2016/6/24 
+			            <h2 class="blog-post-title"><a href="14685928997529.html">通过 logrotate 配置日志轮滚</a></h2>
+			            <p class="blog-post-meta">2016/7/15
 				            &nbsp;分类于 
 							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
+							    <a class='category' href='linux.html'>Linux</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <h2 id="toc_0">Lookup Implementations</h2>
+			            <p>logrotate 是一个日志管理程序，用来把旧的日志文件删除（备份），并创建新的日志文件，这个过程称为转储。这个程序目前是 CentOS 自带的。</p>
 
-<p>AnalyzingLookupFactory </p>
+<p>logrotate 的执行由系统的 crond 服务实现，通过 crond 的日执行脚本 /etc/cron.daily/logrotate 来触发。</p>
 
-<p>FuzzyLookupFactory </p>
+<p>logrotata 使用起来非常舒服，能满足大多数情况的需求，我忽然想起 Nginx 竟然有一个网上流传很久的日志切割脚本，这真是多此一举。</p>
 
-<p>AnalyzingInfixLookupFactory </p>
+<span id="more"></span><!-- more -->
 
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14580995696531.html">Solr 5.5.1 单机版安装部署</a></h2>
-			            <p class="blog-post-meta">2016/3/16 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>Solr 4 到 Solr 5 的一些变更：</p>
+<p>现在我们看下如何配置常规的 Nginx 访问日志轮滚策略：</p>
+
+<p>如果你使用 yum 或 rpm 安装的话，可以检查下 /etc/logrotate.d/ 是否有对应 Nginx 的配置，否则就需要新建一个。</p>
+
+<pre><code>vi /etc/logrotate.d/nginxlog
+/var/log/server/nginx/*log { 
+    daily 
+    dateext 
+    rotate 15 
+    missingok 
+    ifempty 
+    compress 
+    delaycompress 
+    sharedscripts 
+    postrotate 
+        [ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid` 
+    endscript 
+} 
+</code></pre>
+
+<p>主要说明：</p>
 
 <ul>
-<li>可通过内置脚本一键安装，同时支持安装为Linux的服务，启动脚本也增加了更多的参数支持。并且Solr 5通过内置Server实现Http接口（虽然还是使用Jetty）</li>
-<li>schemal.xml 变更为managed-solr</li>
+<li>轮滚 /var/log/server/nginx/ 目录下所有的 log 结尾的日志文件</li>
+<li>daily 每日运行</li>
+<li>dateext 自动生成日期后缀</li>
+<li>rotate 15 保存副本天数</li>
+<li>compress 启用压缩</li>
+<li>delaycompress 启用延迟压缩，今天会压缩前天的，在做日统计的时候非常有用</li>
+<li>postrotete 触发 Nginx 生成新的日志文件</li>
 </ul>
 
+<p>搞完后，可以手动执行命令触发一下：</p>
 
-						 
-						<a href="14580995696531.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14568951982132.html">Solr 优化</a></h2>
-			            <p class="blog-post-meta">2016/3/2 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            
-						 
-						<a href="14568951982132.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14563776286597.html">Solr HTTP BASIC 认证</a></h2>
-			            <p class="blog-post-meta">2016/2/25 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>Solr安全性最简单的就是 HTTP Basic 认证了，以下配置方法。</p>
+<pre><code>logrotate -f /etc/logrotate.conf    # –强制轮转 
+logrotate -vf /etc/logrotate.conf  # –再加一个-v参数查看轮转的过程 
+</code></pre>
 
+<p>然而，你会发现你的日志轮滚总是在凌晨 3 点运行! 这未免有点尴尬，修改 START_HOURS_RANGE：</p>
 
-						 
-						<a href="14563776286597.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14557148853181.html">Solr 常见问题与错误记录</a></h2>
-			            <p class="blog-post-meta">2016/2/17 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            
-						 
-						<a href="14557148853181.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14556094264580.html">Solr 常用指令</a></h2>
-			            <p class="blog-post-meta">2016/2/16 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            
-						 
-						<a href="14556094264580.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14543953736059.html">Solr 4.10 手册</a></h2>
-			            <p class="blog-post-meta">2016/2/2 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>本文档参考自 apache-solr-ref-guide-4.10.pdf<br/>
-测试环境使用 Solr 为 CDH 最新发行版本：solr-4.10.3-cdh5.5.1 （官方 4.10.3 发布于2014-12-29）<br/>
-当前 Solr 官方最新版为：5.5.1 （截至到2016-06-18）</p>
+<pre><code>vi /etc/anacrontab 
 
+# START_HOURS_RANGE=0-8  表示什么时候运行 CROND 日常任务
+# RANDOM_DELAY=45 随机延迟时间
+</code></pre>
 
-						 
-						<a href="14543953736059.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
+<p>好了，可以了。</p>
+
+			            </div>
 			          </div><!-- /.blog-post -->
-			  
-          <nav>
-            <ul class="pager">
-            	<li class=""><a href="archives.html">归档</a></li>
-            
-            	<li class="  disabled "><a href="#index">上一页</a></li>
-            
-			
-            	<li class=" disabled "><a href="#index">下一页</a></li>
-            
-            </ul>
-          </nav>
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
         </div><!-- /.blog-main -->
-       <!-- slider start -->
-
-  		<div class="col-sm-3 blog-sidebar">
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
           <div class="sidebar-module">
             <h4>分类</h4>
             

@@ -93,8 +93,6 @@
 --with-pdo-mysql=mysqlnd \
 --with-xsl \
 --with-libedit \
---with-ldap \
---with-ldap-sasl \
 --with-snmp \
 --with-tidy \
 --with-xmlrpc \
@@ -135,13 +133,10 @@
 <p><a href="http://pecl.php.net/package/swoole">http://pecl.php.net/package/swoole</a> (已支持PHP7)</p>
 
 <ul>
-<li>imagick</li>
-</ul>
-
-<p><a href="http://pecl.php.net/package/imagick">http://pecl.php.net/package/imagick</a>  (已支持PHP 7)</p>
-
-<ul>
-<li>memcache</li>
+<li><p>imagick<br/>
+yum install ImageMagick ImageMagick-devel<br/>
+<a href="http://pecl.php.net/package/imagick">http://pecl.php.net/package/imagick</a>  (已支持PHP 7)</p></li>
+<li><p>memcache</p></li>
 </ul>
 
 <p><a href="http://pecl.php.net/package/memcache">http://pecl.php.net/package/memcache</a>  (不支持 PHP 7，2016-06-13)</p>
@@ -225,15 +220,15 @@
 --enable-exif           Enable EXIF (metadata from images) support
 --enable-soap           Enable SOAP support
 --enable-shmop          Enable shmop support
+--enable-sysvmsg        Enable sysvmsg support
+--enable-sysvsem        Enable System V semaphore support
+--enable-sysvshm        Enable the System V shared memory support
 </code></pre>
 
 <p>默认未开启的其他内置扩展：</p>
 
 <pre><code>--enable-zend-signals   Use zend signal handling
 --enable-maintainer-zts Enable thread safety - for code maintainers only!!
---enable-sysvmsg        Enable sysvmsg support
---enable-sysvsem        Enable System V semaphore support
---enable-sysvshm        Enable the System V shared memory support
 --enable-debug          Compile with debugging symbols
 --enable-sigchild       Enable PHP&#39;s own SIGCHLD handler
 --enable-gd-jis-conv      GD: Enable JIS-mapped Japanese font support
@@ -433,10 +428,10 @@
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(2)</a>
+	        <a href="server.html">服务器&nbsp;(3)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(1)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(1)</a>&nbsp;&nbsp;
 	        
@@ -481,6 +476,10 @@
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14685928997529.html" title="通过 logrotate 配置日志轮滚">通过 logrotate 配置日志轮滚</a><br />
+	     
 	  
 	      
 		        <a href="14675557326089.html" title="Lua 中的类与面向对象">Lua 中的类与面向对象</a><br />
@@ -536,10 +535,6 @@
 	  
 	      
 		        <a href="14568951982132.html" title="Solr 优化">Solr 优化</a><br />
-	     
-	  
-	      
-		        <a href="14563776286597.html" title="Solr HTTP BASIC 认证">Solr HTTP BASIC 认证</a><br />
 	     
 	  
 	      
