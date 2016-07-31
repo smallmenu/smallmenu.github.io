@@ -63,38 +63,42 @@
 
 <pre><code>CREATE TABLE `content` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `md5` varchar(32) NOT NULL,
-  `title` varchar(200) NOT NULL,
-  `catid` int(10) NOT NULL,
-  `modelid` tinyint(3) NOT NULL,
-  `published` int(10) NULL,
-  `publishedby` int(10) NULL,
-  `time`  TIMESTAMP NULL,
-  `datetime` DATETIME NULL,
-  `status` tinyint(3) NOT NULL,
+  `md5` varchar(32) NOT NULL DEFAULT &#39;&#39;,
+  `title` varchar(200) NOT NULL DEFAULT &#39;&#39;,
+  `catid` int(10) unsigned NOT NULL DEFAULT &#39;0&#39;,
+  `modelid` tinyint(3) NOT NULL DEFAULT &#39;0&#39;,
+  `published` int(10) DEFAULT NULL,
+  `publishedby` int(10) DEFAULT NULL,
+  `time` timestamp NULL DEFAULT NULL,
+  `datetime` datetime DEFAULT NULL,
+  `status` tinyint(3) unsigned NOT NULL DEFAULT &#39;0&#39;,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 </code></pre>
 
 <h2 id="toc_1">创建随机字符串函数</h2>
 
-<pre><code>CREATE DEFINER=`root`@`%` FUNCTION `rand_string`(n INT) RETURNS varchar(255) CHARSET utf8
-BEGIN
+<pre><code>DELIMITER $$
+DROP FUNCTION IF EXISTS `rand_string`$$
+CREATE FUNCTION rand_string(n INT) RETURNS VARCHAR(255)
+    BEGIN
           DECLARE chars_str VARCHAR(100) DEFAULT &#39;abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ&#39;;
           DECLARE return_str VARCHAR(255) DEFAULT &#39;&#39;;
           DECLARE i INT DEFAULT 0;
           WHILE i&lt;n DO
-               SET return_str = CONCAT(return_str,SUBSTRING(chars_str,FLOOR(1+RAND()*52),1));
-               SET i = i+1;
+              SET return_str = CONCAT(return_str,SUBSTRING(chars_str,FLOOR(1+RAND()*52),1));
+              SET i = i+1;
           END WHILE;
-     RETURN return_str;
-END;
+    RETURN return_str;
+END$$
+DELIMITER ;
 </code></pre>
 
 <h2 id="toc_2">创建存储过程</h2>
 
-<pre><code>DELIMITER ;;
-CREATE DEFINER=`root`@`%` PROCEDURE `insert_content`(START INT(10), MAX INT(10))
+<pre><code>DELIMITER $$
+DROP PROCEDURE IF EXISTS `insert_content` $$
+CREATE PROCEDURE `insert_content`(START INT(10), MAX INT(10))
 BEGIN
      DECLARE i INT DEFAULT 0;
      DECLARE catid INT;
@@ -128,7 +132,7 @@ BEGIN
          UNTIL i = MAX
      END REPEAT;
      COMMIT;
-END;;
+END $$
 DELIMITER ;
 </code></pre>
 
