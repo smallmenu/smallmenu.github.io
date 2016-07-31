@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>http://www.niuchaoqun.com/</loc>
-  <lastmod>2016-07-29T14:40:41+08:00</lastmod>
+  <lastmod>2016-07-31T22:15:13+08:00</lastmod>
 </url>
 
 <url>
@@ -193,31 +193,11 @@
 
 
 <url>
-  <loc>http://www.niuchaoqun.com/db.html</loc>
-</url>
-
-<url>
-  <loc>http://www.niuchaoqun.com/mysql.html</loc>
-</url>
-
-<url>
-  <loc>http://www.niuchaoqun.com/bigdata.html</loc>
-</url>
-
-<url>
-  <loc>http://www.niuchaoqun.com/hadoop.html</loc>
-</url>
-
-<url>
-  <loc>http://www.niuchaoqun.com/hbase.html</loc>
-</url>
-
-<url>
-  <loc>http://www.niuchaoqun.com/solr.html</loc>
-</url>
-
-<url>
   <loc>http://www.niuchaoqun.com/program.html</loc>
+</url>
+
+<url>
+  <loc>http://www.niuchaoqun.com/lua.html</loc>
 </url>
 
 <url>
@@ -226,10 +206,6 @@
 
 <url>
   <loc>http://www.niuchaoqun.com/java.html</loc>
-</url>
-
-<url>
-  <loc>http://www.niuchaoqun.com/lua.html</loc>
 </url>
 
 <url>
@@ -250,6 +226,30 @@
 
 <url>
   <loc>http://www.niuchaoqun.com/mac.html</loc>
+</url>
+
+<url>
+  <loc>http://www.niuchaoqun.com/db.html</loc>
+</url>
+
+<url>
+  <loc>http://www.niuchaoqun.com/mysql.html</loc>
+</url>
+
+<url>
+  <loc>http://www.niuchaoqun.com/bigdata.html</loc>
+</url>
+
+<url>
+  <loc>http://www.niuchaoqun.com/hadoop.html</loc>
+</url>
+
+<url>
+  <loc>http://www.niuchaoqun.com/solr.html</loc>
+</url>
+
+<url>
+  <loc>http://www.niuchaoqun.com/hbase.html</loc>
 </url>
 
 

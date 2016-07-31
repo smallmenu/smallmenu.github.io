@@ -4,10 +4,7 @@
  */
 
 body {
-  font-family: "Lantinghei SC","Open Sans",Arial,"Hiragino Sans GB","Microsoft YaHei","STHeiti","WenQuanYi Micro Hei",SimSun,sans-serif,"Microsoft YaHei UI", "Microsoft YaHei";
-  font-size: 1.4em;  line-height: 1.4em;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Lantinghei SC","Lucida Grande", Helvetica,"Open Sans",Arial,"Microsoft YaHei",FreeSans,Arimo,"WenQuanYi Micro Hei","Hiragino Sans GB","Hiragino Sans GB W3",SimSun,sans-serif;
   color:#111;
 }
 
