@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>HTML/CSS 编码规范 - 蛮-com | 醉里挑灯看剑</title>
+    <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
+    <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!--     <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/dark.min.css"> -->
+    <link rel="stylesheet" href="/asset/css/style.css" >
+    <script src="//cdn.bootcss.com/jquery/1.12.2/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/asset/js/docs.js"></script>
+    <script src="/asset/js/ie10-viewport-bug-workaround.js"></script>
+    <!--    <script src="asset/highlightjs/highlight.pack.js"></script>
+	  <script>hljs.initHighlightingOnLoad();</script> -->
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/placeholders/4.0.1/placeholders.min.js"></script>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <h1><a href="http://www.niuchaoqun.com" title="蛮-com | 醉里挑灯看剑">蛮-com | 醉里挑灯看剑</a></h1>
+          <a class="blog-nav-item" id="menu-index" href="index.html">首页</a>
+          <a class="blog-nav-item" id="menu-recommend" href="recommend.html">推荐</a>
+          <a class="blog-nav-item" id="menu-archives" href="archives.html">归档</a>
+          <a class="blog-nav-item" id="menu-about" href="about.html">关于</a>
+        </nav>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      $(function(){
+      	$('#menu-index').addClass('active');
+      });
+      </script>
+   <div class="container" id="content-wrap">
+      <div class="row">
+        <div class="col-sm-9 blog-main">
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14613994523878.html">HTML/CSS 编码规范</a></h2>
+			            <p class="blog-post-meta">2016/9/1
+				            &nbsp;分类于 
+							
+							    <a class='category' href='css.html'>Css</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>不管有多少人共同参与同一项目，一定要确保每一行代码都像是同一个人编写的。这是个黄金定律，永远遵循同一套编码规范。</p>
+
+<p>本文参考了不少文档，最后整理了这个规范，主要也是个人的学习总结。</p>
+
+<span id="more"></span><!-- more -->
+
+<ul>
+<li>
+<a href="#toc_0">需求</a>
+</li>
+<li>
+<a href="#toc_1">规范</a>
+</li>
+<li>
+<a href="#toc_2">HTML 5 规范</a>
+</li>
+<li>
+<a href="#toc_3">样式统一</a>
+</li>
+<li>
+<a href="#toc_4">字体与排版</a>
+</li>
+<li>
+<a href="#toc_5">兼容性</a>
+<ul>
+<li>
+<a href="#toc_6">一些兼容性方法</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_7">优化</a>
+<ul>
+<li>
+<a href="#toc_8">工具</a>
+</li>
+<li>
+<a href="#toc_9">浏览器渲染性能</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_10">SEO优化</a>
+</li>
+<li>
+<a href="#toc_11">Demo</a>
+<ul>
+<li>
+<a href="#toc_12">PC Demo</a>
+</li>
+<li>
+<a href="#toc_13">HTML5 Demo</a>
+</li>
+</ul>
+</li>
+<li>
+<a href="#toc_14">参考文档</a>
+</li>
+</ul>
+
+
+<h2 id="toc_0">需求</h2>
+
+<ul>
+<li>HTML 与 CSS 文件编码统一为不带BOM的 <code>utf-8</code> 编码</li>
+<li>明确页面兼容的浏览器，以及浏览器测试权重，前台页面至少要支持 &gt;= <strong>IE8</strong>，后台页面一般不做过高要求。</li>
+<li>编写有效的代码，能通过<strong>代码校验工具</strong> <a href="https://validator.w3.org/nu/">https://validator.w3.org/nu/</a> 验证 HTML，还有 <a href="http://jigsaw.w3.org/css-validator/validator.html.zh-cn">http://jigsaw.w3.org/css-validator/validator.html.zh-cn</a> 验证 CSS</li>
+</ul>
+
+<h2 id="toc_1">规范</h2>
+
+<ul>
+<li>HTML 编码声明 <code>&lt;meta charset=&quot;utf-8&quot;&gt;</code></li>
+<li>HTML 语言属性 <code>&lt;html lang=&quot;zh-CN&quot;&gt;</code>，这将有助于语音合成工具确定其所应该采用的发音，有助于翻译工具确定其翻译时所应遵守的规则等。（N年以后，应当使用<code>&lt;html lang=&quot;zh-cmn-Hans&quot;&gt;</code>，<a href="http://www.zhihu.com/question/20797118%EF%BC%89">http://www.zhihu.com/question/20797118）</a></li>
+<li>省略外链资源（图片及其它媒体资源）URL 中的 http / https 协议，使 URL 成为相对地址，避免 Mixed Content 问题，如：<code>&lt;script src=&quot;//www.google.com/code.js&quot;&gt;&lt;/script&gt;</code></li>
+<li>HTML 标签、属姓、颜色使用<strong>小写字母</strong>，属性值用双引号包含</li>
+<li>img标签尽量加上 width, height 属性，避免浏览器渲染时的较大抖动现象</li>
+<li>单选框、复选框包含附加文字的表单输入框都应该利用<code>&lt;label&gt;</code>标签</li>
+<li>语义化标签，根据 HTML 各元素设计的用途使用他们。这事关可访性、重用以及代码效率，例如<code>h1-h6用于标题，&lt;p&gt; 用于段落，&lt;a&gt;用于链接</code></li>
+<li>使用 UTF-8 作为文件编码时，不需要使用 HTML 实体引用，<code>如 &amp;copyright;</code></li>
+<li>虽然HTML5 定义了一些标签可以省略闭合标签，但我们建议<code>&lt;br&gt;, &lt;hr&gt;, &lt;img&gt;, &lt;input&gt;</code> 等自闭合标签都应该在结尾添加 /，避免不同浏览器不可预知的问题</li>
+</ul>
+
+<h2 id="toc_2">HTML 5 规范</h2>
+
+<ul>
+<li>使用 rem 作为字号、长度单位，需要 1px 级别精准定位的，仍然使用 px</li>
+</ul>
+
+<h2 id="toc_3">样式统一</h2>
+
+<p>在统一浏览器默认样式上，reset.css 一度非常流行，normalize.css 现在取而代之：</p>
+
+<p><a href="https://github.com/necolas/normalize.css">https://github.com/necolas/normalize.css</a></p>
+
+<p>如果项目使用 bootstrap.css，它默认集成的是 normalize.css </p>
+
+<h2 id="toc_4">字体与排版</h2>
+
+<p>中文排版是个很麻烦的问题，如何构建最适合中文阅读的网页排版，可以使用不同的系统参考这篇文章：</p>
+
+<p>type.css： <a href="http://typo.sofi.sh/">http://typo.sofi.sh/</a><br/>
+网页字体排印指南：<a href="http://aaaaaashu.me/shu/">http://aaaaaashu.me/shu/</a></p>
+
+<p>经过调研，以下字体设置和顺序能够良好的兼容Mac、Mac with Retina、Windows、Ubuntu。</p>
+
+<pre><code>font-family: -apple-system, &quot;PingFang SC&quot;, &quot;Lantinghei SC&quot;, &quot;\5FAE\8F6F\96C5\9ED1&quot;, &quot;Microsoft YaHei&quot;, FreeSans, &quot;WenQuanYi Micro Hei&quot;, &quot;Hiragino Sans GB&quot;, &quot;Hiragino Sans GB W3&quot;, SimSun, sans-serif, tahoma, arial;
+</code></pre>
+
+<ul>
+<li>微软雅黑为 Windows 用户默认的中文字体</li>
+<li>Lantinghei SC 为 Mac 较好的中文阅读字体，该字体在渲染比较纤细(像开启防锯齿效果)，适合阅读（参考36kr），未来可能会使用 PingFang SC,</li>
+<li>Lucida Grande为 Mac 下西文字体。</li>
+<li>Hiragino Sans GB 要在 Microsoft YaHei 的后面，因为Windows用户可能会安装丽黑，而丽黑在 Windows 上渲染很烂。虽然这样会让安装雅黑的Mac使用雅黑来渲染（只能牺牲这部分用户）</li>
+<li>FreeSans 包括 Ubuntu 之类的 Linux 分发版包含的字体。（实测并没有卵用）</li>
+<li>arial 等英文字体一般要在中文前面，但，IE8 下面某种情况会让雅黑失效，所以为兼容性考虑只能放后面。尚不知道有什么更好的解决办法?</li>
+</ul>
+
+<p>smoothing 两个属性开启Chrome与Firefox的字体防锯齿功能，在Windows普通显示器上并没什么鸟用，如果使用 Lantinghei SC，也不用开启（因为它本来就纤细，开启后变得非常纤细）：</p>
+
+<pre><code>-webkit-font-smoothing: antialiased;
+-moz-osx-font-smoothing: grayscale;
+</code></pre>
+
+<blockquote>
+<p>Tips : Mac Firefox 的 Lantinghei SC 渲染粗体的时候明显粗了一号，如果使用Lantinghei SC，为了较好的兼容效果在使用粗体时可以设置<code>font-weight:600</code>，600这个值在普通显示器上与bold效果一样。</p>
+</blockquote>
+
+<h2 id="toc_5">兼容性</h2>
+
+<ul>
+<li>不要使用 IE Tester， 它不靠谱</li>
+<li>按照微软官方的说法，IE 开发者工具中的浏览器模式也不一定靠谱</li>
+<li>微软官方提供了各种 IE 测试虚拟机 （<a href="https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/#downloads%EF%BC%89">https://developer.microsoft.com/en-us/microsoft-edge/tools/vms/#downloads）</a></li>
+</ul>
+
+<p>关于浏览器功能支持的更多细节请参考：<a href="http://caniuse.com/">http://caniuse.com/</a></p>
+
+<p>其他兼容性问题：</p>
+
+<ul>
+<li>IE 8/9 不支持 transition</li>
+<li>IE 8 设置min/max-width/height  会忽略 <code>box-sizing: border-box</code> 属性</li>
+</ul>
+
+<h3 id="toc_6">一些兼容性方法</h3>
+
+<ul>
+<li>Placeholders</li>
+</ul>
+
+<p>兼容 IE9 以下浏览器不支持 placeholder 属性</p>
+
+<p><a href="https://github.com/jamesallardice/Placeholders.js">https://github.com/jamesallardice/Placeholders.js</a></p>
+
+<ul>
+<li>html5shiv</li>
+</ul>
+
+<p>兼容 IE9 以下浏览器不支持 H5 标签如<code>&lt;header&gt;</code></p>
+
+<p><a href="https://github.com/aFarkas/html5shiv">https://github.com/aFarkas/html5shiv</a></p>
+
+<ul>
+<li>Respond</li>
+</ul>
+
+<p>兼容 IE9 以下浏览器不支持 CSS3 媒体查询属性，如 <code>@media</code></p>
+
+<p><a href="https://github.com/scottjehl/Respond">https://github.com/scottjehl/Respond</a></p>
+
+<h2 id="toc_7">优化</h2>
+
+<h3 id="toc_8">工具</h3>
+
+<p>YSLOW，Yahoo发布的一款前端性能检测工具，提供各种浏览器插件：<a href="http://yslow.org/">http://yslow.org/</a></p>
+
+<h3 id="toc_9">浏览器渲染性能</h3>
+
+<p>关于浏览器渲染性能，可以参考这篇文章：<br/>
+<a href="https://developers.google.com/web/fundamentals/performance/critical-rendering-path/?hl=zh-cn">https://developers.google.com/web/fundamentals/performance/critical-rendering-path/?hl=zh-cn</a></p>
+
+<p>简单的理解（个人理解），就是浏览器需要加载完整个 DOM 树以及 CSSOM 树，最后才会渲染出来。所以在写 HTML/CSS 时应当避免一个大的布局 div 包含所有内容，在网速不理想的情况，页面会先是一片空白，然后突然全部展现。</p>
+
+<p>尽可能的采用分级布局。</p>
+
+<pre><code>推荐：
+&lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;main1&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;main2&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;main3&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;footer&quot;&gt;&lt;/div&gt;
+
+避免：
+&lt;div class=&quot;main&quot;&gt;
+    &lt;div class=&quot;header&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;main1&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;main2&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;main3&quot;&gt;&lt;/div&gt;
+    &lt;div class=&quot;footer&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<p>同理，如果左右浮动布局，左边较大，右边较小，可以考虑小的布局写在 HTML 树的上方。让浏览器尽快渲染出内容。</p>
+
+<pre><code>&lt;div class=&quot;main&quot;&gt;
+&lt;div class=&quot;right&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;left&quot;&gt;&lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+
+<h2 id="toc_10">SEO优化</h2>
+
+<ul>
+<li><p>meta 标签中的 title, keywords, description，这个不用多说</p></li>
+<li><p>重视 h1-h3 标签，不滥用</p></li>
+</ul>
+
+<p>网站首页，h1标签可能会应用在logo上，通过text-indent隐藏h1标签文字</p>
+
+<p>网站列表页，h1标签可能会应用在频道、栏目名称上</p>
+
+<p>网站内容页，h1标签通常应用在文章内容标题上，通过首页、内容页不同的导航，忽略内容页logo的h1标签</p>
+
+<p>以上只是举例，没有绝对的，参考网易、搜狐等大站尚且也会这样做。</p>
+
+<p>结论：对于一个页面来说，应当只有一个或极少量h1标签，少量的h2标签（频道、栏目title），适量的h3标签（推荐内容列表）。而其他使用普通的文字链接 a 标签即可。</p>
+
+<ul>
+<li><p>strong 标签，仅次于 h 标签，可以少量的在页面上使用</p></li>
+<li><p>文字链接 a 增加 title, 在页面需要截字时尤为重要</p></li>
+<li><p>图片 img 标签需要 alt, title 属性</p></li>
+</ul>
+
+<h2 id="toc_11">Demo</h2>
+
+<h3 id="toc_12">PC Demo</h3>
+
+<p>因显示原因，请自行格式化：</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;zh-CN&quot;&gt;
+&lt;head&gt;
+    &lt;!-- 必须作为head的直接子元素 --&gt;
+    &lt;meta charset=&quot;utf-8&quot;&gt;
+    &lt;!-- IE 版本Edge渲染，同时兼容Chrome GCF --&gt;
+    &lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=Edge,Chrome=1&quot;&gt;
+    &lt;!-- 让山寨双核浏览器们使用webkit核心渲染，如360安全浏览器，搜狗，X --&gt;
+    &lt;meta name=&quot;renderer&quot; content=&quot;webkit&quot;&gt;
+    &lt;!-- boostrap 或响应式设计要求 --&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+     &lt;!-- 告诉百度该页面只适合在PC上浏览 --&gt;
+     &lt;meta name=&quot;applicable-device&quot; content=&quot;pc&quot;&gt;
+
+    &lt;title&gt;Page title&lt;/title&gt;
+    &lt;meta name=&quot;keywords&quot; content=&quot;&quot;&gt;
+    &lt;meta name=&quot;description&quot; content=&quot;&quot;&gt;
+
+    &lt;!-- 浏览器默认会请求根目录favicon.ico，避免404 --&gt;
+    &lt;link rel=&quot;shortcut icon&quot; type=&quot;image/x-icon&quot; href=&quot;/favicon.ico&quot;&gt;
+    
+    &lt;!-- css 一般放在head头部，在浏览器渲染之前优先下载 --&gt;
+    &lt;link  rel=&quot;stylesheet&quot; href=&quot;//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css&quot;&gt;
+    
+    &lt;!--[if lt IE 9]&gt;
+    &lt;script src=&quot;//cdn.bootcss.com/respond.js/1.4.2/respond.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;//cdn.bootcss.com/placeholders/4.0.1/placeholders.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;//cdn.bootcss.com/html5shiv/3.7.3/html5shiv-printshiv.min.js&quot;&gt;&lt;/script&gt;
+     &lt;![endif]--&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;Hello World&lt;/h1&gt;
+    
+    &lt;!-- 为了使页面更快的渲染，脚本一般放在底部，除非你的页面布局依赖js --&gt;
+    &lt;script src=&quot;//cdn.bootcss.com/jquery/1.12.2/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js&quot;&gt;&lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h3 id="toc_13">HTML5 Demo</h3>
+
+<p>待更...</p>
+
+<h2 id="toc_14">参考文档</h2>
+
+<p><a href="http://zoomzhao.github.io/code-guide/">http://zoomzhao.github.io/code-guide/</a><br/>
+<a href="http://amazeui.org/getting-started/html-css-guide">http://amazeui.org/getting-started/html-css-guide</a><br/>
+<a href="http://zhibimo.com/read/Ashu/front-end-style-guide/index.html">http://zhibimo.com/read/Ashu/front-end-style-guide/index.html</a></p>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+          <div class="sidebar-module">
+            <h4>分类</h4>
+            
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="bigdata.html">大数据&nbsp;(22)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        
+	        	<a href="solr.html">Solr&nbsp;(7)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="server.html">服务器&nbsp;(3)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="linux.html">Linux&nbsp;(2)</a>&nbsp;&nbsp;
+	        
+	        	<a href="webserver.html">Webserver&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="db.html">数据库&nbsp;(4)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mysql.html">MySQL&nbsp;(4)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="program.html">编程语言&nbsp;(7)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="php.html">PHP&nbsp;(2)</a>&nbsp;&nbsp;
+	        
+	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
+	        
+	        	<a href="css.html">Css&nbsp;(2)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="algorithm.html">其他&nbsp;(2)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mac.html">Mac&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	   
+            </ol>
+          </div>
+          <div class="sidebar-module">
+            <h4>最近文章</h4>
+	  
+	      
+		        <a href="14727802575210.html" title="Sass + Compass">Sass + Compass</a><br />
+	     
+	  
+	      
+		        <a href="14613994523878.html" title="HTML/CSS 编码规范">HTML/CSS 编码规范</a><br />
+	     
+	  
+	      
+		        <a href="14722814557558.html" title="SEO 优化">SEO 优化</a><br />
+	     
+	  
+	      
+		        <a href="14685928997529.html" title="通过 logrotate 配置日志轮滚">通过 logrotate 配置日志轮滚</a><br />
+	     
+	  
+	      
+		        <a href="14675557326089.html" title="Lua 中的类与面向对象">Lua 中的类与面向对象</a><br />
+	     
+	  
+	      
+		        <a href="14674693691952.html" title="Lua 元表 metatable 与 类定义">Lua 元表 metatable 与 类定义</a><br />
+	     
+	  
+	      
+		        <a href="14671892872587.html" title="PHP Opcache 扩展">PHP Opcache 扩展</a><br />
+	     
+	  
+	      
+		        <a href="14564968420622.html" title="Mac 修改打开文件数限制">Mac 修改打开文件数限制</a><br />
+	     
+	  
+	      
+		        <a href="14667381787643.html" title="Solr Suggest 组件">Solr Suggest 组件</a><br />
+	     
+	  
+	      
+		        <a href="14657354899214.html" title="PHP 5.4 编译参数">PHP 5.4 编译参数</a><br />
+	     
+	  
+	      
+		        <a href="14661548403888.html" title="基于Cloudera CDH的Hadoop平台搭建">基于Cloudera CDH的Hadoop平台搭建</a><br />
+	     
+	  
+	      
+		        <a href="14661279980383.html" title="Linux服务器部署规范（CentOS 6）">Linux服务器部署规范（CentOS 6）</a><br />
+	     
+	  
+	      
+		        <a href="14643975993511.html" title="TokuDB 引擎 （Percona Server）">TokuDB 引擎 （Percona Server）</a><br />
+	     
+	  
+	      
+		        <a href="14603696258384.html" title="Cloudera 集群修改IP">Cloudera 集群修改IP</a><br />
+	     
+	  
+	      
+		        <a href="14589730453584.html" title="MySQL 开发人员规范">MySQL 开发人员规范</a><br />
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+          </div>
+          <div class="sidebar-module">
+            <h4>好友链接</h4>
+            <a href="http://www.phpboy.net" title="徐典阳">PHPBoy-专注WEB架构N年</a><br />
+            <a href="http://onbing.com" title="宴兵兵">Binglog-涓涓细流汇成大海</a><br />
+          </div>
+          <div class="sidebar-module">
+            <h4>关于</h4>
+            <p><a target="_blank" href="about.html">关于蛮-com</a></p>
+          </div>
+        </div><!-- /.blog-sidebar -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->  <footer class="blog-footer">
+      <p>CopyRight &copy; 2010-2016 本站采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank" rel="nofollow">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
+      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://zh.mweb.im/" rel="nofollow">MWeb</a> 强力驱动</p>
+    </footer>
+    
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?11d84d21f7b7ebd8c51896d5f3678f45";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+  </body>
+</html>
