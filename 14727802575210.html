@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>HBase 之Thrift Server - 蛮-com | 醉里挑灯看剑</title>
+    <title>Sass + Compass - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,20 +46,171 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541167482772.html">HBase 之Thrift Server</a></h2>
-			            <p class="blog-post-meta">2016/1/30
+			            <h2 class="blog-post-title"><a href="14727802575210.html">Sass + Compass</a></h2>
+			            <p class="blog-post-meta">2016/9/2
 				            &nbsp;分类于 
 							
-							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							    <a class='category' href='css.html'>Css</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>通过 Thrift 操作 HBase</p>
+			            <p>Sass 是一种 CSS 的开发工具，是对 CSS 的一种扩充，提供了许多便利的写法，节省了设计者的时间，使得 CSS 的开发，变得简单和可维护。</p>
+
+<p>Compass 在 Sass 的基础上，封装了一系列有用的模块和模板，补充 Sass 的功能。</p>
 
 <span id="more"></span><!-- more -->
 
-<p>thrift -gen php /opt/cloudera/parcels/CDH-5.5.1-1.cdh5.5.1.p0.11/lib/hue/apps/hbase/thrift/Hbase.thrift</p>
+<p>Sass 官网：<a href="https://sass-lang.com/">https://sass-lang.com/</a><br/>
+Sass Github：<a href="https://github.com/sass">https://github.com/sass</a></p>
+
+<p>Compass 官网： <a href="http://compass-style.org/">http://compass-style.org/</a></p>
+
+<h2 id="toc_0">安装 Ruby</h2>
+
+<p>Sass 与 Compass 都是 Ruby 语言写的，需要使用Ruby Gems 安装，意味着我们先安装 Ruby。哎呀，有点不爽。</p>
+
+<p>Ruby官网：<a href="http://rubyinstaller.org/">http://rubyinstaller.org/</a></p>
+
+<p>下载安装后检查一下：</p>
+
+<pre><code>ruby -v
+ruby 2.0.0p481 (2014-05-08 revision 45883)
+</code></pre>
+
+<h2 id="toc_1">Sass</h2>
+
+<h3 id="toc_2">Gems 安装 Sass</h3>
+
+<p>因为国内网络原因 ruby gems 会连接失败，我们可以使用 ruby.taobao.org 提供的镜像。</p>
+
+<p>切换 gem 源至 taobao 并安装 Sass</p>
+
+<pre><code># 切换taobao源
+gem sources --remove https://rubygems.org/
+gem sources -a https://ruby.taobao.org/
+gem source -l
+
+# 安装
+gem install sass
+</code></pre>
+
+<p>检验 Sass 是否安装成功</p>
+
+<pre><code>sass -v
+Sass 3.4.22 (Selective Steve)
+</code></pre>
+
+<h3 id="toc_3">体验一下</h3>
+
+<p>使用官网上的例子，创建 demo.scss 文件，为什么扩展名是scss而不是sass？</p>
+
+<p>因为 Sass 本来就支持这两种语法文件格式，可 sass 连大括号都没有，多少有点怪异。</p>
+
+<pre><code>nav {
+    /* 这是注释 */
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    li { display: inline-block; }
+
+    a {
+        display: block;
+        padding: 6px 12px;
+        text-decoration: none;
+    }
+}
+</code></pre>
+
+<p>我们到命令行执行一下：</p>
+
+<pre><code>sass --style compressed demo.scss demo.css
+</code></pre>
+
+<p>最终编译生成了 demo.css 文件</p>
+
+<pre><code>nav ul { margin: 0; padding: 0; list-style: none; }
+nav li { display: inline-block; }
+nav a { display: block; padding: 6px 12px; text-decoration: none; } 
+/*# sourceMappingURL=demo.css.map */
+</code></pre>
+
+<p>几种输出格式 --style：</p>
+
+<ul>
+<li>nested：嵌套缩进的css代码，它是默认值。</li>
+<li>expanded：没有缩进的、扩展的css代码。</li>
+<li>compact：简洁格式的css代码。</li>
+<li>compressed：压缩后的css代码。</li>
+</ul>
+
+<p>我一般喜欢使用compact，也就是上面那种格式，至少还有一点可阅读性，并且当你使用版本库的时候因为是多行，不易产生冲突。compressed 是压缩后的css 文件，只有1行，我觉得在服务端开启 gzip 以后差异很小。</p>
+
+<p>sass 还有一些其他的指令（watch 监控文件变动）等，以及详细语法可自行查阅。</p>
+
+<h2 id="toc_4">Compass</h2>
+
+<h3 id="toc_5">Gems 安装 Compass</h3>
+
+<pre><code>gem install compass
+
+compass -v
+Compass 1.0.3 (Polaris)
+</code></pre>
+
+<h3 id="toc_6">体验一下</h3>
+
+<p>创建一个项目，其实就是生成了一些示例文件，几个目录，一个config.rb配置文件：</p>
+
+<pre><code>compass create demo
+
+demo
+├── config.rb
+├── sass
+│   ├── ie.scss
+│   ├── print.scss
+│   └── screen.scss
+└── stylesheets
+    ├── ie.css
+    ├── print.css
+    └── screen.css
+</code></pre>
+
+<p>　<br/>
+看一下配置文件，上面注释已经很详细了，默认就是配置了 sass 目录，css 输出目录等。</p>
+
+<p>在项目目录执行一下，会自动扫描sass目录编译输出到stylesheets目录中：</p>
+
+<pre><code>compass complie
+</code></pre>
+
+<p>通过最终输出的css文件，我们需要在 config.rb 里面调整一下配置：</p>
+
+<pre><code>output_style = :compact
+sourcemap = true
+line_comments = false
+</code></pre>
+
+<h3 id="toc_7">监控文件变动</h3>
+
+<p>大概有几种方法</p>
+
+<ul>
+<li>项目目录命令行执行 compass watch</li>
+<li>借助第三方软件，如支持多平台的Koala：<a href="http://koala-app.com/">http://koala-app.com/</a></li>
+<li>使用IDE集成功能，如PHPStorm</li>
+<li>使用构建工具</li>
+</ul>
+
+<p>这里主要介绍下 PHPStorm 的配置：</p>
+
+<ol>
+<li>打开：Preferences -&gt; Languages &amp; Frameworks -&gt; Compass，启用 Compass 并选择你系统安装compass的路径</li>
+<li>打开：Tools -&gt; FileWatchers，添加一条 compass scss 的 Watch，注意勾掉 Immediate file synchronization 选项，意思是保存的时候才进行编译。</li>
+</ol>
 
 			            </div>
 			          </div><!-- /.blog-post -->
