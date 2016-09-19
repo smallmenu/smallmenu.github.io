@@ -2,7 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>http://www.niuchaoqun.com/</loc>
-  <lastmod>2016-09-02T22:31:05+08:00</lastmod>
+  <lastmod>2016-09-19T15:27:56+08:00</lastmod>
+</url>
+
+<url>
+  <loc>http://www.niuchaoqun.com/14731420304516.html</loc>
+  <lastmod>2016-09-06T14:07:10+08:00</lastmod>
 </url>
 
 <url>
@@ -212,6 +217,10 @@
 </url>
 
 <url>
+  <loc>http://www.niuchaoqun.com/solr.html</loc>
+</url>
+
+<url>
   <loc>http://www.niuchaoqun.com/hadoop.html</loc>
 </url>
 
@@ -220,19 +229,15 @@
 </url>
 
 <url>
-  <loc>http://www.niuchaoqun.com/solr.html</loc>
-</url>
-
-<url>
   <loc>http://www.niuchaoqun.com/program.html</loc>
 </url>
 
 <url>
-  <loc>http://www.niuchaoqun.com/css.html</loc>
+  <loc>http://www.niuchaoqun.com/php.html</loc>
 </url>
 
 <url>
-  <loc>http://www.niuchaoqun.com/php.html</loc>
+  <loc>http://www.niuchaoqun.com/css.html</loc>
 </url>
 
 <url>
