@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Solr 5.5.1 单机版安装部署 - 蛮-com | 醉里挑灯看剑</title>
+    <title>搜索引擎老板开了个杂货店 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,80 +46,58 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14580995696531.html">Solr 5.5.1 单机版安装部署</a></h2>
-			            <p class="blog-post-meta">2016/3/16
+			            <h2 class="blog-post-title"><a href="14797090104689.html">搜索引擎老板开了个杂货店</a></h2>
+			            <p class="blog-post-meta">2016/11/21
 				            &nbsp;分类于 
 							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
+							    <a class='category' href='security.html'>安全</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>Solr 4 到 Solr 5 的一些变更：</p>
-
-<ul>
-<li>可通过内置脚本一键安装，同时支持安装为Linux的服务，启动脚本也增加了更多的参数支持。并且Solr 5通过内置Server实现Http接口（虽然还是使用Jetty）</li>
-<li>schemal.xml 变更为managed-solr</li>
-</ul>
+			            <p>搜索引擎百度老板开了个杂货店，你新开了一家供货店。</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">安装</h2>
+<p>黄山烟（大词）买的用户特别多，老板的库存也多，进货多而频繁。所以主要考虑优质香烟供货商，不会从其他地方拿货（信任度高，权重高）</p>
 
-<p>首先 JDK 是必须的，请提前安装 JDK 并配置好环境变量</p>
+<p>店里杂七杂八的东西，用户少，库存少，进货少（长尾），老板偶尔从一些其他供货商进点货，虽然你也提供过一些小玩意。</p>
 
-<pre><code># 下载
-cd /usr/local/src
-wget http://apache.fayea.com/lucene/solr/5.5.1/solr-5.5.1.tgz
-tar xvzf solr-5.5.1.tgz
-cd solr-5.5.1
+<p>老板怎么才能从你那里拿货呢？（没有信任关系）</p>
 
-# 创建安装目录
-mkdir /usr/local/server/
-bin/install_solr_service.sh /usr/local/src/solr-5.5.1.tgz -s solr -u root -p 8983 -d /opt/solrdata -i /usr/local/server
-</code></pre>
+<p>[通过第三方人介绍（代理），约到老板吃个饭，唱个K，喝点小酒。老板说以后从你那搞点货。（百度推广）]</p>
 
-<p>其中：</p>
+<p>[在电线杆子上贴点小广告（垃圾外链），你跟同行老王说，你没事跟老板推荐推荐我嘛（优质友情链接，SEO优化）]</p>
 
-<p>/usr/local/src/solr-5.5.1.tgz 表示源码包位置<br/>
--s Linux服务名<br/>
--u 运行用户<br/>
--p 端口<br/>
--d 数据目录<br/>
--i 安装位置</p>
+<p>[有时候那些大厂也会从你这补点货，弥补货源不足，你动了点小心思，发货时留下了你店的电话小纸条（优质外链，SEO优化）]</p>
 
-<p>安装完成以后会自动启动，可以通过浏览器测试8983端口访问 Admin UI</p>
+<p>黄山烟你就不要想了，挤不进去。杂七杂八的东西，可能偶尔会从你这里拿点，因为货太多太杂，一年几百家小供货店，老板压根就不认识你。（新站观察期长，收录慢）</p>
 
-<p>另外可以使用Linux的服务开关Solr服务<code>service solr restart</code></p>
+<p>但是有一天，黄山烟断货了，用户需求激增，黄山烟的供货商货也不够卖（热点）</p>
 
-<h2 id="toc_1">配置</h2>
+<p>老板不能不卖啊，有钱赚不了那是傻子，老板决定从其他小店先搞点货（试图临时建立一次信任关系）</p>
 
-<p>安装脚本默认会创建一个配置文件，这里根据情况主要修改两个参数，一个是Java堆内存，一个是时区</p>
+<p>你事先预知了这个消息，提前屯了点黄山烟（内容转载），并且高举旗帜挡住其他人的脸说我有货（足够曝光），老板说好，那就先进点，虽然不信任你，但是只能先搞点（临时建立信任关系）</p>
 
-<pre><code>vim /etc/default/solr.in.sh 
-SOLR_HEAP=&quot;12000m&quot;
-SOLR_TIMEZONE=&quot;Asia/Shanghai&quot;
-</code></pre>
+<p>这样的事情虽然不是经常发生，但是一年也有几次（热点），你逐渐和老板混了个脸熟（开始有一点点信任关系）</p>
 
-<h2 id="toc_2">测试</h2>
+<p>老板发现你家店总有一些新鲜的玩意（数据经常更新），觉得不错有点意思，慢慢对你有了好感。（信任关系逐步完善）</p>
 
-<p>安装脚本默认创建数据目录，但是目录是空的，我们可以创建一个core来进行测试</p>
+<p>杂七杂八的东西，老板偶尔也开始优先从你那里拿货了（长尾效益产生）。</p>
 
-<pre><code># 因为我们用到MySQL与dataimport模块，所以 复制MySQL client jar 包
-cp mysql-connector-java-5.1.38-bin.jar /usr/local/server/solr/contrib/dataimporthandler-extras/lib/
+<p>老板某天去你家进货时，你跟他聊聊天，吹吹牛逼，推荐了更多的杂七杂八的东西（内链建设，SEO优化）</p>
 
-# 复制dataimport的默认配置示例：
-mkdir /opt/solrdata/data/test/
-cp -fr /usr/local/server/solr/example/example-DIH/solr/db/conf/ /opt/solrdata/data/test/
+<p>临走的时候，你递给他一包黄山烟（内链建设+引流），说不要客气拿去抽。老板回家后发现你家的黄山烟，包装更好质量更好，决定以后也从你那里进点黄山烟（伪原创，内容优质，权重开始提升）</p>
 
-# 编辑solrconfig.xml增加额外jar包加载路径
-vi /opt/solrdata/data/test/conf/solrconfig.xml
-&lt;lib dir=&quot;${solr.install.dir:../../../..}/contrib/dataimporthandler-extras/lib/&quot; regex=&quot;.*\.jar&quot; /&gt;
+<p>你每次给老板供货黄山烟的时候，不只是质量好，还赠送点额外的东西，并且一律用顺丰发货，速度特别给力还更安全，老板觉得这小伙太帅了，信任度进一步增强，老板开始重点关照你的黄山烟（网站响应快，https，SEO优化，权重进一步提升，排名靠前）</p>
 
-# 编辑managed-schema与db-data-config.xml文件
-</code></pre>
+<p>好景不常，有一天你不小心以次充好，被老板发现，臭骂了你一顿（被K）</p>
 
-<p>最后进入到 Admin UI 中就可以通过图形界面 Core Admin 加载测试了。</p>
+<p>你哭着求饶，说老板再给一次机会，这不是故意的，老板说下次不要这样了（观察观察，大家还是好伙伴）</p>
+
+<p>为了谋取暴力，你有次给老板提供了假烟，让老板的用户感觉特别的不爽。老板大发雷霆，觉得这小伙一点都不诚信，再也不要跟他做生意了（信任关系崩塌）</p>
+
+<p>你完蛋了，去找另一个老板吧，邻村还有Google老板。</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->

@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Solr 5.5.1 单机版安装部署 - 蛮-com | 醉里挑灯看剑</title>
+    <title>安全 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,104 +37,49 @@
       </div>
     </div>
     
-    <script type="text/javascript">
+    <div class="container" id="content-wrap">
+      <script type="text/javascript">
       $(function(){
       	$('#menu-index').addClass('active');
       });
       </script>
-   <div class="container" id="content-wrap">
       <div class="row">
         <div class="col-sm-9 blog-main">
+			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14580995696531.html">Solr 5.5.1 单机版安装部署</a></h2>
-			            <p class="blog-post-meta">2016/3/16
+			            <h2 class="blog-post-title"><a href="14797090104689.html">搜索引擎老板开了个杂货店</a></h2>
+			            <p class="blog-post-meta">2016/11/21 
 				            &nbsp;分类于 
 							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
+							    <a class='category' href='security.html'>安全</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>Solr 4 到 Solr 5 的一些变更：</p>
+			            <p>搜索引擎百度老板开了个杂货店，你新开了一家供货店。</p>
 
-<ul>
-<li>可通过内置脚本一键安装，同时支持安装为Linux的服务，启动脚本也增加了更多的参数支持。并且Solr 5通过内置Server实现Http接口（虽然还是使用Jetty）</li>
-<li>schemal.xml 变更为managed-solr</li>
-</ul>
 
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">安装</h2>
-
-<p>首先 JDK 是必须的，请提前安装 JDK 并配置好环境变量</p>
-
-<pre><code># 下载
-cd /usr/local/src
-wget http://apache.fayea.com/lucene/solr/5.5.1/solr-5.5.1.tgz
-tar xvzf solr-5.5.1.tgz
-cd solr-5.5.1
-
-# 创建安装目录
-mkdir /usr/local/server/
-bin/install_solr_service.sh /usr/local/src/solr-5.5.1.tgz -s solr -u root -p 8983 -d /opt/solrdata -i /usr/local/server
-</code></pre>
-
-<p>其中：</p>
-
-<p>/usr/local/src/solr-5.5.1.tgz 表示源码包位置<br/>
--s Linux服务名<br/>
--u 运行用户<br/>
--p 端口<br/>
--d 数据目录<br/>
--i 安装位置</p>
-
-<p>安装完成以后会自动启动，可以通过浏览器测试8983端口访问 Admin UI</p>
-
-<p>另外可以使用Linux的服务开关Solr服务<code>service solr restart</code></p>
-
-<h2 id="toc_1">配置</h2>
-
-<p>安装脚本默认会创建一个配置文件，这里根据情况主要修改两个参数，一个是Java堆内存，一个是时区</p>
-
-<pre><code>vim /etc/default/solr.in.sh 
-SOLR_HEAP=&quot;12000m&quot;
-SOLR_TIMEZONE=&quot;Asia/Shanghai&quot;
-</code></pre>
-
-<h2 id="toc_2">测试</h2>
-
-<p>安装脚本默认创建数据目录，但是目录是空的，我们可以创建一个core来进行测试</p>
-
-<pre><code># 因为我们用到MySQL与dataimport模块，所以 复制MySQL client jar 包
-cp mysql-connector-java-5.1.38-bin.jar /usr/local/server/solr/contrib/dataimporthandler-extras/lib/
-
-# 复制dataimport的默认配置示例：
-mkdir /opt/solrdata/data/test/
-cp -fr /usr/local/server/solr/example/example-DIH/solr/db/conf/ /opt/solrdata/data/test/
-
-# 编辑solrconfig.xml增加额外jar包加载路径
-vi /opt/solrdata/data/test/conf/solrconfig.xml
-&lt;lib dir=&quot;${solr.install.dir:../../../..}/contrib/dataimporthandler-extras/lib/&quot; regex=&quot;.*\.jar&quot; /&gt;
-
-# 编辑managed-schema与db-data-config.xml文件
-</code></pre>
-
-<p>最后进入到 Admin UI 中就可以通过图形界面 Core Admin 加载测试了。</p>
-
-			            </div>
+						 
+						<a href="14797090104689.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
 			          </div><!-- /.blog-post -->
-			<div class="share-comment">
-			<div id="SOHUCS"></div>
-<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
-<script type="text/javascript">
-    window.changyan.api.config({
-        appid: 'cysrW6HYf',
-        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
-    });
-</script>
-			</div>
+			  
+          <nav>
+            <ul class="pager">
+            	<li class=""><a href="archives.html">归档</a></li>
+            
+            	<li class="  disabled "><a href="#index">上一页</a></li>
+            
+			
+            	<li class=" disabled "><a href="#index">下一页</a></li>
+            
+            </ul>
+          </nav>
         </div><!-- /.blog-main -->
-       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+       <!-- slider start -->
+
+  		<div class="col-sm-3 blog-sidebar">
           <div class="sidebar-module">
             <h4>分类</h4>
             
