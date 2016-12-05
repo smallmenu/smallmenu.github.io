@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
   <loc>http://www.niuchaoqun.com/</loc>
-  <lastmod>2016-12-01T16:23:31+08:00</lastmod>
+  <lastmod>2016-12-05T11:25:35+08:00</lastmod>
 </url>
 
 <url>
@@ -205,6 +205,11 @@
   <lastmod>2016-01-30T09:14:51+08:00</lastmod>
 </url>
 
+
+<url>
+  <loc>http://www.niuchaoqun.com/my.html</loc>
+  <lastmod>2016-12-05T11:25:03+08:00</lastmod>
+</url>
 
 <url>
   <loc>http://www.niuchaoqun.com/recommend.html</loc>
