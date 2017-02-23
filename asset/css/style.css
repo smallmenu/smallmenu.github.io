@@ -194,13 +194,14 @@ vertical-align: middle; line-height: 19px; font-size: 14px; font-family: 'Helvet
   font-size: 16px;
   line-height: 1.6;
   padding-top:30px;
+  padding-right:60px;
 }
 
 /* Sidebar modules for boxing content */
 .sidebar-module {
   padding: 15px;
   margin: 0 -15px 15px;
-  font-size: 13px;
+  font-size: 14px;
 }
 .sidebar-module .somelink {}
 .sidebar-module .goodlink {display: block;height: 0;width: 0;overflow: hidden;}
