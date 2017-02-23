@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Css - 蛮-com | 醉里挑灯看剑</title>
+    <title>Gitlab CE + Gitbook 本地环境搭建 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,72 +38,141 @@
       </div>
     </div>
     
-    <div class="container" id="content-wrap">
-      <script type="text/javascript">
+    <script type="text/javascript">
       $(function(){
       	$('#menu-index').addClass('active');
       });
       </script>
+   <div class="container" id="content-wrap">
       <div class="row">
         <div class="col-sm-9 blog-main">
-			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14727802575210.html">Sass + Compass</a></h2>
-			            <p class="blog-post-meta">2016/9/2 
+			            <h2 class="blog-post-title"><a href="14866965563754.html">Gitlab CE + Gitbook 本地环境搭建</a></h2>
+			            <p class="blog-post-meta">2017/2/10
 				            &nbsp;分类于 
 							
-							    <a class='category' href='css.html'>Css</a>&nbsp;
+							    <a class='category' href='php.html'>PHP</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>Sass 是一种 CSS 的开发工具，是对 CSS 的一种扩充，提供了许多便利的写法，节省了设计者的时间，使得 CSS 的开发，变得简单和可维护。</p>
+			            <p><a href="https://about.gitlab.com/downloads/#centos6">https://about.gitlab.com/downloads/#centos6</a></p>
 
-<p>Compass 在 Sass 的基础上，封装了一系列有用的模块和模板，补充 Sass 的功能。</p>
+<h2 id="toc_0">安装Gitlab</h2>
 
+<p>安装所需的软件包：</p>
 
-						 
-						<a href="14727802575210.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
+<pre><code>yum install curl openssh-server openssh-clients postfix cronie
+service postfix start
+chkconfig postfix on
+lokkit -s http -s ssh
+</code></pre>
+
+<p>下载一键部署脚本：</p>
+
+<pre><code>curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
+yum install gitlab-ce
+</code></pre>
+
+<p>如果yum安装比较慢。可以单独下载rpm包安装</p>
+
+<pre><code>curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/6/gitlab-ce-XXX.rpm/download
+rpm -i gitlab-ce-XXX.rpm
+</code></pre>
+
+<p>当前使用版本：gitlab-ce-8.16.4-ce.0.el6.x86_64.rpm</p>
+
+<h2 id="toc_1">配置Gitlab</h2>
+
+<p>Gitlab默认安装路径：/opt/gitlab<br/>
+默认配置文件路径：/etc/gitlab/gitlab.rb</p>
+
+<p>修改默认配置文件：</p>
+
+<pre><code># 监听域名与端口
+external_url &#39;http://localhost:8888&#39;
+
+# SSH 端口
+gitlab_rails[&#39;gitlab_shell_ssh_port&#39;] = 2222
+
+# 配置备份、仓库路径
+gitlab_rails[&#39;backup_path&#39;] = &quot;/data/gitlab/backups&quot;
+git_data_dirs({&quot;default&quot; =&gt; &quot;/data/gitlab/git-data&quot;})
+gitlab_rails[&#39;shared_path&#39;] = &#39;/data/gitlab/gitlab-rails/shared&#39;
+
+# 配置SMTP邮箱功能
+gitlab_rails[&#39;smtp_enable&#39;] = true
+gitlab_rails[&#39;smtp_address&#39;] = &quot;smtp.exmail.qq.com&quot;
+gitlab_rails[&#39;smtp_port&#39;] = 465
+gitlab_rails[&#39;smtp_user_name&#39;] = &quot;example@qq.com&quot;
+gitlab_rails[&#39;smtp_password&#39;] = &quot;密码&quot;
+gitlab_rails[&#39;smtp_domain&#39;] = &quot;smtp.qq.com&quot;
+gitlab_rails[&#39;smtp_authentication&#39;] = &quot;login&quot;
+gitlab_rails[&#39;smtp_enable_starttls_auto&#39;] = true
+gitlab_rails[&#39;smtp_tls&#39;] = true
+
+gitlab_rails[&#39;gitlab_email_enabled&#39;] = true
+gitlab_rails[&#39;gitlab_email_from&#39;] = &#39;example@qq.com&#39;
+
+# 时区
+gitlab_rails[&#39;time_zone&#39;] = &#39;Asia/Shanghai&#39;
+</code></pre>
+
+<h2 id="toc_2">安装 gitbook-cli</h2>
+
+<p><a href="https://toolchain.gitbook.com/setup.html">https://toolchain.gitbook.com/setup.html</a></p>
+
+<p>首先你要安装 Nodejs 与 npm，然后全局安装 gitbook</p>
+
+<pre><code>npm install gitbook-cli -g
+</code></pre>
+
+<p>有几个常用指令：</p>
+
+<pre><code>gitbook init 初始化目录
+gitbook build 输出html
+gitbook serve 本地预览
+gitbook install 用于插件安装
+</code></pre>
+
+<h2 id="toc_3">配置 gitbook</h2>
+
+<p>主要配置参见上面的地址，gitbook默认自带了5个插件：</p>
+
+<ul>
+<li>highlight</li>
+<li>search</li>
+<li>sharing</li>
+<li>font-settings</li>
+<li>livereload</li>
+</ul>
+
+<p>常用插件：</p>
+
+<ul>
+<li>toggle-chapters 折叠左侧目录</li>
+<li>page-toc-button 显示内容大纲</li>
+<li>splitter 左右栏可以拖动</li>
+<li>-sharing 取消分享按钮</li>
+</ul>
+
+<pre><code>&quot;plugins&quot;: [&quot;toggle-chapters&quot;,&quot;page-toc-button&quot;, &quot;splitter&quot;, &quot;-sharing&quot;]
+</code></pre>
+
+			            </div>
 			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14613994523878.html">HTML/CSS 开发人员编码规范</a></h2>
-			            <p class="blog-post-meta">2016/9/1 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='css.html'>Css</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>不管有多少人共同参与同一项目，一定要确保每一行代码都像是同一个人编写的。这是个黄金定律，永远遵循同一套编码规范。</p>
-
-<p>本文参考了不少文档，最后整理了这个规范，主要也是个人的学习总结。</p>
-
-
-						 
-						<a href="14613994523878.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			  
-          <nav>
-            <ul class="pager">
-            	<li class=""><a href="archives.html">归档</a></li>
-            
-            	<li class="  disabled "><a href="#index">上一页</a></li>
-            
-			
-            	<li class=" disabled "><a href="#index">下一页</a></li>
-            
-            </ul>
-          </nav>
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
         </div><!-- /.blog-main -->
-       <!-- slider start -->
-
-  		<div class="col-sm-3 blog-sidebar">
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
           <div class="sidebar-module">
             <h4>分类</h4>
             

@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Css - 蛮-com | 醉里挑灯看剑</title>
+    <title>php composer 配置 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,72 +38,57 @@
       </div>
     </div>
     
-    <div class="container" id="content-wrap">
-      <script type="text/javascript">
+    <script type="text/javascript">
       $(function(){
       	$('#menu-index').addClass('active');
       });
       </script>
+   <div class="container" id="content-wrap">
       <div class="row">
         <div class="col-sm-9 blog-main">
-			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14727802575210.html">Sass + Compass</a></h2>
-			            <p class="blog-post-meta">2016/9/2 
+			            <h2 class="blog-post-title"><a href="14864571405778.html">php composer 配置</a></h2>
+			            <p class="blog-post-meta">2017/2/7
 				            &nbsp;分类于 
 							
-							    <a class='category' href='css.html'>Css</a>&nbsp;
+							    <a class='category' href='php.html'>PHP</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>Sass 是一种 CSS 的开发工具，是对 CSS 的一种扩充，提供了许多便利的写法，节省了设计者的时间，使得 CSS 的开发，变得简单和可维护。</p>
+			            <h2 id="toc_0">安装</h2>
 
-<p>Compass 在 Sass 的基础上，封装了一系列有用的模块和模板，补充 Sass 的功能。</p>
+<p>参见官网：<a href="https://getcomposer.org/download/">https://getcomposer.org/download/</a></p>
 
+<pre><code>php -r &quot;copy(&#39;https://getcomposer.org/installer&#39;, &#39;composer-setup.php&#39;);&quot;
+php -r &quot;if (hash_file(&#39;SHA384&#39;, &#39;composer-setup.php&#39;) === &#39;55d6ead61b29c7bdee5cccfb50076874187bd9f21f65d8991d46ec5cc90518f447387fb9f76ebae1fbbacf329e583e30&#39;) { echo &#39;Installer verified&#39;; } else { echo &#39;Installer corrupt&#39;; unlink(&#39;composer-setup.php&#39;); } echo PHP_EOL;&quot;
+php composer-setup.php
+php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
+</code></pre>
 
-						 
-						<a href="14727802575210.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
+<h2 id="toc_1">配置</h2>
+
+<p>composer config -l -g</p>
+
+<pre><code>&quot;config&quot;: {
+    &quot;secure-http&quot;:false
+}
+</code></pre>
+
+			            </div>
 			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14613994523878.html">HTML/CSS 开发人员编码规范</a></h2>
-			            <p class="blog-post-meta">2016/9/1 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='css.html'>Css</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>不管有多少人共同参与同一项目，一定要确保每一行代码都像是同一个人编写的。这是个黄金定律，永远遵循同一套编码规范。</p>
-
-<p>本文参考了不少文档，最后整理了这个规范，主要也是个人的学习总结。</p>
-
-
-						 
-						<a href="14613994523878.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			  
-          <nav>
-            <ul class="pager">
-            	<li class=""><a href="archives.html">归档</a></li>
-            
-            	<li class="  disabled "><a href="#index">上一页</a></li>
-            
-			
-            	<li class=" disabled "><a href="#index">下一页</a></li>
-            
-            </ul>
-          </nav>
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
         </div><!-- /.blog-main -->
-       <!-- slider start -->
-
-  		<div class="col-sm-3 blog-sidebar">
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
           <div class="sidebar-module">
             <h4>分类</h4>
             

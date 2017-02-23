@@ -48,6 +48,156 @@
         <div class="col-sm-9 blog-main">
 			
 					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14866965563754.html">Gitlab CE + Gitbook 本地环境搭建</a></h2>
+			            <p class="blog-post-meta">2017/2/10 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='php.html'>PHP</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p><a href="https://about.gitlab.com/downloads/#centos6">https://about.gitlab.com/downloads/#centos6</a></p>
+
+<h2 id="toc_0">安装Gitlab</h2>
+
+<p>安装所需的软件包：</p>
+
+<pre><code>yum install curl openssh-server openssh-clients postfix cronie
+service postfix start
+chkconfig postfix on
+lokkit -s http -s ssh
+</code></pre>
+
+<p>下载一键部署脚本：</p>
+
+<pre><code>curl -sS https://packages.gitlab.com/install/repositories/gitlab/gitlab-ce/script.rpm.sh | sudo bash
+yum install gitlab-ce
+</code></pre>
+
+<p>如果yum安装比较慢。可以单独下载rpm包安装</p>
+
+<pre><code>curl -LJO https://packages.gitlab.com/gitlab/gitlab-ce/packages/el/6/gitlab-ce-XXX.rpm/download
+rpm -i gitlab-ce-XXX.rpm
+</code></pre>
+
+<p>当前使用版本：gitlab-ce-8.16.4-ce.0.el6.x86_64.rpm</p>
+
+<h2 id="toc_1">配置Gitlab</h2>
+
+<p>Gitlab默认安装路径：/opt/gitlab<br/>
+默认配置文件路径：/etc/gitlab/gitlab.rb</p>
+
+<p>修改默认配置文件：</p>
+
+<pre><code># 监听域名与端口
+external_url &#39;http://localhost:8888&#39;
+
+# SSH 端口
+gitlab_rails[&#39;gitlab_shell_ssh_port&#39;] = 2222
+
+# 配置备份、仓库路径
+gitlab_rails[&#39;backup_path&#39;] = &quot;/data/gitlab/backups&quot;
+git_data_dirs({&quot;default&quot; =&gt; &quot;/data/gitlab/git-data&quot;})
+gitlab_rails[&#39;shared_path&#39;] = &#39;/data/gitlab/gitlab-rails/shared&#39;
+
+# 配置SMTP邮箱功能
+gitlab_rails[&#39;smtp_enable&#39;] = true
+gitlab_rails[&#39;smtp_address&#39;] = &quot;smtp.exmail.qq.com&quot;
+gitlab_rails[&#39;smtp_port&#39;] = 465
+gitlab_rails[&#39;smtp_user_name&#39;] = &quot;example@qq.com&quot;
+gitlab_rails[&#39;smtp_password&#39;] = &quot;密码&quot;
+gitlab_rails[&#39;smtp_domain&#39;] = &quot;smtp.qq.com&quot;
+gitlab_rails[&#39;smtp_authentication&#39;] = &quot;login&quot;
+gitlab_rails[&#39;smtp_enable_starttls_auto&#39;] = true
+gitlab_rails[&#39;smtp_tls&#39;] = true
+
+gitlab_rails[&#39;gitlab_email_enabled&#39;] = true
+gitlab_rails[&#39;gitlab_email_from&#39;] = &#39;example@qq.com&#39;
+
+# 时区
+gitlab_rails[&#39;time_zone&#39;] = &#39;Asia/Shanghai&#39;
+</code></pre>
+
+<h2 id="toc_2">安装 gitbook-cli</h2>
+
+<p><a href="https://toolchain.gitbook.com/setup.html">https://toolchain.gitbook.com/setup.html</a></p>
+
+<p>首先你要安装 Nodejs 与 npm，然后全局安装 gitbook</p>
+
+<pre><code>npm install gitbook-cli -g
+</code></pre>
+
+<p>有几个常用指令：</p>
+
+<pre><code>gitbook init 初始化目录
+gitbook build 输出html
+gitbook serve 本地预览
+gitbook install 用于插件安装
+</code></pre>
+
+<h2 id="toc_3">配置 gitbook</h2>
+
+<p>主要配置参见上面的地址，gitbook默认自带了5个插件：</p>
+
+<ul>
+<li>highlight</li>
+<li>search</li>
+<li>sharing</li>
+<li>font-settings</li>
+<li>livereload</li>
+</ul>
+
+<p>常用插件：</p>
+
+<ul>
+<li>toggle-chapters 折叠左侧目录</li>
+<li>page-toc-button 显示内容大纲</li>
+<li>splitter 左右栏可以拖动</li>
+<li>-sharing 取消分享按钮</li>
+</ul>
+
+<pre><code>&quot;plugins&quot;: [&quot;toggle-chapters&quot;,&quot;page-toc-button&quot;, &quot;splitter&quot;, &quot;-sharing&quot;]
+</code></pre>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14864571405778.html">php composer 配置</a></h2>
+			            <p class="blog-post-meta">2017/2/7 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='php.html'>PHP</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <h2 id="toc_0">安装</h2>
+
+<p>参见官网：<a href="https://getcomposer.org/download/">https://getcomposer.org/download/</a></p>
+
+<pre><code>php -r &quot;copy(&#39;https://getcomposer.org/installer&#39;, &#39;composer-setup.php&#39;);&quot;
+php -r &quot;if (hash_file(&#39;SHA384&#39;, &#39;composer-setup.php&#39;) === &#39;55d6ead61b29c7bdee5cccfb50076874187bd9f21f65d8991d46ec5cc90518f447387fb9f76ebae1fbbacf329e583e30&#39;) { echo &#39;Installer verified&#39;; } else { echo &#39;Installer corrupt&#39;; unlink(&#39;composer-setup.php&#39;); } echo PHP_EOL;&quot;
+php composer-setup.php
+php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
+</code></pre>
+
+<h2 id="toc_1">配置</h2>
+
+<p>composer config -l -g</p>
+
+<pre><code>&quot;config&quot;: {
+    &quot;secure-http&quot;:false
+}
+</code></pre>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14671892872587.html">PHP Opcache 扩展</a></h2>
 			            <p class="blog-post-meta">2016/6/29 
 				            &nbsp;分类于 
@@ -145,12 +295,12 @@
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(7)</a>
+	        <a href="program.html">编程语言&nbsp;(10)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="php.html">PHP&nbsp;(2)</a>&nbsp;&nbsp;
+	        	<a href="php.html">PHP&nbsp;(4)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -173,6 +323,18 @@
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14866965563754.html" title="Gitlab CE + Gitbook 本地环境搭建">Gitlab CE + Gitbook 本地环境搭建</a><br />
+	     
+	  
+	      
+		        <a href="14864571405778.html" title="php composer 配置">php composer 配置</a><br />
+	     
+	  
+	      
+		        <a href="14841186341336.html" title="Java QuickStart (1)">Java QuickStart (1)</a><br />
+	     
 	  
 	      
 		        <a href="14805801026400.html" title="搜索引擎老板开了个杂货店">搜索引擎老板开了个杂货店</a><br />
@@ -220,18 +382,6 @@
 	  
 	      
 		        <a href="14657354899214.html" title="PHP 5.4 编译参数">PHP 5.4 编译参数</a><br />
-	     
-	  
-	      
-		        <a href="14661548403888.html" title="基于Cloudera CDH的Hadoop平台搭建">基于Cloudera CDH的Hadoop平台搭建</a><br />
-	     
-	  
-	      
-		        <a href="14661279980383.html" title="Linux服务器部署规范（CentOS 6）">Linux服务器部署规范（CentOS 6）</a><br />
-	     
-	  
-	      
-		        <a href="14643975993511.html" title="TokuDB 引擎 （Percona Server）">TokuDB 引擎 （Percona Server）</a><br />
 	     
 	  
 	      

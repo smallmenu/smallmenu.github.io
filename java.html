@@ -48,6 +48,294 @@
         <div class="col-sm-9 blog-main">
 			
 					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14841186341336.html">Java QuickStart (1)</a></h2>
+			            <p class="blog-post-meta">2017/1/11 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <h2 id="toc_0">面向对象</h2>
+
+<h3 id="toc_1">Java 内存区域</h3>
+
+<ol>
+<li>栈内存空间，保存所有对象名称（保存了引用堆内存空间地址）</li>
+<li>堆内存空间：保存每个对象的具体属性内容</li>
+<li>全局数据区：保存 static 类型的属性</li>
+<li>全局代码区：保存所有方法定义</li>
+</ol>
+
+<h3 id="toc_2">this 关键字</h3>
+
+<p>使用 this 调用本类中的属性：this.name = &quot;&quot;<br/>
+this() 可以调用构造方法<br/>
+this 表示当前对象，</p>
+
+<h3 id="toc_3">static 关键词</h3>
+
+<p>使用 static 表示类属性<br/>
+static 不可以调用非 static 类型的属性和方法<br/>
+可以在Class中生命static { 静态代码块 }，它会优于主方法执行</p>
+
+<h3 id="toc_4">内部类</h3>
+
+<p>在类内部可以通过 public 或 private 声明内部类，访问权限与变量和方法完全相同。 <br/>
+在类中定义内部静态类<br/>
+在方法中定义内部类</p>
+
+<h3 id="toc_5">super()</h3>
+
+<p>子类默认会自动调用父类的无参构造。super()。<br/>
+子类可以手动调用有参构造super(参数)</p>
+
+<h3 id="toc_6">final</h3>
+
+<p>使用final生命的类不能有子类<br/>
+使用final生命的方法不能被子类覆盖<br/>
+使用final生命的变量即成为常量，常量不可以修改。</p>
+
+<h3 id="toc_7">抽象类</h3>
+
+<p>包含一个抽象方法的类必须是抽象类，都要使用abstract关键字声明<br/>
+抽象方法只需要声明，不需要实现。抽象方法不能使用private生命<br/>
+public abstract void print();</p>
+
+<h3 id="toc_8">接口</h3>
+
+<p>接口可以理解为一种特殊的类，是由全局常量和公共的抽象方法组成。并且默认是这样，所以声明时候可以简化。<br/>
+接口的抽象方法必须定义 public 权限</p>
+
+<h3 id="toc_9">克隆</h3>
+
+<p>实现 Cloneable 接口，并覆写 clone() 方法</p>
+
+<pre><code>class Person implements Cloneable {
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
+}
+</code></pre>
+
+<h3 id="toc_10">多态性</h3>
+
+<p>多态主要体现两方面：<br/>
+1. 方法的重载与覆盖<br/>
+2. 对象的多态性</p>
+
+<p>对象的多态性，分为向上转型，向下转型。<br/>
+向上转型，程序会自动完成。向下转型，必须明确指明要转型的子类类型。<br/>
+向上转型关系发生以后，调用的方法是子类覆盖后的方法。并且无法调用子类独有的方法。</p>
+
+<h3 id="toc_11">instance of 关键词，用于判断一个对象是否是一个类的实例</h3>
+
+<p>返回 boolean</p>
+
+<h3 id="toc_12">抽象类和接口的区别</h3>
+
+<table>
+<thead>
+<tr>
+<th>区别点</th>
+<th>抽象类</th>
+<th>接口</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>定义</td>
+<td>包含一个抽象方法的类</td>
+<td>抽象方法和全局常量的集合</td>
+</tr>
+<tr>
+<td>组成</td>
+<td>构造方法、抽象方法、普通方法、常量、变量</td>
+<td>常量、抽象方法</td>
+</tr>
+<tr>
+<td>使用</td>
+<td>子类集成抽象类</td>
+<td>子类实现接口</td>
+</tr>
+<tr>
+<td>关系</td>
+<td>抽象类可以实现多个接口</td>
+<td>接口不能继承抽象类，但可继承多个接口</td>
+</tr>
+<tr>
+<td>设计模式</td>
+<td>模板设计</td>
+<td>工厂设计、代理设计</td>
+</tr>
+<tr>
+<td>对象</td>
+<td>通过对象的多态产生实例化对象</td>
+<td></td>
+</tr>
+<tr>
+<td>局限</td>
+<td>抽象类有单继承的局限</td>
+<td>接口没有此局限</td>
+</tr>
+<tr>
+<td>实际</td>
+<td>作为模板</td>
+<td>作为标准或一种能力</td>
+</tr>
+<tr>
+<td>选择</td>
+<td>如果两者都可以用，优先使用接口，避免单继承局限</td>
+<td></td>
+</tr>
+<tr>
+<td>特殊</td>
+<td>一个抽象类可以包含多个接口，一个接口可以包含多个抽象类</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+
+<p>类的设计中，尽量不要去继承一个已经实现好的类，而通过继承抽象类或实现接口来实现，如果两者都可以使用，那么优先使用接口。</p>
+
+<h3 id="toc_13">Object 类</h3>
+
+<p>所有的类都有一个公共的父类，Object。有以下主要方法： equals()、hashCode()、toString();<br/>
+比如String类就继承了Object类，单独覆盖实现了equals()方法</p>
+
+<h3 id="toc_14">包装类</h3>
+
+<p>Java设计中提倡一切皆对象。<br/>
+所以需要将基本数据类型进行包装：</p>
+
+<p>int -&gt; Integer<br/>
+char  -&gt; Character<br/>
+short  -&gt; Short<br/>
+long  -&gt; Long<br/>
+float  -&gt; Float<br/>
+double  -&gt; Double<br/>
+boolean -&gt; Boolean<br/>
+byte -&gt; Byte</p>
+
+<p>其中数值类型包装类，主要又继承自 Number 类。它提供一些拆箱方法。<br/>
+基本数据类型与包装类的互转，称为装箱与拆箱操作。</p>
+
+<p>int x = 30;<br/>
+Integer i = new Integer(x);  // 装箱<br/>
+int temp = i.intValue(); // 拆箱</p>
+
+<p>包装类运用最多的，还是进行字符串数值转换，如：</p>
+
+<p>string str1 = &quot;30&quot;;<br/>
+string str2 = &quot;30.3&quot;;<br/>
+int x = Integer.parseInt(str1);<br/>
+float f = Float.parseFloat(str2);</p>
+
+<h3 id="toc_15">异常</h3>
+
+<p>定义方法时 throws 关键字表示此方法不处理异常，交给方法调用者进行处理<br/>
+throw 表示抛出异常</p>
+
+<h3 id="toc_16">包</h3>
+
+<p>import * 不会产生性能问题。<br/>
+如果在不同的包中，有类重名，那么调用的时候需要写出完整的包、类名称。</p>
+
+<p>常用的系统开发包：<br/>
+java.lang  基本包，目前JDK已经自动导入<br/>
+java.lang.reflect 反射机制<br/>
+java.util  工具包，包含常用的类库，重点掌握<br/>
+java.text 提供了文本处理的类库<br/>
+java.sql 数据库操作<br/>
+java.net 网络编程<br/>
+java.io 输入输出</p>
+
+<p>import static 可以静态导入全部使用static声明的静态方法的类。这时候比较像某些语言的函数，因为可以直接使用静态方法调用。</p>
+
+<h3 id="toc_17">权限控制</h3>
+
+<p>private 仅限本类访问<br/>
+default 可以被本包中的其他类访问<br/>
+protected 可以被本包及不同包的子类访问<br/>
+public 所有</p>
+
+<h2 id="toc_18">应用</h2>
+
+<h3 id="toc_19">多线程</h3>
+
+<p>多线程是指在一个进程执行过程中可以产生多个线程。这些线程可以同时存在，同时运行。</p>
+
+<p>继承Thread类，覆写run方法，通过start执行：</p>
+
+<pre><code>class MyThread extends Thread {
+    public void run() {
+    
+    }
+}
+MyThread mt1 = new MyThread();
+MyThread mt2 = new MyThread();
+mt1.start();
+mt2.start();
+</code></pre>
+
+<p>实现 Runnable 接口，实现run方法：</p>
+
+<pre><code>class MyThread implements Runnable {
+    public void run() {
+    
+    }
+}
+MyThread mt1 = new MyThread();
+MyThread mt2 = new MyThread();
+Thread t1 = new Thread(mt1);
+Thread t2 = new Thread(mt2);
+t1.start();
+t2.start();
+</code></pre>
+
+<p>建议使用 Runnable 接口实现多线程，原因：<br/>
+1. 继承 Thread 类，不能实现资源共享。<br/>
+2. 避免 Java 单继承特性带来的局限<br/>
+3. 增强程序健壮性</p>
+
+<p>中断线程 interrupt()<br/>
+休眠线程 sleep()<br/>
+后台运行线程 setDaemon()<br/>
+暂停线程 yield()</p>
+
+<h4 id="toc_20">同步与死锁</h4>
+
+<p>同步：多个操作在同一时间只能有一个线程进行，其他线程要等待此线程完成之后才可以继续运行。</p>
+
+<pre><code>同步代码块
+synchronized (this) {
+}
+同步方法
+public synchronized run() {
+}
+</code></pre>
+
+<p>死锁：两个线程都在彼此等待，过多的同步就有可能产生死锁。</p>
+
+<h3 id="toc_21">IO</h3>
+
+<p>java.io包中的流主要有字节流、字符流两大类。字节流对应OutputStream/InputStream，字符流对应Writer/Reader类，它们均是抽象类。</p>
+
+<p>字节流操作时不会用到缓冲区，是文件本身直接操作，而字符流使用了缓冲区。比如字符流如果不进行flush()和close()操作，数据会丢失。</p>
+
+<p>字节字符流的转换，是通过OutputStreamWriter/InputStreamReader类来实现的。而Writer类是OutputStreamWriter子类。所以不管是字符流还是字节流，最终都是以字节的形式输入输出的。</p>
+
+<p>管道流，主要作用是可以进行两个线程间的通信。</p>
+
+<p>打印流，是输出信息最方便的类。</p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14541202136915.html">CentOS/Mac 下安装 JDK 1.7</a></h2>
 			            <p class="blog-post-meta">2016/1/30 
 				            &nbsp;分类于 
@@ -120,12 +408,12 @@
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(7)</a>
+	        <a href="program.html">编程语言&nbsp;(10)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="php.html">PHP&nbsp;(2)</a>&nbsp;&nbsp;
+	        	<a href="php.html">PHP&nbsp;(4)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(1)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -148,6 +436,18 @@
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14866965563754.html" title="Gitlab CE + Gitbook 本地环境搭建">Gitlab CE + Gitbook 本地环境搭建</a><br />
+	     
+	  
+	      
+		        <a href="14864571405778.html" title="php composer 配置">php composer 配置</a><br />
+	     
+	  
+	      
+		        <a href="14841186341336.html" title="Java QuickStart (1)">Java QuickStart (1)</a><br />
+	     
 	  
 	      
 		        <a href="14805801026400.html" title="搜索引擎老板开了个杂货店">搜索引擎老板开了个杂货店</a><br />
@@ -195,18 +495,6 @@
 	  
 	      
 		        <a href="14657354899214.html" title="PHP 5.4 编译参数">PHP 5.4 编译参数</a><br />
-	     
-	  
-	      
-		        <a href="14661548403888.html" title="基于Cloudera CDH的Hadoop平台搭建">基于Cloudera CDH的Hadoop平台搭建</a><br />
-	     
-	  
-	      
-		        <a href="14661279980383.html" title="Linux服务器部署规范（CentOS 6）">Linux服务器部署规范（CentOS 6）</a><br />
-	     
-	  
-	      
-		        <a href="14643975993511.html" title="TokuDB 引擎 （Percona Server）">TokuDB 引擎 （Percona Server）</a><br />
 	     
 	  
 	      
