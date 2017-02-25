@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>HDFS 常用指令 - 蛮-com | 醉里挑灯看剑</title>
+    <title>工厂模式之工厂方法模式-创建型 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,37 +47,141 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541169085543.html">HDFS 常用指令</a></h2>
-			            <p class="blog-post-meta">2016/1/30
+			            <h2 class="blog-post-title"><a href="14878375722768.html">工厂模式之工厂方法模式-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/23
 				            &nbsp;分类于 
 							
-							    <a class='category' href='hadoop.html'>Hadoop</a>&nbsp;
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>如何修改 HDFS 副本数量</p>
+			            <p>在工厂方法模式中，工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类。</p>
+
+<p>具有完整的产品接口、产品实现、工厂接口、工厂实现。</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">副本</h2>
+<h2 id="toc_0">VS 简单工厂</h2>
 
-<p>一个文件，上传到hdfs上时指定的是几个副本就是几个。以后你修改了副本数，对已经上传了的文件也不会起作用。可以再上传文件的同时指定创建的副本数</p>
+<ul>
+<li><p>简单工厂包含了必要的逻辑判断，根据客户端参数，在工厂内部动态实例化类。有违“开闭原则”</p></li>
+<li><p>工厂方法通过增加一个具体工厂实现和具体产品实现。而简单工厂需要修改工厂实现</p></li>
+<li><p>客户端都需要修改代码，简单工厂需要修改参数，而工厂方法需要修改要使用哪个工厂</p></li>
+</ul>
 
-<p><code>sudo -u hdfs hdfs -D dfs.replication=1 -put</code></p>
+<h2 id="toc_1">优点</h2>
 
-<p>可以通过命令来更改已经上传的文件的副本数：</p>
+<ul>
+<li><p>工厂方法模式是简单工厂模式的进一步抽象和推广。由于使用了面向对象的多态性，工厂方法模式保持了简单工厂模式的优点，而且克服了它的缺点。</p></li>
+<li><p>在工厂方法模式中，核心的工厂类不再负责所有产品的创建，而是将具体创建工作交给子类去做。这个核心类仅仅负责给出具体工厂必须实现的接口，而不负责哪一个产品类被实例化这种细节，这使得工厂方法模式可以允许系统在不修改工厂角色的情况下引进新产品。</p></li>
+<li><p>在系统中加入新产品时，无须修改抽象工厂和抽象产品提供的接口，也无须修改其他的具体工厂和具体产品，系统的可扩展性也就变得非常好，完全符合“开闭原则”。</p></li>
+</ul>
 
-<p><code>sudo -u hdfs hdfs dfs -setrep -R 2 /</code></p>
+<h2 id="toc_2">缺点</h2>
 
-<p>查看当前hdfs的副本数<br/>
-<code>sudo -u hdfs hdfs fsck -locations</code></p>
+<ul>
+<li><p>在添加新产品时，需要编写新的具体产品类，而且还要提供与之对应的具体工厂类，系统中类的个数将成对增加，在一定程度上增加了系统的复杂度，有很多的类需要编译和运行，会给系统带来一些额外的开销。</p></li>
+<li><p>需要引入抽象层，在客户端代码中均使用抽象层进行定义，增加了系统的抽象性和理解难度，且在实现时可能需要用到DOM、反射等技术，增加了系统的实现难度。</p></li>
+</ul>
 
-<p>Job Finished in 99.451 seconds<br/>
-当前集群性能，100 map，每个map执行1亿次<br/>
-sudo -u hdfs hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.5.1.jar pi 100 100000000</p>
+<h2 id="toc_3">适用</h2>
 
-<h2 id="toc_1">待更</h2>
+<ul>
+<li>在工厂方法模式中，客户端不需要知道具体产品类的类名，只需要知道所对应的工厂即可，具体的产品对象由具体工厂类创建；客户端需要知道创建具体产品的工厂类。</li>
+</ul>
+
+<p>*　在工厂方法模式中，对于抽象工厂类只需要提供一个创建产品的接口，而由其子类来确定具体要创建的对象，利用面向对象的多态性和里氏代换原则，在程序运行时，子类对象将覆盖父类对象，从而使得系统更容易扩展。</p>
+
+<h2 id="toc_4">应用</h2>
+
+<p>Java JDBC</p>
+
+<h2 id="toc_5">示例</h2>
+
+<pre><code class="language-php">&lt;?php
+/**
+ * Interface Part
+ */
+interface Part
+{
+    public function produce();
+}
+
+/**
+ * Class CarEngine
+ */
+class Engine implements Part
+{
+    public function produce()
+    {
+        echo &#39;生产发动机&#39;;
+        echo PHP_EOL;
+    }
+}
+
+/**
+ * Class CarWheel
+ */
+class Wheel implements Part
+{
+    public function produce()
+    {
+        echo &#39;生产车轮&#39;;
+        echo PHP_EOL;
+    }
+}
+
+/**
+ * Interface PartFactory
+ */
+interface PartFactory
+{
+    public function create();
+}
+
+/**
+ * Class CarFactory
+ */
+class WheelFactory implements PartFactory
+{
+    public function create()
+    {
+        return new Wheel();
+    }
+}
+
+/**
+ * Class EngineFactory
+ */
+class EngineFactory implements PartFactory
+{
+    public function create()
+    {
+        return new Engine();
+    }
+}
+
+$wheelFactory = new WheelFactory();
+$wheel = $wheelFactory-&gt;create();
+var_dump($wheel);
+$wheel-&gt;produce();
+
+$engineFactory = new EngineFactory();
+$engine = $engineFactory-&gt;create();
+var_dump($engine);
+$engine-&gt;produce();
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>object(Wheel)#2 (0) {
+}
+生产车轮
+object(Engine)#4 (0) {
+}
+生产发动机
+</code></pre>
 
 			            </div>
 			          </div><!-- /.blog-post -->

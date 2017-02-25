@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>HDFS 常用指令 - 蛮-com | 醉里挑灯看剑</title>
+    <title>软件设计 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,61 +38,114 @@
       </div>
     </div>
     
-    <script type="text/javascript">
+    <div class="container" id="content-wrap">
+      <script type="text/javascript">
       $(function(){
       	$('#menu-index').addClass('active');
       });
       </script>
-   <div class="container" id="content-wrap">
       <div class="row">
         <div class="col-sm-9 blog-main">
+			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541169085543.html">HDFS 常用指令</a></h2>
-			            <p class="blog-post-meta">2016/1/30
+			            <h2 class="blog-post-title"><a href="14879052822759.html">工厂模式之抽象工厂模式-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/24 
 				            &nbsp;分类于 
 							
-							    <a class='category' href='hadoop.html'>Hadoop</a>&nbsp;
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>如何修改 HDFS 副本数量</p>
+			            <p>抽象工厂模式与工厂方法模式最大的区别在于，工厂方法模式针对的是一个产品等级结构，而抽象工厂模式则需要面对多个产品等级结构，一个工厂等级结构可以负责多个不同产品等级结构中的产品对象的创建。多个产品等级结构构成了一个产品族。</p>
 
-<span id="more"></span><!-- more -->
 
-<h2 id="toc_0">副本</h2>
-
-<p>一个文件，上传到hdfs上时指定的是几个副本就是几个。以后你修改了副本数，对已经上传了的文件也不会起作用。可以再上传文件的同时指定创建的副本数</p>
-
-<p><code>sudo -u hdfs hdfs -D dfs.replication=1 -put</code></p>
-
-<p>可以通过命令来更改已经上传的文件的副本数：</p>
-
-<p><code>sudo -u hdfs hdfs dfs -setrep -R 2 /</code></p>
-
-<p>查看当前hdfs的副本数<br/>
-<code>sudo -u hdfs hdfs fsck -locations</code></p>
-
-<p>Job Finished in 99.451 seconds<br/>
-当前集群性能，100 map，每个map执行1亿次<br/>
-sudo -u hdfs hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.5.1.jar pi 100 100000000</p>
-
-<h2 id="toc_1">待更</h2>
-
-			            </div>
+						 
+						<a href="14879052822759.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
 			          </div><!-- /.blog-post -->
-			<div class="share-comment">
-			<div id="SOHUCS"></div>
-<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
-<script type="text/javascript">
-    window.changyan.api.config({
-        appid: 'cysrW6HYf',
-        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
-    });
-</script>
-			</div>
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14878392980386.html">单例模式-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/23 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>单例模式确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例，这个类称为单例类，它提供全局访问的方法。</p>
+
+<p>单例类拥有一个私有构造函数，确保用户无法通过new关键字直接实例化它。除此之外，该模式中包含一个静态私有成员变量与公有的方法，该方法负责检验实例的存在性并实例化自己，然后存储在静态成员变量中，以确保只有一个实例被创建。</p>
+
+
+						 
+						<a href="14878392980386.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14878375722768.html">工厂模式之工厂方法模式-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/23 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>在工厂方法模式中，工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类。</p>
+
+<p>具有完整的产品接口、产品实现、工厂接口、工厂实现。</p>
+
+
+						 
+						<a href="14878375722768.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14878346074790.html">工厂模式之简单工厂模式（静态工厂模式）-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/23 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>在简单工厂模式中，可以根据参数的不同返回不同类的实例。简单工厂模式专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类（接口）。</p>
+
+<p>具有产品接口、产品实现、工厂实现。没有工厂接口。</p>
+
+<p>简单工厂模式用于生产静态或独立的产品。</p>
+
+
+						 
+						<a href="14878346074790.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			  
+          <nav>
+            <ul class="pager">
+            	<li class=""><a href="archives.html">归档</a></li>
+            
+            	<li class="  disabled "><a href="#index">上一页</a></li>
+            
+			
+            	<li class=" disabled "><a href="#index">下一页</a></li>
+            
+            </ul>
+          </nav>
         </div><!-- /.blog-main -->
-       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+       <!-- slider start -->
+
+  		<div class="col-sm-3 blog-sidebar">
           <div class="sidebar-module">
             <h4>分类</h4>
             

@@ -11,7 +11,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!--     <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/dark.min.css"> -->
-    <link rel="stylesheet" href="/asset/css/style.css" >
+    <link rel="stylesheet" href="/asset/css/style.css?v=20170225" >
     <script src="//cdn.bootcss.com/jquery/1.12.2/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/asset/js/docs.js"></script>
@@ -47,6 +47,408 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 			
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14879999782063.html">Unix 环境高级编程-进程</a></h2>
+			            <p class="blog-post-meta">2017/2/25 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='php.html'>PHP</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>程序的执行实例称为进程，Unix确保每个进程都有一个唯一的标识，即进程ID。</p>
+
+
+						 
+						<a href="14879999782063.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14879216457905.html">设计模式原则</a></h2>
+			            <p class="blog-post-meta">2017/2/24 
+				            
+							 
+							
+			            </p>
+			            <div class="content-responsive">
+			            <h2 id="toc_0">单一职责原则</h2>
+
+<p>对于一个类而言，应该仅有一个引起它变化的原因。</p>
+
+<p>如果一个类承担的职责过多，等于把这些职责耦合在一起，一个职责的变化可能会削弱或抑制这个类完成其他职责的能力，这种耦合会导致脆弱的设计。</p>
+
+<h2 id="toc_1">开放-封闭原则</h2>
+
+<p>开放-封闭原则：软件实体（类、模块、函数）应该是可以扩展的，但是不可以修改。</p>
+
+<p>无论模块多么封闭，都会存在一些无法对之封闭的变化，既然不可能完全封闭，设计人员对于模块应该对哪种变化封闭做出选择。等到变化发生时立即采集行动。</p>
+
+<p>面对需求，对程序的改动应该是通过增加新代码进行，而不是更改现有的代码。</p>
+
+<h2 id="toc_2">依赖倒转原则</h2>
+
+<p>抽象不应该依赖细节，细节应该依赖于抽象。</p>
+
+<p>针对接口编程，不要对实现编程。</p>
+
+<p>高层模块不应该依赖底层模块。</p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14879154940276.html">观察者模式-行为型</a></h2>
+			            <p class="blog-post-meta">2017/2/24 
+				            
+							 
+							
+			            </p>
+			            <div class="content-responsive">
+			            <p>观察者模式：定义对象间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。</p>
+
+<p>发生改变的对象称为观察目标，而被通知的对象称为观察者，一个观察目标可以对应多个观察者，而且这些观察者之间没有相互联系，可以根据需要增加和删除观察者，使得系统更易于扩展。</p>
+
+<p>观察者模式又叫做发布-订阅（Publish/Subscribe）模式、模型-视图（Model/View）模式、源-监听器（Source/Listener）模式或从属者（Dependents）模式。</p>
+
+<h2 id="toc_0">优点</h2>
+
+<ul>
+<li><p>观察者模式可以实现表示层和数据逻辑层的分离，并定义了稳定的消息更新传递机制，抽象了更新接口，使得可以有各种各样不同的表示层作为具体观察者角色。</p></li>
+<li><p>观察者模式在观察目标和观察者之间建立一个抽象的耦合。</p></li>
+<li><p>观察者模式支持广播通信。</p></li>
+<li><p>观察者模式符合“开闭原则”的要求。</p></li>
+</ul>
+
+<h2 id="toc_1">缺点</h2>
+
+<ul>
+<li><p>如果一个观察目标对象有很多直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间。</p></li>
+<li><p>如果在观察者和观察目标之间有循环依赖的话，观察目标会触发它们之间进行循环调用，可能导致系统崩溃。</p></li>
+<li><p>观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化。</p></li>
+</ul>
+
+<h2 id="toc_2">适用</h2>
+
+<p>一个抽象模型有两个方面，其中一个方面依赖于另一个方面。将这些方面封装在独立的对象中使它们可以各自独立地改变和复用。</p>
+
+<p>一个对象的改变将导致其他一个或多个对象也发生改变，而不知道具体有多少对象将发生改变，可以降低对象之间的耦合度。</p>
+
+<p>一个对象必须通知其他对象，而并不知道这些对象是谁。</p>
+
+<p>需要在系统中创建一个触发链，A对象的行为将影响B对象，B对象的行为将影响C对象……，可以使用观察者模式创建一种链式触发机制。</p>
+
+<h2 id="toc_3">应用</h2>
+
+<p>观察者模式在软件开发中应用非常广泛，如某电子商务网站可以在执行发送操作后给用户多个发送商品打折信息</p>
+
+<p>某团队战斗游戏中某队友牺牲将给所有成员提示等等，凡是涉及到一对一或者一对多的对象交互场景都可以使用观察者模式。</p>
+
+<p>在JDK的java.util包中，提供了Observable类以及Observer接口，它们构成了Java语言对观察者模式的支持。</p>
+
+<h2 id="toc_4">示例</h2>
+
+<h3 id="toc_5">方法1 手工实现</h3>
+
+<pre><code class="language-php">&lt;?php
+/**
+ * Interface SubjectInterface
+ */
+interface SubjectInterface
+{
+    public function attach(ObserverInterface $observer);
+
+    public function detach(ObserverInterface $observer);
+
+    public function notify();
+}
+
+/**
+ * Class Subject
+ */
+class Subject implements SubjectInterface
+{
+    protected $subject;
+
+    protected $observers = array();
+
+    public function __construct($subject)
+    {
+        $this-&gt;subject = $subject;
+    }
+
+    public function attach(ObserverInterface $observer)
+    {
+        $this-&gt;observers[] = $observer;
+    }
+
+    public function detach(ObserverInterface $observer)
+    {
+        foreach ($this-&gt;observers as $key =&gt; $o) {
+            if ($o === $observer) {
+                unset($this-&gt;observers[$key]);
+            }
+        }
+    }
+
+    public function notify()
+    {
+        foreach ($this-&gt;observers as $key =&gt; $o) {
+            $o-&gt;update($this);
+        }
+    }
+
+    public function getSubject()
+    {
+        return $this-&gt;subject;
+    }
+}
+
+/**
+ * Interface ObserverInterface
+ */
+interface ObserverInterface
+{
+    public function update(SubjectInterface $s);
+}
+
+/**
+ * Class Observer
+ */
+abstract class Observer implements ObserverInterface
+{
+    protected $name = null;
+
+    public function __construct($name)
+    {
+        $this-&gt;name = $name;
+    }
+
+    abstract public function update(SubjectInterface $s);
+}
+
+/**
+ * Class Observer1
+ */
+class Observer1 extends Observer
+{
+    public function update(SubjectInterface $s)
+    {
+        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
+        echo PHP_EOL;
+    }
+}
+
+/**
+ * Class Observer2
+ */
+class Observer2 extends Observer
+{
+    public function update(SubjectInterface $s)
+    {
+        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
+        echo PHP_EOL;
+    }
+}
+
+$subject = new Subject(&#39;subject&#39;);
+$observer = new Observer1(&#39;observerinstance&#39;);
+$observer1 = new Observer1(&#39;observerinstance1&#39;);
+$observer2 = new Observer2(&#39;observerinstance2&#39;);
+
+$subject-&gt;attach($observer);
+$subject-&gt;attach($observer1);
+$subject-&gt;attach($observer2);
+$subject-&gt;notify();
+
+echo PHP_EOL;
+
+$subject-&gt;detach($observer);
+$subject-&gt;notify();
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>subject-&gt;Observer1-&gt;observerinstance on update
+subject-&gt;Observer1-&gt;observerinstance1 on update
+subject-&gt;Observer2-&gt;observerinstance2 on update
+
+subject-&gt;Observer1-&gt;observerinstance1 on update
+subject-&gt;Observer2-&gt;observerinstance2 on update
+</code></pre>
+
+<h3 id="toc_6">方法2 使用SPL接口</h3>
+
+<pre><code class="language-php">&lt;?php
+/**
+ * Class Subject
+ */
+class Subject implements SplSubject
+{
+    protected $subject;
+
+    protected $observers = array();
+
+    public function __construct($subject)
+    {
+        $this-&gt;observers = new SplObjectStorage();
+        $this-&gt;subject = $subject;
+    }
+
+    public function attach(SplObserver $observer)
+    {
+        $this-&gt;observers-&gt;attach($observer);
+    }
+
+    public function detach(SplObserver $observer)
+    {
+        $this-&gt;observers-&gt;detach($observer);
+    }
+
+    public function notify()
+    {
+        foreach ($this-&gt;observers as $key =&gt; $o) {
+            $o-&gt;update($this);
+        }
+    }
+
+    public function getSubject()
+    {
+        return $this-&gt;subject;
+    }
+}
+
+/**
+ * Class Observer
+ */
+abstract class Observer implements SplObserver
+{
+    protected $name = null;
+
+    public function __construct($name)
+    {
+        $this-&gt;name = $name;
+    }
+
+    abstract public function update(SplSubject $s);
+}
+
+/**
+ * Class Observer1
+ */
+class Observer1 extends Observer
+{
+    public function update(SplSubject $s)
+    {
+        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
+        echo PHP_EOL;
+    }
+}
+
+/**
+ * Class Observer2
+ */
+class Observer2 extends Observer
+{
+    public function update(SplSubject $s)
+    {
+        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
+        echo PHP_EOL;
+    }
+}
+</code></pre>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14879052822759.html">工厂模式之抽象工厂模式-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/24 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>抽象工厂模式与工厂方法模式最大的区别在于，工厂方法模式针对的是一个产品等级结构，而抽象工厂模式则需要面对多个产品等级结构，一个工厂等级结构可以负责多个不同产品等级结构中的产品对象的创建。多个产品等级结构构成了一个产品族。</p>
+
+
+						 
+						<a href="14879052822759.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14878392980386.html">单例模式-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/23 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>单例模式确保某一个类只有一个实例，而且自行实例化并向整个系统提供这个实例，这个类称为单例类，它提供全局访问的方法。</p>
+
+<p>单例类拥有一个私有构造函数，确保用户无法通过new关键字直接实例化它。除此之外，该模式中包含一个静态私有成员变量与公有的方法，该方法负责检验实例的存在性并实例化自己，然后存储在静态成员变量中，以确保只有一个实例被创建。</p>
+
+
+						 
+						<a href="14878392980386.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14878375722768.html">工厂模式之工厂方法模式-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/23 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>在工厂方法模式中，工厂父类负责定义创建产品对象的公共接口，而工厂子类则负责生成具体的产品对象，这样做的目的是将产品类的实例化操作延迟到工厂子类中完成，即通过工厂子类来确定究竟应该实例化哪一个具体产品类。</p>
+
+<p>具有完整的产品接口、产品实现、工厂接口、工厂实现。</p>
+
+
+						 
+						<a href="14878375722768.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14878346074790.html">工厂模式之简单工厂模式（静态工厂模式）-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/23 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>在简单工厂模式中，可以根据参数的不同返回不同类的实例。简单工厂模式专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类（接口）。</p>
+
+<p>具有产品接口、产品实现、工厂实现。没有工厂接口。</p>
+
+<p>简单工厂模式用于生产静态或独立的产品。</p>
+
+
+						 
+						<a href="14878346074790.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
 					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14866965563754.html">Gitlab CE + Gitbook 本地环境搭建</a></h2>
 			            <p class="blog-post-meta">2017/2/10 
@@ -232,156 +634,6 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14685928997529.html">通过 logrotate 配置日志轮滚</a></h2>
-			            <p class="blog-post-meta">2016/7/15 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='linux.html'>Linux</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>logrotate 是一个日志管理程序，用来把旧的日志文件删除（备份），并创建新的日志文件，这个过程称为转储。这个程序目前是 CentOS 自带的。</p>
-
-<p>logrotate 的执行由系统的 crond 服务实现，通过 crond 的日执行脚本 /etc/cron.daily/logrotate 来触发。</p>
-
-<p>logrotata 使用起来非常舒服，能满足大多数情况的需求，我忽然想起 Nginx 竟然有一个网上流传很久的日志切割脚本，这真是多此一举。</p>
-
-
-						 
-						<a href="14685928997529.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14675557326089.html">Lua 中的类与面向对象</a></h2>
-			            <p class="blog-post-meta">2016/7/3 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='lua.html'>Lua</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>类是创建对象的模板，对象是类的实例，Lua 中没有类的概念，所以我们只能使用现有的支持去模拟类的概念。</p>
-
-
-						 
-						<a href="14675557326089.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14674693691952.html">Lua 元表 metatable 与 类定义</a></h2>
-			            <p class="blog-post-meta">2016/7/2 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='lua.html'>Lua</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>元表（metatable） 是 Lua 中的重要概念，每一个 table 都可以加上 metatable，以改变相应的 table 的行为。</p>
-
-<p>Lua 中不能改变其他类型的元表（除了使用调试库），必须使用C API才能做到。</p>
-
-<p>元表也是普通的table，定义了原始值在某些特定操作下的行为。你可通过在值的原表中设置特定的字段来改变作用于该值的操作的某些行为特征。</p>
-
-
-						 
-						<a href="14674693691952.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14671892872587.html">PHP Opcache 扩展</a></h2>
-			            <p class="blog-post-meta">2016/6/29 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>OPcache 通过将 PHP 脚本预编译的字节码存储到共享内存中来提升 PHP 的性能， 存储预编译字节码的好处就是省去了每次加载和解析 PHP 脚本的开销。</p>
-
-<p>PHP 5.5.0 及后续版本中已经绑定了 OPcache 扩展。 5.3 和 5.4 版本可以使用扩展安装。</p>
-
-
-						 
-						<a href="14671892872587.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14564968420622.html">Mac 修改打开文件数限制</a></h2>
-			            <p class="blog-post-meta">2016/6/26 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='mac.html'>Mac</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>Linux 一般可以通过/etc/security/limits.conf 配置文件修改，但Mac没有这个配置文件。</p>
-
-<p>如何修改 Mac 打开文件数限制？</p>
-
-
-						 
-						<a href="14564968420622.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14667381787643.html">Solr Suggest 组件</a></h2>
-			            <p class="blog-post-meta">2016/6/24 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <h2 id="toc_0">Lookup Implementations</h2>
-
-<p>AnalyzingLookupFactory </p>
-
-<p>FuzzyLookupFactory </p>
-
-<p>AnalyzingInfixLookupFactory </p>
-
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14657354899214.html">PHP 5.4 编译参数</a></h2>
-			            <p class="blog-post-meta">2016/6/23 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>本文主要整理了 PHP 5.4 的编译参数，并对一些参数和第三方扩展做以说明</p>
-
-<p>截止到目前 2016-06-23 PHP 5.4 的兼容性还是最好的。</p>
-
-
-						 
-						<a href="14657354899214.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
 			  
           <nav>
             <ul class="pager">
@@ -439,16 +691,26 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(10)</a>
+	        <a href="program.html">编程语言&nbsp;(11)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="php.html">PHP&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="php.html">PHP&nbsp;(5)</a>&nbsp;&nbsp;
 	        
 	        	<a href="java.html">Java&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	        	<a href="css.html">Css&nbsp;(2)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="software.html">软件设计&nbsp;(4)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html">设计模式&nbsp;(4)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
@@ -467,6 +729,34 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14879999782063.html" title="Unix 环境高级编程-进程">Unix 环境高级编程-进程</a><br />
+	     
+	  
+	      
+		        <a href="14879216457905.html" title="设计模式原则">设计模式原则</a><br />
+	     
+	  
+	      
+		        <a href="14879154940276.html" title="观察者模式-行为型">观察者模式-行为型</a><br />
+	     
+	  
+	      
+		        <a href="14879052822759.html" title="工厂模式之抽象工厂模式-创建型">工厂模式之抽象工厂模式-创建型</a><br />
+	     
+	  
+	      
+		        <a href="14878392980386.html" title="单例模式-创建型">单例模式-创建型</a><br />
+	     
+	  
+	      
+		        <a href="14878375722768.html" title="工厂模式之工厂方法模式-创建型">工厂模式之工厂方法模式-创建型</a><br />
+	     
+	  
+	      
+		        <a href="14878346074790.html" title="工厂模式之简单工厂模式（静态工厂模式）-创建型">工厂模式之简单工厂模式（静态工厂模式）-创建型</a><br />
+	     
 	  
 	      
 		        <a href="14866965563754.html" title="Gitlab CE + Gitbook 本地环境搭建">Gitlab CE + Gitbook 本地环境搭建</a><br />
@@ -498,34 +788,6 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
 	  
 	      
 		        <a href="14722814557558.html" title="SEO 优化">SEO 优化</a><br />
-	     
-	  
-	      
-		        <a href="14685928997529.html" title="通过 logrotate 配置日志轮滚">通过 logrotate 配置日志轮滚</a><br />
-	     
-	  
-	      
-		        <a href="14675557326089.html" title="Lua 中的类与面向对象">Lua 中的类与面向对象</a><br />
-	     
-	  
-	      
-		        <a href="14674693691952.html" title="Lua 元表 metatable 与 类定义">Lua 元表 metatable 与 类定义</a><br />
-	     
-	  
-	      
-		        <a href="14671892872587.html" title="PHP Opcache 扩展">PHP Opcache 扩展</a><br />
-	     
-	  
-	      
-		        <a href="14564968420622.html" title="Mac 修改打开文件数限制">Mac 修改打开文件数限制</a><br />
-	     
-	  
-	      
-		        <a href="14667381787643.html" title="Solr Suggest 组件">Solr Suggest 组件</a><br />
-	     
-	  
-	      
-		        <a href="14657354899214.html" title="PHP 5.4 编译参数">PHP 5.4 编译参数</a><br />
 	     
 	  
 	      

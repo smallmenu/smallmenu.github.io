@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>HDFS 常用指令 - 蛮-com | 醉里挑灯看剑</title>
+    <title>设计模式原则 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,37 +47,34 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541169085543.html">HDFS 常用指令</a></h2>
-			            <p class="blog-post-meta">2016/1/30
-				            &nbsp;分类于 
+			            <h2 class="blog-post-title"><a href="14879216457905.html">设计模式原则</a></h2>
+			            <p class="blog-post-meta">2017/2/24
+				            
+							 
 							
-							    <a class='category' href='hadoop.html'>Hadoop</a>&nbsp;
-							 
-							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>如何修改 HDFS 副本数量</p>
+			            <h2 id="toc_0">单一职责原则</h2>
 
-<span id="more"></span><!-- more -->
+<p>对于一个类而言，应该仅有一个引起它变化的原因。</p>
 
-<h2 id="toc_0">副本</h2>
+<p>如果一个类承担的职责过多，等于把这些职责耦合在一起，一个职责的变化可能会削弱或抑制这个类完成其他职责的能力，这种耦合会导致脆弱的设计。</p>
 
-<p>一个文件，上传到hdfs上时指定的是几个副本就是几个。以后你修改了副本数，对已经上传了的文件也不会起作用。可以再上传文件的同时指定创建的副本数</p>
+<h2 id="toc_1">开放-封闭原则</h2>
 
-<p><code>sudo -u hdfs hdfs -D dfs.replication=1 -put</code></p>
+<p>开放-封闭原则：软件实体（类、模块、函数）应该是可以扩展的，但是不可以修改。</p>
 
-<p>可以通过命令来更改已经上传的文件的副本数：</p>
+<p>无论模块多么封闭，都会存在一些无法对之封闭的变化，既然不可能完全封闭，设计人员对于模块应该对哪种变化封闭做出选择。等到变化发生时立即采集行动。</p>
 
-<p><code>sudo -u hdfs hdfs dfs -setrep -R 2 /</code></p>
+<p>面对需求，对程序的改动应该是通过增加新代码进行，而不是更改现有的代码。</p>
 
-<p>查看当前hdfs的副本数<br/>
-<code>sudo -u hdfs hdfs fsck -locations</code></p>
+<h2 id="toc_2">依赖倒转原则</h2>
 
-<p>Job Finished in 99.451 seconds<br/>
-当前集群性能，100 map，每个map执行1亿次<br/>
-sudo -u hdfs hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.5.1.jar pi 100 100000000</p>
+<p>抽象不应该依赖细节，细节应该依赖于抽象。</p>
 
-<h2 id="toc_1">待更</h2>
+<p>针对接口编程，不要对实现编程。</p>
+
+<p>高层模块不应该依赖底层模块。</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->

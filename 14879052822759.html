@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>HDFS 常用指令 - 蛮-com | 醉里挑灯看剑</title>
+    <title>工厂模式之抽象工厂模式-创建型 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,37 +47,200 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541169085543.html">HDFS 常用指令</a></h2>
-			            <p class="blog-post-meta">2016/1/30
+			            <h2 class="blog-post-title"><a href="14879052822759.html">工厂模式之抽象工厂模式-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/24
 				            &nbsp;分类于 
 							
-							    <a class='category' href='hadoop.html'>Hadoop</a>&nbsp;
+							    <a class='category' href='%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html'>设计模式</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>如何修改 HDFS 副本数量</p>
+			            <p>抽象工厂模式与工厂方法模式最大的区别在于，工厂方法模式针对的是一个产品等级结构，而抽象工厂模式则需要面对多个产品等级结构，一个工厂等级结构可以负责多个不同产品等级结构中的产品对象的创建。多个产品等级结构构成了一个产品族。</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">副本</h2>
+<h2 id="toc_0">VS 工厂方法</h2>
 
-<p>一个文件，上传到hdfs上时指定的是几个副本就是几个。以后你修改了副本数，对已经上传了的文件也不会起作用。可以再上传文件的同时指定创建的副本数</p>
+<p>工厂方法模式对应：零件产品接口、车轮产品、发动机产品、零件工厂接口、车轮产品工厂、发动机产品工厂。车轮与发动机属于同一个产品等级，都属于零件这个产品等级。</p>
 
-<p><code>sudo -u hdfs hdfs -D dfs.replication=1 -put</code></p>
+<p>抽象工厂方法对应：发动机产品接口、轿车发动机产品、巴士发动机产品、车轮产品接口、轿车车轮产品、巴士车轮产品、机动车工厂接口、轿车工厂、巴士工厂。</p>
 
-<p>可以通过命令来更改已经上传的文件的副本数：</p>
+<p>产品等级结构：车轮是一个产品等级（轿车发动机产品、巴士发动机产品），发动机也是一个产品等级。<br/>
+产品族：是指由同一个工厂生产的，位于不同产品等级结构中的一组产品。如车轮与发动机由同一个工厂生产，构成了一个产品族。</p>
 
-<p><code>sudo -u hdfs hdfs dfs -setrep -R 2 /</code></p>
+<h2 id="toc_1">优点</h2>
 
-<p>查看当前hdfs的副本数<br/>
-<code>sudo -u hdfs hdfs fsck -locations</code></p>
+<ul>
+<li><p>当一个产品族中的多个对象被设计成一起工作时，它能够保证客户端始终只使用同一个产品族中的对象。这对一些需要根据当前环境来决定其行为的软件系统来说，是一种非常实用的设计模式。</p></li>
+<li><p>增加新的具体工厂和产品族很方便，无须修改已有系统，符合“开闭原则”。</p></li>
+</ul>
 
-<p>Job Finished in 99.451 seconds<br/>
-当前集群性能，100 map，每个map执行1亿次<br/>
-sudo -u hdfs hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.5.1.jar pi 100 100000000</p>
+<p>如：我们现在要增加SUV产品族。我们可以增加SUV发动机、SUV车轮、再增加一个SUV工厂即可。</p>
 
-<h2 id="toc_1">待更</h2>
+<h2 id="toc_2">缺点</h2>
+
+<p>开闭原则的倾斜性（增加新的产品等级结构麻烦）。</p>
+
+<p>如：我们现在要增加一个变速箱产品，我们需要：</p>
+
+<ol>
+<li>增加变速箱产品接口、轿车变速箱产品、巴士变速箱产品</li>
+<li>修改所有工厂实现和工厂接口。增加创建变速箱的方法。因为工厂是一个产品族，需要包含了所有产品。</li>
+</ol>
+
+<h2 id="toc_3">适用</h2>
+
+<ul>
+<li><p>系统中有多于一个的产品族，而每次只使用其中某一产品族。</p></li>
+<li><p>属于同一个产品族的产品将在一起使用，这一约束必须在系统的设计中体现出来。</p></li>
+<li><p>系统提供一个产品类的库，所有的产品以同样的接口出现，从而使客户端不依赖于具体实现。</p></li>
+</ul>
+
+<h2 id="toc_4">扩展</h2>
+
+<p>增加产品族：对于增加新的产品族，工厂方法模式很好的支持了“开闭原则”，对于新增加的产品族，只需要对应增加一个新的具体工厂，补充已有的产品。</p>
+
+<p>增加新的产品等级结构：对于增加新的产品等级结构，需要修改所有的工厂角色，包括抽象工厂类，在所有的工厂类中都需要增加生产新产品的方法，不能很好地支持“开闭原则”。</p>
+
+<p>当抽象工厂模式中每一个具体工厂类只创建一个产品对象，也就是只存在一个产品等级结构时，抽象工厂模式退化成工厂方法模式；当工厂方法模式中抽象工厂与具体工厂合并，提供一个统一的工厂来创建产品对象，并将创建对象的工厂方法设计为静态方法时，工厂方法模式退化成简单工厂模式。</p>
+
+<h2 id="toc_5">示例</h2>
+
+<pre><code class="language-php">&lt;?php
+/**
+ * Interface Engine
+ */
+interface Engine
+{
+    public function produce();
+}
+
+/**
+ * Class CarEngine
+ */
+class CarEngine implements Engine
+{
+    public function produce()
+    {
+        echo &#39;生产Car发动机&#39;;
+        echo PHP_EOL;
+    }
+}
+
+/**
+ * Class BusEngine
+ */
+class BusEngine implements Engine
+{
+    public function produce()
+    {
+        echo &#39;生产Bus发动机&#39;;
+        echo PHP_EOL;
+    }
+}
+
+/**
+ * Interface Wheel
+ */
+interface Wheel
+{
+    public function produce();
+}
+
+/**
+ * Class CarWheel
+ */
+class CarWheel implements Wheel
+{
+    public function produce()
+    {
+        echo &#39;生产Car车轮&#39;;
+        echo PHP_EOL;
+    }
+}
+
+/**
+ * Class BusWheel
+ */
+class BusWheel implements Wheel
+{
+    public function produce()
+    {
+        echo &#39;生产Bus车轮&#39;;
+        echo PHP_EOL;
+    }
+}
+
+/**
+ * Interface Factory
+ */
+interface Factory
+{
+    public function engine();
+    public function wheel();
+}
+
+/**
+ * Class CarFactory
+ */
+class CarFactory implements Factory
+{
+    public function engine()
+    {
+        return new CarEngine();
+    }
+
+    public function wheel()
+    {
+        return new CarWheel();
+    }
+}
+
+/**
+ * Class BusFactory
+ */
+class BusFactory implements Factory
+{
+    public function engine()
+    {
+        return new BusEngine();
+    }
+
+    public function wheel()
+    {
+        return new BusWheel();
+    }
+}
+
+$carFactory = new CarFactory();
+$carEngine = $carFactory-&gt;engine();
+$carWheel = $carFactory-&gt;wheel();
+var_dump($carEngine);
+var_dump($carWheel);
+$carWheel-&gt;produce();
+
+$busFactory = new BusFactory();
+$busEngine = $busFactory-&gt;engine();
+$busWheel = $busFactory-&gt;wheel();
+var_dump($busEngine);
+var_dump($busWheel);
+$busEngine-&gt;produce();
+</code></pre>
+
+<p>输出：</p>
+
+<pre><code>object(CarEngine)#2 (0) {
+}
+object(CarWheel)#3 (0) {
+}
+生产Car车轮
+object(BusEngine)#5 (0) {
+}
+object(BusWheel)#6 (0) {
+}
+生产Bus发动机
+</code></pre>
 
 			            </div>
 			          </div><!-- /.blog-post -->
