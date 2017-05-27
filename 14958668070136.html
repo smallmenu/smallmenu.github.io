@@ -71,11 +71,11 @@
 <p>迷茫之后我决定先从 Web 开发这块开始下手，于是我：</p>
 
 <ul>
-<li>折腾了IDE，从 Eclipse 到 IDEA，最终觉得 IDEA 是个神器</li>
+<li>折腾了IDE，从 Eclipse 到 IDEA，最终觉得 IDEA 靠谱</li>
 <li>先看了看 JSP 和 Servlet，知道是怎么回事了，但这个姿势应该不太对</li>
-<li>找个框架看看吧，我瞄准了 Play Framework，热加载很牛逼，捣鼓了一阵觉得还是不太对，但感觉不是正统啊</li>
-<li>接着 Spring MVC -&gt; Spring，稍微有点靠谱，使用起来还是感觉有点吐血</li>
-<li>直到，我看到了 Spring Boot 这个玩意。眼前一亮，开始入坑</li>
+<li>找个框架看看，我瞄准了 Play Framework，热加载很牛逼，捣鼓了一阵觉得还是不太对（文档吃力，资料少）</li>
+<li>接着 Spring MVC -&gt; Spring，感觉稍微有点靠谱了，不过实操起来还是感觉有点吐血</li>
+<li>直到，我看到了 SpringBoot 这个玩意。眼前一亮，开始入坑</li>
 </ul>
 
 <h2 id="toc_0">开始之前</h2>
@@ -94,13 +94,59 @@
 
 <p><a href="https://yq.aliyun.com/articles/69327">https://yq.aliyun.com/articles/69327</a></p>
 
-<h2 id="toc_3">JSP 和 Servlet</h2>
+<h3 id="toc_3">SpringBoot快速入门</h3>
 
-<h2 id="toc_4">Spring 和 Spring MVC</h2>
+<p><a href="http://git.oschina.net/didispace/SpringBoot-Learning">http://git.oschina.net/didispace/SpringBoot-Learning</a></p>
 
-<h2 id="toc_5">Spring Boot</h2>
+<h2 id="toc_4">准备工作</h2>
 
-<p>待更</p>
+<p>看看 JSP 和 Servlet 这两个古董级东西，了解下大概原理</p>
+
+<p>看看 Spring 和 Spring MVC，了解下大概原理</p>
+
+<p>然后根据经验，我们看看要进行 Java Web 开发，大概需要掌握哪些东西：</p>
+
+<ul>
+<li>Java 基础，选择 JDK 8，再配合一些常用的工具</li>
+<li>框架或 MVC 框架，选择 SpringBoot（集成了Spring、Restful、单元测试、日志、验证、JSON、容器）</li>
+<li>模板引擎，选择 Thymeleaf</li>
+<li>数据库，选择 MySQL 以及一个ORM 框架 MyBatis</li>
+<li>缓存，选择 Redis</li>
+</ul>
+
+<p>上面都是比较大的东西，再来细分下：</p>
+
+<ul>
+<li>HTTP 相关操作，获取header，输出header，获取Session、Cookie</li>
+<li>HTTP 方法参数相关操作，GET、POST、PUT、DELETE，获取路径参数，GET参数，POST参数，文件上传</li>
+<li>数据库 CURD 操作，缓存操作</li>
+<li>配置管理</li>
+<li>验证码</li>
+<li>字符串处理，日期，JSON，加密处理</li>
+</ul>
+
+<p>为了检验学习成果，准备一个万能入门项目：留言板</p>
+
+<h2 id="toc_5">留言板</h2>
+
+<h3 id="toc_6">前台需求</h3>
+
+<p>页面（多页面）：<br/>
+首页，会员登陆，注册页面，留言详情</p>
+
+<p>功能：<br/>
+会员注册、登陆、登出<br/>
+留言列表分页查看，留言详情<br/>
+留言发布</p>
+
+<h3 id="toc_7">后台需求</h3>
+
+<p>页面(单页面Vue.js + API)：</p>
+
+<p>功能：<br/>
+登陆，登出<br/>
+会员管理，增删改查，会员登陆日志<br/>
+留言管理，增删改查，留言回复</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->
