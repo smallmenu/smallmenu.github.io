@@ -103,9 +103,9 @@ vertical-align: middle; line-height: 19px; font-size: 14px; font-family: 'Helvet
  * Override Bootstrap's default container.
  */
 
-@media (min-width: 1200px) {
+@media (min-width: 1000px) {
   .container {
-    width: 1170px; 
+    width: 970px; 
   }
 }
 
