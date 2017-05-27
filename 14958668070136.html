@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Linux/Mac 下伪分布式 HBase 开发测试环境 - 蛮-com | 醉里挑灯看剑</title>
+    <title>Java QuickStart (3) - Web 开发 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,192 +47,60 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14943218854977.html">Linux/Mac 下伪分布式 HBase 开发测试环境</a></h2>
-			            <p class="blog-post-meta">2017/5/9
+			            <h2 class="blog-post-title"><a href="14958668070136.html">Java QuickStart (3) - Web 开发</a></h2>
+			            <p class="blog-post-meta">2017/5/27
 				            &nbsp;分类于 
 							
-							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							    <a class='category' href='java.html'>Java</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <h2 id="toc_0">准备工作</h2>
-
-<p>Mac 下不要使用brew 来安装Hadoop相关软件，因为各组件之间的版本可能不兼容：</p>
+			            <p>入了Java的坑，看完了基础和语法之后，我进入了好长时间的迷茫期：</p>
 
 <span id="more"></span><!-- more -->
 
-<p><a href="http://hbase.apache.org/book.html#configuration">http://hbase.apache.org/book.html#configuration</a></p>
+<ul>
+<li>Java JDK 只有个API手册，不知道怎么查找想用的东西，并且API手册缺少实例，充其量只是个类、接口、方法介绍</li>
+<li>怀念PHP的手册，再也不能使用 PHP 那些神奇的函数了，md5(), strtotime(), json_encode()</li>
+<li>想实现一点东西，发现轮子实在是太多，比如光json就有一大堆的库，gson，fastjson，jackson...</li>
+<li>我找到了 awesome java 项目，上面介绍了一堆，但不知道从何开始下手</li>
+<li>最大的问题：没有老司机带路</li>
+</ul>
 
-<p>建议使用CDH 的发行版二进制套件，目前最新版cdh5.10.1，依次下载：</p>
+<p>迷茫之后我决定先从 Web 开发这块开始下手，于是我：</p>
 
-<p><a href="https://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.10.1.tar.gz">https://archive.cloudera.com/cdh5/cdh/5/hadoop-2.6.0-cdh5.10.1.tar.gz</a></p>
+<ul>
+<li>折腾了IDE，从 Eclipse 到 IDEA，最终觉得 IDEA 是个神器</li>
+<li>先看了看 JSP 和 Servlet，知道是怎么回事了，但这个姿势应该不太对</li>
+<li>找个框架看看吧，我瞄准了 Play Framework，热加载很牛逼，捣鼓了一阵觉得还是不太对，但感觉不是正统啊</li>
+<li>接着 Spring MVC -&gt; Spring，稍微有点靠谱，使用起来还是感觉有点吐血</li>
+<li>直到，我看到了 Spring Boot 这个玩意。眼前一亮，开始入坑</li>
+</ul>
 
-<p><a href="https://archive.cloudera.com/cdh5/cdh/5/hbase-1.2.0-cdh5.10.1.tar.gz">https://archive.cloudera.com/cdh5/cdh/5/hbase-1.2.0-cdh5.10.1.tar.gz</a></p>
+<h2 id="toc_0">开始之前</h2>
 
-<h3 id="toc_1">JDK 1.7</h3>
+<p>先找点 Java 编码规范和常用的类库、工具、框架看看（参见QuickStart 2）：</p>
 
-<p>安装与设置 JAVA_HOME，略</p>
+<h3 id="toc_1">Google 规范</h3>
 
-<p>java -version</p>
+<p><a href="https://google.github.io/styleguide/javaguide.html">https://google.github.io/styleguide/javaguide.html</a></p>
 
-<h3 id="toc_2">SSH</h3>
+<p>这里有中文版：</p>
 
-<p>为了确保在远程管理Hadoop以及Hadoop节点用户共享时的安全性, Hadoop需要配置使用SSH协议，确保这一步能正常：</p>
+<p><a href="http://www.hawstein.com/posts/google-java-style.html">http://www.hawstein.com/posts/google-java-style.html</a></p>
 
-<p>ssh localhost</p>
+<h3 id="toc_2">阿里巴巴 Java 开发手册</h3>
 
-<p>MC首先在系统偏好设置-&gt;共享-&gt;打开远程登录服务-&gt;右侧选择允许所有用户访问</p>
+<p><a href="https://yq.aliyun.com/articles/69327">https://yq.aliyun.com/articles/69327</a></p>
 
-<p>ssh-keygen -t dsa -P &#39;&#39; -f ~/.ssh/id_dsa<br/>
-cat ~/.ssh/id_dsa.pub &gt;&gt; ~/.ssh/authorized_keys</p>
+<h2 id="toc_3">JSP 和 Servlet</h2>
 
-<h2 id="toc_3">Hadoop HDFS 伪分布式运行</h2>
+<h2 id="toc_4">Spring 和 Spring MVC</h2>
 
-<p>修改hadoop-env.sh，指定JAVA_HOME，这里是Mac下特有的表达方式：</p>
+<h2 id="toc_5">Spring Boot</h2>
 
-<pre><code>export JAVA_HOME=&quot;$(/usr/libexec/java_home)&quot;
-</code></pre>
-
-<p>修改core-site.xml，HDFS端口、日志</p>
-
-<pre><code>&lt;configuration&gt;
-    &lt;property&gt;
-        &lt;name&gt;fs.defaultFS&lt;/name&gt;
-        &lt;value&gt;hdfs://localhost:8020&lt;/value&gt;
-    &lt;/property&gt;
-    &lt;property&gt;
-        &lt;name&gt;hadoop.tmp.dir&lt;/name&gt;
-        &lt;value&gt;file:/usr/local/var/hdfslog/&lt;/value&gt;
-        &lt;description&gt;Abase for other temporary directories.&lt;/description&gt;
-    &lt;/property&gt;
-&lt;/configuration&gt;
-</code></pre>
-
-<p>修改hdfs-site.xml，HDFS数据目录、复制因子</p>
-
-<pre><code>&lt;configuration&gt;
-    &lt;property&gt;
-        &lt;name&gt;dfs.replication&lt;/name&gt;
-        &lt;value&gt;1&lt;/value&gt;
-    &lt;/property&gt;
-    &lt;property&gt;
-        &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;
-        &lt;value&gt;file:/usr/local/var/hdfs/name&lt;/value&gt;
-    &lt;/property&gt;
-    &lt;property&gt;
-        &lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;
-        &lt;value&gt;file:/usr/local/var/hdfs/data&lt;/value&gt;
-    &lt;/property&gt;
-&lt;/configuration&gt;
-</code></pre>
-
-<p>虽然只需要配置 fs.defaultFS 和 dfs.replication 就可以运行（官方教程如此），不过若没有配置 hadoop.tmp.dir 参数，则默认使用的临时目录为 /tmp/hadoo-hadoop，而这个目录在重启时有可能被系统清理掉，导致必须重新执行 format 才行。所以我们进行了设置，同时也指定 dfs.namenode.name.dir 和 dfs.datanode.data.dir，否则在接下来的步骤中可能会出错。</p>
-
-<p>格式化hdfs文件系统：</p>
-
-<pre><code>hdfs namenode -format
-</code></pre>
-
-<p>接着运行HDFS服务，开启 NameNode 和 DataNode 守护进程，通过jps查看进程状态</p>
-
-<pre><code>/usr/local/server/hadoop/sbin/start-dfs.sh
-jps
-15468 SecondaryNameNode
-15358 DataNode
-15267 NameNode
-</code></pre>
-
-<p>dfshealth 界面<br/>
-<a href="http://localhost:50070/">http://localhost:50070/</a></p>
-
-<h2 id="toc_4">Hadoop YARN（MapReduceV2） 伪分布式</h2>
-
-<p>修改：mapred-site.xml:</p>
-
-<pre><code>&lt;configuration&gt;
-    &lt;property&gt;
-        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;
-        &lt;value&gt;yarn&lt;/value&gt;
-    &lt;/property&gt;
-&lt;/configuration&gt;
-</code></pre>
-
-<p>修改：yarn-site.xml:</p>
-
-<pre><code>&lt;configuration&gt;
-    &lt;property&gt;
-        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;
-        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;
-    &lt;/property&gt;
-&lt;/configuration&gt;
-</code></pre>
-
-<p>启动YARN，此时通过jps查看应该包含以下组件：</p>
-
-<pre><code>/usr/local/server/hadoop/sbin/start-yarn.sh
-jps
-15468 SecondaryNameNode
-15358 DataNode
-15691 NodeManager
-15592 ResourceManager
-15267 NameNode
-</code></pre>
-
-<p>Hadoop Cluster GUI<br/>
-<a href="http://localhost:8088/">http://localhost:8088/</a></p>
-
-<p>使用Hadoop自带的Map Reduce例子测试是否成功：</p>
-
-<p>hadoop jar /usr/local/server/hadoop/share/hadoop/mapreduce2/hadoop-mapreduce-examples-2.6.0-cdh5.5.1.jar pi 1 3</p>
-
-<h3 id="toc_5">Hbase 伪分布式安装</h3>
-
-<p>环境变量与PATH</p>
-
-<p>修改：hbase-env.sh，指定 JAVA_HOME</p>
-
-<pre><code>export JAVA_HOME=&quot;$(/usr/libexec/java_home)&quot;
-</code></pre>
-
-<p>修改：hbase-site.xml</p>
-
-<pre><code>&lt;configuration&gt;
-&lt;property&gt;
-    &lt;name&gt;hbase.rootdir&lt;/name&gt;
-    &lt;value&gt;hdfs://localhost:8020/hbase&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-    &lt;name&gt;hbase.zookeeper.property.dataDir&lt;/name&gt;
-    &lt;value&gt;/usr/local/var/zookeeper&lt;/value&gt;
-&lt;/property&gt;
-&lt;property&gt;
-  &lt;name&gt;hbase.cluster.distributed&lt;/name&gt;
-  &lt;value&gt;true&lt;/value&gt;
-&lt;/property&gt;
-&lt;/configuration&gt;
-&lt;property&gt;
-    &lt;name&gt;hbase.zookeeper.quorum&lt;/name&gt;
-    &lt;value&gt;localhost&lt;/value&gt;
-&lt;/property&gt;
-</code></pre>
-
-<p>启动HBase，此时通过jps查看应该包含以下组件：</p>
-
-<pre><code>/usr/local/server/hbase/bin/start-hbase.sh   
-jps
-39920 ResourceManager
-42381 HQuorumPeer
-40018 NodeManager
-39793 SecondaryNameNode
-42433 HMaster
-39683 DataNode
-39592 NameNode
-42539 HRegionServer
-</code></pre>
-
-<p>HBase Web GUI<br/>
-<a href="http://localhost:60010">http://localhost:60010</a></p>
+<p>待更</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->
