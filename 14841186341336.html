@@ -72,14 +72,14 @@
 <h3 id="toc_2">this 关键字</h3>
 
 <p>使用 this 调用本类中的属性：this.name = &quot;&quot;<br/>
-this() 可以调用构造方法<br/>
-this 表示当前对象，</p>
+this() 可以用来调用构造方法<br/>
+this 表示当前实例化的对象</p>
 
 <h3 id="toc_3">static 关键词</h3>
 
 <p>使用 static 表示类属性<br/>
-static 不可以调用非 static 类型的属性和方法<br/>
-可以在Class中生命static { 静态代码块 }，它会优于主方法执行</p>
+static 方法不可以调用非 static 类型的属性和方法<br/>
+可以在 Class 中声明 static { 静态代码块 }，它会优于主方法执行</p>
 
 <h3 id="toc_4">内部类</h3>
 
@@ -90,18 +90,18 @@ static 不可以调用非 static 类型的属性和方法<br/>
 <h3 id="toc_5">super()</h3>
 
 <p>子类默认会自动调用父类的无参构造。super()。<br/>
-子类可以手动调用有参构造super(参数)</p>
+子类可以手动调用父类的有参构造 super(参数)</p>
 
 <h3 id="toc_6">final</h3>
 
-<p>使用final生命的类不能有子类<br/>
-使用final生命的方法不能被子类覆盖<br/>
-使用final生命的变量即成为常量，常量不可以修改。</p>
+<p>使用 final 声明的类不能有子类<br/>
+使用 final 声明的方法不能被子类覆盖<br/>
+使用 final 声明的变量即成为常量，常量不可以修改。</p>
 
 <h3 id="toc_7">抽象类</h3>
 
-<p>包含一个抽象方法的类必须是抽象类，都要使用abstract关键字声明<br/>
-抽象方法只需要声明，不需要实现。抽象方法不能使用private生命<br/>
+<p>包含一个抽象方法的类必须是抽象类，都要使用 abstract 关键字声明<br/>
+抽象方法只需要声明，不需要实现。抽象方法不能使用 private 声明<br/>
 public abstract void print();</p>
 
 <h3 id="toc_8">接口</h3>
@@ -123,12 +123,12 @@ public abstract void print();</p>
 <h3 id="toc_10">多态性</h3>
 
 <p>多态主要体现两方面：<br/>
-1. 方法的重载与覆盖<br/>
+1. 方法的重载与重写<br/>
 2. 对象的多态性</p>
 
 <p>对象的多态性，分为向上转型，向下转型。<br/>
 向上转型，程序会自动完成。向下转型，必须明确指明要转型的子类类型。<br/>
-向上转型关系发生以后，调用的方法是子类覆盖后的方法。并且无法调用子类独有的方法。</p>
+向上转型关系发生以后，<strong><em>调用的方法是子类覆盖后的方法。并且无法调用子类独有的方法。</em></strong></p>
 
 <h3 id="toc_11">instance of 关键词，用于判断一个对象是否是一个类的实例</h3>
 
@@ -250,7 +250,7 @@ java.lang.reflect 反射机制<br/>
 java.util  工具包，包含常用的类库，重点掌握<br/>
 java.text 提供了文本处理的类库<br/>
 java.sql 数据库操作<br/>
-java.net 网络编程<br/>
+java.net 网络编程，http、socket、cookie、ip<br/>
 java.io 输入输出</p>
 
 <p>import static 可以静态导入全部使用static声明的静态方法的类。这时候比较像某些语言的函数，因为可以直接使用静态方法调用。</p>
@@ -351,24 +351,26 @@ public synchronized run() {
             
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="bigdata.html">大数据&nbsp;(22)</a>
+	        <a href="bigdata.html">大数据&nbsp;(24)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
 	        
-	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        	<a href="hbase.html">HBase&nbsp;(10)</a>&nbsp;&nbsp;
 	        
 	        	<a href="solr.html">Solr&nbsp;(7)</a>&nbsp;&nbsp;
+	        
+	        	<a href="ElasticSearch.html">ElasticSearch&nbsp;(1)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(4)</a>
+	        <a href="server.html">服务器&nbsp;(6)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(2)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(4)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -387,12 +389,12 @@ public synchronized run() {
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(11)</a>
+	        <a href="program.html">编程语言&nbsp;(12)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="php.html">PHP&nbsp;(5)</a>&nbsp;&nbsp;
+	        	<a href="php.html">PHP&nbsp;(4)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(2)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(4)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -403,7 +405,7 @@ public synchronized run() {
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="software.html">软件设计&nbsp;(4)</a>
+	        <a href="software.html">软件设计&nbsp;(5)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html">设计模式&nbsp;(4)</a>&nbsp;&nbsp;
@@ -425,6 +427,30 @@ public synchronized run() {
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14949831725275.html" title="Maven QuickStart">Maven QuickStart</a><br />
+	     
+	  
+	      
+		        <a href="14944229387367.html" title="ElasticSearch 2.x 安装">ElasticSearch 2.x 安装</a><br />
+	     
+	  
+	      
+		        <a href="14943218854977.html" title="Linux/Mac 下伪分布式 HBase 开发测试环境">Linux/Mac 下伪分布式 HBase 开发测试环境</a><br />
+	     
+	  
+	      
+		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
+	     
+	  
+	      
+		        <a href="14914572882166.html" title="Apache Commons 工具集">Apache Commons 工具集</a><br />
+	     
+	  
+	      
+		        <a href="14896294544708.html" title="分布式系统的意义">分布式系统的意义</a><br />
+	     
 	  
 	      
 		        <a href="14879999782063.html" title="Unix 环境高级编程-进程">Unix 环境高级编程-进程</a><br />
@@ -460,30 +486,6 @@ public synchronized run() {
 	  
 	      
 		        <a href="14864571405778.html" title="php composer 配置">php composer 配置</a><br />
-	     
-	  
-	      
-		        <a href="14841186341336.html" title="Java QuickStart (1)">Java QuickStart (1)</a><br />
-	     
-	  
-	      
-		        <a href="14805801026400.html" title="搜索引擎老板开了个杂货店">搜索引擎老板开了个杂货店</a><br />
-	     
-	  
-	      
-		        <a href="14731420304516.html" title="浏览器缓存与相关 HTTP Header">浏览器缓存与相关 HTTP Header</a><br />
-	     
-	  
-	      
-		        <a href="14727802575210.html" title="Sass + Compass">Sass + Compass</a><br />
-	     
-	  
-	      
-		        <a href="14613994523878.html" title="HTML/CSS 开发人员编码规范">HTML/CSS 开发人员编码规范</a><br />
-	     
-	  
-	      
-		        <a href="14722814557558.html" title="SEO 优化">SEO 优化</a><br />
 	     
 	  
 	      

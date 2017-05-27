@@ -51,7 +51,7 @@
 			            <p class="blog-post-meta">2017/2/25
 				            &nbsp;分类于 
 							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
+							    <a class='category' href='linux.html'>Linux</a>&nbsp;
 							 
 							 
 			            </p>
@@ -62,16 +62,16 @@
 
 <h2 id="toc_0">创建新进程 fork</h2>
 
-<p>一个现有的进程可以调用fock函数创建一个新进程。</p>
+<p>一个现有的进程可以调用 fork 函数创建一个新进程。</p>
 
-<p>fork函数被调用一次，但返回两次。区别是子进程返回值是0，父进程返回是子进程的进程ID：</p>
+<p>fork函数被调用一次，但返回两次。区别是子进程返回值是0，父进程返回是子进程的进程ID，这样做是因为：</p>
 
 <ul>
 <li>一个进程的子进程可以有多个，没有一个函数可以获得所有子进程的进程ID</li>
-<li>一个子进程只会有一个父进程，子进程可以调用getppid获得父进程的进程ID</li>
+<li>一个子进程只会有一个父进程，子进程可以调用 getppid 获得父进程的进程ID</li>
 </ul>
 
-<p>fork之后，父进程与子进程一起向下执行，子进程获得父进程的数据空间、堆、栈。子进程是父进程的副本。子进程并不共享存储空间部分。但是共享正文段（CPU执行机器指令部分）</p>
+<p>fork 之后，父进程与子进程一起向下执行，子进程获得父进程的数据空间、堆、栈。子进程是父进程的副本。子进程并不共享存储空间部分。但是共享正文段（CPU执行机器指令部分）</p>
 
 <p>父进程先执行还是子进程先执行是不确定的，这取决于内核使用的调度算法。如果要求父子进程之间互相同步，则要求某种形式的进程间通信。</p>
 
@@ -96,15 +96,15 @@
 
 <p>父进程检查子进程终止状态的不同方法，如果子进程正常终止，父进程可以获得子进程的退出状态</p>
 
-<p>当终止进程的父进程调用wait或waitpid时，可以得到子进程一定量的信息，包括进程ID、种植状态、CPU时间量。</p>
+<p>当终止进程的父进程调用 wait 或 waitpid 时，可以得到子进程一定量的信息，包括进程ID、种植状态、CPU时间量。</p>
 
-<p>对于父进程已经终止的所有进程，他们的父进程都改变为init进程。</p>
+<p>对于父进程已经终止的所有进程，他们的父进程都改变为 init 进程。</p>
 
-<p>一个已经终止、但父进程尚未对其进行善后处理（获取终止子进程的有关信息、释放它占用的资源）的进程成为僵死进程。</p>
+<p>一个已经终止、但父进程尚未对其进行善后处理（获取终止子进程的有关信息、释放它占用的资源）的进程将成为僵死进程。</p>
 
 <p>当一个进程正常或异常终止时，内核向其父进程发送 SIGCHLD 信号。</p>
 
-<p>调用wait可能会发生：</p>
+<p>调用 wait 可能会发生：</p>
 
 <ul>
 <li>如果所有子进程还在运行，则阻塞</li>
@@ -112,18 +112,18 @@
 <li>如果没有任何子进程，则出错返回。</li>
 </ul>
 
-<p>waitpid和wait的区别：</p>
+<p>waitpid 和 wait 的区别：</p>
 
 <ul>
-<li>在一个子进程终止前，wait会阻塞。只要有一个子进程终止，wait就返回。如果有多个子进程就需要循环调用wait。而waitpid提供了这种功能。</li>
-<li>waitpid可以等待特定进程</li>
+<li>在一个子进程终止前，wait 会阻塞。只要有一个子进程终止，wait 就返回。如果有多个子进程就需要循环调用wait。而 waitpid 提供了这种功能。</li>
+<li>waitpid 还可以等待特定进程</li>
 </ul>
 
 <p>waitpid参数如下：<br/>
 pid == -1 等待任一子进程，与wait等效<br/>
-pid&gt;0 等待pid这个子进程<br/>
-pid==0 等待调用进程组ID的任一子进程<br/>
-pid &lt;-1 等待调用进程组ID等于pid绝对值的任意子进程</p>
+pid &gt; 0 等待pid这个子进程<br/>
+pid == 0 等待调用进程组ID的任一子进程<br/>
+pid &lt; -1 等待调用进程组ID等于pid绝对值的任意子进程</p>
 
 <h2 id="toc_2">进程组</h2>
 
@@ -133,25 +133,27 @@ pid &lt;-1 等待调用进程组ID等于pid绝对值的任意子进程</p>
 
 <p>进程组组长可以创建一个进程组，创建改组中的进程，然后终止。只要某个进程组中有一个进程存在，则该进程组就存在，与组长进程是否终止无关。从进程组创建开始到最后一个进程离开为止称为进程组的生命期。</p>
 
-<p>进程调用setpgid可以加入一个现有的进程组，或setsid创建一个新的进程组</p>
+<p>进程调用 setpgid 可以加入一个现有的进程组，或使用 setsid 创建一个新的进程组</p>
 
-<p>一个进程只能为它自己或它的子进程设置进程组ID。在大多数作业控制中，使用fork之后，使父进程设置子进程的进程组ID，并且也使子进程设置自己的进程组ID，这样可以保证父子属于同一个进程组。</p>
+<p>一个进程只能为它自己或它的子进程设置进程组ID。在大多数作业控制中，使用 fork 之后，使父进程设置子进程的进程组ID，并且也使子进程设置自己的进程组ID，这样可以保证父子属于同一个进程组。</p>
 
 <h2 id="toc_3">会话</h2>
 
 <p>会话是一个或多个进程组的集合。</p>
 
-<p>进程调用setsid函数建立一个新会话</p>
+<p>进程调用 setsid 函数建立一个新会话</p>
 
-<p>如果调用此函数的进程不是一个进程组的组长，则此函数创建一个新会话</p>
+<p>如果调用此函数的进程不是一个进程组的组长，则此函数会创建一个新会话，然后将会发生：</p>
 
 <ol>
 <li>该进程变成新会话的会话首进程。</li>
 <li>该进程成为一个新的进程组的组长进程</li>
-<li>该进程没有控制终端，如果调用setsid之前该进程有一个控制终端这种联系也被切断。</li>
+<li>该进程没有控制终端，如果调用 setsid 之前该进程有一个控制终端这种联系也被切断。</li>
 </ol>
 
-<p>如果该调用进程已经是一个进程组的组长，则返回出错。通常先fork，然后父进程终止，子进程继续，因为子进程继承了父进程的进程组ID，而其进程ID是新分配的，不可能相等，所以保证子进程不是一个进程组的组长。</p>
+<p>如果该调用进程已经是一个进程组的组长，则返回出错。</p>
+
+<p>通常先fork，然后父进程终止，子进程继续，因为子进程继承了父进程的进程组ID，而其进程ID是新分配的，不可能相等，所以保证子进程不是一个进程组的组长。</p>
 
 <h2 id="toc_4">控制终端</h2>
 
@@ -190,7 +192,7 @@ pid &lt;-1 等待调用进程组ID等于pid绝对值的任意子进程</p>
 3. 调用setsid创建一个新会话，将执行3个步骤：1. 成为新会话的首进程。2.成为一个新进程组的组长进程。3.没有控制终端<br/>
 （有人建议此时再次调用fork，终止父进程，这样使第二次fork的子进程脱离会话首进程，防止它主动取得控制终端。）<br/>
 （如果不使用上面的方法，那么需要在主动打开终端设备时，制定O_NOCTTY）<br/>
-4. 将当前工作目录更改为根目录。为了防止父进程挂载在一个文件系统中，而该文件系统可能会被卸载。<br/>
+4. 将当前工作目录更改为根目录。为了防止父进程挂载某个可能被卸载的文件系统中。<br/>
 5. 关闭不需要的文件描述符<br/>
 6. 某些守护进程打开/dev/null，使其具有文件描述符0/1/2。这样可以让输入、输出、错误不会产生任何效果。</p>
 
@@ -203,6 +205,40 @@ pid &lt;-1 等待调用进程组ID等于pid绝对值的任意子进程</p>
 <p>锁文件一般存储在/var/run目录，锁文件名一般是name.pid<br/>
 配置文件一般放在/etc目录，配置文件一般是name.conf<br/>
 守护进程可以使用命令行启动，通常是系统初始化脚本之一</p>
+
+<h3 id="toc_9">如何使用 PHP 实现一个守护进程</h3>
+
+<pre><code>&lt;?php
+umask(0);
+
+// 脱离进程组
+$pid = pcntl_fork();
+if ($pid === -1) {
+    die(&#39;could not fork&#39;);
+} elseif ($pid &gt; 0) {
+    exit(0);
+}
+
+// 创建新会话
+if (posix_setsid() === -1) {
+    exit(0);
+}
+
+// 再次fork，脱离会话首进程，防止主动获取控制终端
+$pid = pcntl_fork();
+if ($pid === -1) {
+    die(&#39;could not fork&#39;);
+} else if ($pid) {
+    exit(0);
+}
+
+// 以下为测试代码，死循环输出
+$line = 1;
+while (1) {
+    file_put_contents(&#39;a.txt&#39;, $line++ . &quot;daemon\n&quot;, FILE_APPEND);
+    sleep(1);
+}
+</code></pre>
 
 			            </div>
 			          </div><!-- /.blog-post -->
@@ -223,24 +259,26 @@ pid &lt;-1 等待调用进程组ID等于pid绝对值的任意子进程</p>
             
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="bigdata.html">大数据&nbsp;(22)</a>
+	        <a href="bigdata.html">大数据&nbsp;(24)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
 	        
-	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        	<a href="hbase.html">HBase&nbsp;(10)</a>&nbsp;&nbsp;
 	        
 	        	<a href="solr.html">Solr&nbsp;(7)</a>&nbsp;&nbsp;
+	        
+	        	<a href="ElasticSearch.html">ElasticSearch&nbsp;(1)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(4)</a>
+	        <a href="server.html">服务器&nbsp;(6)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(2)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(4)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -259,12 +297,12 @@ pid &lt;-1 等待调用进程组ID等于pid绝对值的任意子进程</p>
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(11)</a>
+	        <a href="program.html">编程语言&nbsp;(12)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="php.html">PHP&nbsp;(5)</a>&nbsp;&nbsp;
+	        	<a href="php.html">PHP&nbsp;(4)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(2)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(4)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -275,7 +313,7 @@ pid &lt;-1 等待调用进程组ID等于pid绝对值的任意子进程</p>
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="software.html">软件设计&nbsp;(4)</a>
+	        <a href="software.html">软件设计&nbsp;(5)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html">设计模式&nbsp;(4)</a>&nbsp;&nbsp;
@@ -297,6 +335,30 @@ pid &lt;-1 等待调用进程组ID等于pid绝对值的任意子进程</p>
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14949831725275.html" title="Maven QuickStart">Maven QuickStart</a><br />
+	     
+	  
+	      
+		        <a href="14944229387367.html" title="ElasticSearch 2.x 安装">ElasticSearch 2.x 安装</a><br />
+	     
+	  
+	      
+		        <a href="14943218854977.html" title="Linux/Mac 下伪分布式 HBase 开发测试环境">Linux/Mac 下伪分布式 HBase 开发测试环境</a><br />
+	     
+	  
+	      
+		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
+	     
+	  
+	      
+		        <a href="14914572882166.html" title="Apache Commons 工具集">Apache Commons 工具集</a><br />
+	     
+	  
+	      
+		        <a href="14896294544708.html" title="分布式系统的意义">分布式系统的意义</a><br />
+	     
 	  
 	      
 		        <a href="14879999782063.html" title="Unix 环境高级编程-进程">Unix 环境高级编程-进程</a><br />
@@ -332,30 +394,6 @@ pid &lt;-1 等待调用进程组ID等于pid绝对值的任意子进程</p>
 	  
 	      
 		        <a href="14864571405778.html" title="php composer 配置">php composer 配置</a><br />
-	     
-	  
-	      
-		        <a href="14841186341336.html" title="Java QuickStart (1)">Java QuickStart (1)</a><br />
-	     
-	  
-	      
-		        <a href="14805801026400.html" title="搜索引擎老板开了个杂货店">搜索引擎老板开了个杂货店</a><br />
-	     
-	  
-	      
-		        <a href="14731420304516.html" title="浏览器缓存与相关 HTTP Header">浏览器缓存与相关 HTTP Header</a><br />
-	     
-	  
-	      
-		        <a href="14727802575210.html" title="Sass + Compass">Sass + Compass</a><br />
-	     
-	  
-	      
-		        <a href="14613994523878.html" title="HTML/CSS 开发人员编码规范">HTML/CSS 开发人员编码规范</a><br />
-	     
-	  
-	      
-		        <a href="14722814557558.html" title="SEO 优化">SEO 优化</a><br />
 	     
 	  
 	      

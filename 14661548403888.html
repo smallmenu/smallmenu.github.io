@@ -122,8 +122,8 @@ vi /etc/sysconfig/selinux
 <pre><code>ulimit -a 
 
 vi /etc/security/limits.conf
-* soft nofile 65535
-* hard nofile 65535
+* soft nofile 65536
+* hard nofile 65536
 * soft core unlimited
 * hard core unlimited
 
@@ -171,8 +171,8 @@ net.ipv4.route.max_size = 5242880
 net.ipv4.tcp_max_tw_buckets = 200000
 net.ipv4.tcp_synack_retries=3
 
-fs.file-max =65535
-vm.swappiness = 5
+fs.file-max =65536
+vm.swappiness = 1
 
 </code></pre>
 
@@ -197,7 +197,8 @@ ntpdate
 
 <p>启用“透明大页面”，它可能会导致重大的性能问题。具体自行查阅相关介绍</p>
 
-<pre><code>echo never &gt; /sys/kernel/mm/redhat_transparent_hugepage/defrag
+<pre><code>echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled
+echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag
 vi /etc/rc.local
 </code></pre>
 
@@ -223,18 +224,18 @@ cloudera-manager-server-5.5.1-1.cm551.p0.8.el6.x86_64.rpm
 cloudera-manager-server-db-2-5.5.1-1.cm551.p0.8.el6.x86_64.rpm
 CDH-5.5.1-1.cdh5.5.1.p0.11-el6.parcel
 CDH-5.5.1-1.cdh5.5.1.p0.11-el6.parcel.sha1
-oracle-j2sdk1.7-1.7.0+update67-1.x86_64.rpm
+jdk-8u131-linux-x64.rpm
 cp cloudera-manager.repo /etc/yum.repos.d/
 </code></pre>
 
 <h2 id="toc_13">JDK 安装</h2>
 
-<pre><code>yum -y --nogpgcheck localinstall oracle-j2sdk1.7-1.7.0+update67-1.x86_64.rpm
-ln -s /usr/java/jdk1.7.0_67-cloudera/ /usr/java/default
+<pre><code>cd /root/cloudera
+rpm -ivh jdk-8u131-linux-x64.rpm
 vi /etc/profile
 </code></pre>
 
-<p>修改环境变量</p>
+<p>修改环境变量vi </p>
 
 <pre><code>export JAVA_HOME=/usr/java/default
 export PATH=$PATH:$JAVA_HOME/bin
@@ -290,7 +291,19 @@ netstat -tunlp
 同时将CDH-5.1.3-1.cdh5.1.3.p0.12-el6.parcel.sha1重命名为CDH-5.1.3-1.cdh5.1.3.p0.12-el6.parcel.sha<br/>
 这点必须注意，否则，系统会重新下载CDH-5.1.3-1.cdh5.1.3.p0.12-el6.parcel文件。</p>
 
-<h2 id="toc_19">集群配置向导</h2>
+<p>同时需要注意设置主节点与其他节点的目录权限：</p>
+
+<pre><code>chmod -R 777 /opt/cloudera
+</code></pre>
+
+<h2 id="toc_19">配置节点hosts</h2>
+
+<pre><code>192.168.0.1 node1
+192.168.0.1 node2
+192.168.0.1 node3
+</code></pre>
+
+<h2 id="toc_20">集群配置向导</h2>
 
 <p>cloudera-scm-server启动以后，正常情况可以在主节点的7180端口访问 Web界面</p>
 
@@ -319,7 +332,7 @@ YARN 主要、高级
 
 <p>最后修改所有组件的日志级别，默认为INFO，至少修改为WARN</p>
 
-<h2 id="toc_20">详细配置</h2>
+<h2 id="toc_21">详细配置</h2>
 
 <p>HDFS 配置-&gt;资源管理:<br/>
 NameNode 的 Java 堆栈大小（字节） 1G<br/>
@@ -333,7 +346,9 @@ dfs.replication 2</p>
 <p>HBase 配置-&gt;资源管理:<br/><br/>
 HBase Master 的 Java 堆栈大小（字节）1G<br/>
 HBase RegionServer 的 Java 堆栈大小（字节） 4G<br/>
-HBase Thrift 的 Java 堆栈大小（字节）2G</p>
+HBase Thrift 的 Java 堆栈大小（字节）2G<br/>
+RegionServer Memstore 大小，默认128MB<br/>
+RegionServer HFile大小，默认10G</p>
 
 <p>YARN 配置-&gt;资源管理:<br/>
 NodeManager 的 Java 堆栈大小（字节）1G <br/>
@@ -351,9 +366,9 @@ Oozie Server 的 Java 堆栈大小（字节）</p>
 <p>Hive 配置-&gt;资源管理:<br/><br/>
 Hive Metastore Server 的 Java 堆栈大小（字节） 1G</p>
 
-<h1 id="toc_21">测试集群</h1>
+<h1 id="toc_22">测试集群</h1>
 
-<h2 id="toc_22">HDFS 与 YARN 测试</h2>
+<h2 id="toc_23">HDFS 与 YARN 测试</h2>
 
 <p>计算圆周率</p>
 
@@ -365,11 +380,11 @@ Hive Metastore Server 的 Java 堆栈大小（字节） 1G</p>
 <pre><code>hadoop jar /opt/cloudera/parcels/CDH/lib/hadoop-mapreduce/hadoop-mapreduce-examples-2.6.0-cdh5.5.1.jar pi 10 100000
 </code></pre>
 
-<h2 id="toc_23">HBase 测试</h2>
+<h2 id="toc_24">HBase 测试</h2>
 
 <p>执行 hbash shell</p>
 
-<h1 id="toc_24">如何卸载重新安装</h1>
+<h1 id="toc_25">如何卸载重新安装</h1>
 
 <pre><code>service cloudera-scm-server stop
 service cloudera-scm-server-db stop
@@ -392,6 +407,20 @@ yum clean all
 rm -Rf /var/lib/flume-ng /var/lib/hadoop* /var/lib/hue /var/lib/navigator /var/lib/oozie /var/lib/solr /var/lib/sqoop* /var/lib/zookeeper
 </code></pre>
 
+<h1 id="toc_26">问题汇总</h1>
+
+<p>Error, CM server guid updated, expected 85587073-270d-43d9-a44a-e213d9f7e45b, received 4c1402a5-8364-4598-a382-0c760710e897</p>
+
+<p>删除节点 /var/lib/cloudera-scm-agent/cm_guid 并重启agent</p>
+
+<h2 id="toc_27">单用户模式</h2>
+
+<p>不要配置</p>
+
+<h2 id="toc_28">Kafka 监听所有端口</h2>
+
+<p>listeners=PLAINTEXT://0.0.0.0:9092</p>
+
 			            </div>
 			          </div><!-- /.blog-post -->
 			<div class="share-comment">
@@ -411,24 +440,26 @@ rm -Rf /var/lib/flume-ng /var/lib/hadoop* /var/lib/hue /var/lib/navigator /var/l
             
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="bigdata.html">大数据&nbsp;(22)</a>
+	        <a href="bigdata.html">大数据&nbsp;(24)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
 	        
-	        	<a href="hbase.html">HBase&nbsp;(9)</a>&nbsp;&nbsp;
+	        	<a href="hbase.html">HBase&nbsp;(10)</a>&nbsp;&nbsp;
 	        
 	        	<a href="solr.html">Solr&nbsp;(7)</a>&nbsp;&nbsp;
+	        
+	        	<a href="ElasticSearch.html">ElasticSearch&nbsp;(1)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(4)</a>
+	        <a href="server.html">服务器&nbsp;(6)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(2)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(4)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -447,12 +478,12 @@ rm -Rf /var/lib/flume-ng /var/lib/hadoop* /var/lib/hue /var/lib/navigator /var/l
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(11)</a>
+	        <a href="program.html">编程语言&nbsp;(12)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="php.html">PHP&nbsp;(5)</a>&nbsp;&nbsp;
+	        	<a href="php.html">PHP&nbsp;(4)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(2)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(4)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -463,7 +494,7 @@ rm -Rf /var/lib/flume-ng /var/lib/hadoop* /var/lib/hue /var/lib/navigator /var/l
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="software.html">软件设计&nbsp;(4)</a>
+	        <a href="software.html">软件设计&nbsp;(5)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F.html">设计模式&nbsp;(4)</a>&nbsp;&nbsp;
@@ -485,6 +516,30 @@ rm -Rf /var/lib/flume-ng /var/lib/hadoop* /var/lib/hue /var/lib/navigator /var/l
           </div>
           <div class="sidebar-module">
             <h4>最近文章</h4>
+	  
+	      
+		        <a href="14949831725275.html" title="Maven QuickStart">Maven QuickStart</a><br />
+	     
+	  
+	      
+		        <a href="14944229387367.html" title="ElasticSearch 2.x 安装">ElasticSearch 2.x 安装</a><br />
+	     
+	  
+	      
+		        <a href="14943218854977.html" title="Linux/Mac 下伪分布式 HBase 开发测试环境">Linux/Mac 下伪分布式 HBase 开发测试环境</a><br />
+	     
+	  
+	      
+		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
+	     
+	  
+	      
+		        <a href="14914572882166.html" title="Apache Commons 工具集">Apache Commons 工具集</a><br />
+	     
+	  
+	      
+		        <a href="14896294544708.html" title="分布式系统的意义">分布式系统的意义</a><br />
+	     
 	  
 	      
 		        <a href="14879999782063.html" title="Unix 环境高级编程-进程">Unix 环境高级编程-进程</a><br />
@@ -520,30 +575,6 @@ rm -Rf /var/lib/flume-ng /var/lib/hadoop* /var/lib/hue /var/lib/navigator /var/l
 	  
 	      
 		        <a href="14864571405778.html" title="php composer 配置">php composer 配置</a><br />
-	     
-	  
-	      
-		        <a href="14841186341336.html" title="Java QuickStart (1)">Java QuickStart (1)</a><br />
-	     
-	  
-	      
-		        <a href="14805801026400.html" title="搜索引擎老板开了个杂货店">搜索引擎老板开了个杂货店</a><br />
-	     
-	  
-	      
-		        <a href="14731420304516.html" title="浏览器缓存与相关 HTTP Header">浏览器缓存与相关 HTTP Header</a><br />
-	     
-	  
-	      
-		        <a href="14727802575210.html" title="Sass + Compass">Sass + Compass</a><br />
-	     
-	  
-	      
-		        <a href="14613994523878.html" title="HTML/CSS 开发人员编码规范">HTML/CSS 开发人员编码规范</a><br />
-	     
-	  
-	      
-		        <a href="14722814557558.html" title="SEO 优化">SEO 优化</a><br />
 	     
 	  
 	      

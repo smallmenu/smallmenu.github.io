@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>Linux服务器部署规范（CentOS 6） - 蛮-com | 醉里挑灯看剑</title>
+    <title>CentOS 7 几点改变 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,8 +47,8 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14661279980383.html">Linux服务器部署规范（CentOS 6）</a></h2>
-			            <p class="blog-post-meta">2016/6/17
+			            <h2 class="blog-post-title"><a href="14924051544294.html">CentOS 7 几点改变</a></h2>
+			            <p class="blog-post-meta">2017/4/17
 				            &nbsp;分类于 
 							
 							    <a class='category' href='linux.html'>Linux</a>&nbsp;
@@ -56,250 +56,62 @@
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>本规范主要用于团队内部服务器部署统一约定，当前使用 CentOS 6 作为模板。</p>
+			            <p>从 CentOS 6 升级到 CentOS 7 有一些变化，如管理服务的 service ，服务启动脚本，以及软件防火墙等。</p>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">安装</h2>
+<h2 id="toc_0">网络配置、主机名、DNS</h2>
 
-<p>系统安装，最重要的一步就是磁盘分区规划：</p>
+<p>之前的版本，可以使用 setup 进行网卡、服务的配置，CentOS 7 安装完以后没有 setup 甚至没有 ifconfig，顿时感觉到蛋疼。好在有替代方案，那就是：</p>
 
-<ul>
-<li>如果尚有磁盘空间，务必采用LVM，方便未来扩容</li>
-<li>空间划分要合理，/根分区，/data数据分区，如有必要应划分独立的日志分区 /var</li>
-</ul>
-
-<h2 id="toc_1">服务器检查与初始化</h2>
-
-<h3 id="toc_2">检查CPU/内存/磁盘情况</h3>
-
-<pre><code>top
-fdisk -l
+<pre><code>shell&gt;nmtui
 </code></pre>
 
-<h3 id="toc_3">网络，主机名</h3>
+<p>查看网卡状态可以暂时使用：</p>
 
-<pre><code>vi /etc/sysconfig/network
-hostname yaoniming
-
-vi /etc/hosts
+<pre><code>shell&gt;ip address
 </code></pre>
 
-<h3 id="toc_4">软件防火墙</h3>
+<blockquote>
+<p>NOTE：以前可以通过 /etc/resolve.conf 修改DNS，现在直接修改文件，重启网卡服务会被覆盖。所以应当使用 nmtui 进行配置</p>
+</blockquote>
 
-<p>部署阶段可以考虑关闭软件防火墙，生产环境务必开启（有硬件防火墙除外）</p>
+<p>重启网卡依然可以使用 service network restart</p>
 
-<pre><code>/etc/init.d/iptables stop
-chkconfig iptables off
+<h2 id="toc_1">安装网络工具 net-tools</h2>
+
+<pre><code>shell&gt;yum install net-tools
 </code></pre>
 
-<p>iptables 可以使用setup工具定义，但如果通过修改配置定义，注意 setup 可能会覆盖配置</p>
+<p>安装完以后网络工具如 ifconfig, netstat 又回来了</p>
 
-<h3 id="toc_5">SELINUX</h3>
+<h2 id="toc_2">服务管理</h2>
 
-<p>关闭SELINUX (可能需要重启服务器)：</p>
+<p>CentOS的服务管理使用 systemctl，但是你有没有觉得很蛋疼，因为很多时候你记不得服务名。</p>
 
-<pre><code>sestatus
-vi /etc/sysconfig/selinux
+<p>以前我通过 /etc/init.d/[tab] 切出来补全服务名，现在 systemctl status 切不出来了。</p>
+
+<p>但可以安装 bash-completion 解决，安装后重启你的session生效</p>
+
+<pre><code>shell&gt;yum install bash-completion
 </code></pre>
 
-<h3 id="toc_6">打开文件数限制</h3>
+<p>现在你 systemctl status [tab][tab] 就可以切出来了。</p>
 
-<p>查看并修改 (可能需要重启服务器)，当作为Webserver时，系统默认1024远远不够。</p>
+<h2 id="toc_3">iptables 防火墙</h2>
 
-<pre><code>ulimit -a 
+<p>如果你不熟悉新的软件防火墙，可以安装老的 iptables</p>
 
-# 最下面增加
-vi /etc/security/limits.conf
-* soft nofile 65535
-* hard nofile 65535
-* soft core unlimited
-* hard core unlimited
+<pre><code>shell&gt;systemctl stop firewalld
+shell&gt;systemctl disable firewalld
 
+shell&gt;yum install iptables-services
+
+shell&gt;systemctl enable iptables
+shell&gt;systemctl start iptables
 </code></pre>
 
-<h3 id="toc_7">内核参数调整 CentOS 6</h3>
-
-<p>主要为TCP一些参数调整，打开文件数限制，swap使用限制，调整需要重启服务器，可与上面两步一起调整。</p>
-
-<p>注意最后两行参数。</p>
-
-<pre><code>net.unix.max_dgram_qlen = 100
-net.ipv4.conf.default.rp_filter = 1
-net.ipv4.conf.default.accept_source_route = 0
-kernel.sysrq = 0
-kernel.core_uses_pid = 1
-kernel.shmmax = 68719476736
-kernel.shmall = 4294967296
-kernel.msgmnb = 4203520
-kernel.msgmax = 8192
-kernel.msgmni = 256
-
-net.core.somaxconn = 32768
-net.core.wmem_default = 8388608
-net.core.rmem_default = 8388608
-net.core.rmem_max = 16777216
-net.core.wmem_max = 16777216
-
-net.ipv4.neigh.default.gc_stale_time=120
-net.ipv4.ip_local_port_range = 20000 65000
-
-net.ipv4.tcp_window_scaling = 1
-net.ipv4.tcp_mem  =   379008       505344  758016
-net.ipv4.tcp_rmem = 4096        87380   4194304
-net.ipv4.tcp_wmem = 4096        16384   4194304
-net.ipv4.tcp_max_orphans = 3276800
-
-net.ipv4.tcp_max_tw_buckets = 200000
-net.ipv4.tcp_syncookies = 1
-net.ipv4.tcp_max_syn_backlog = 81920
-net.ipv4.tcp_synack_retries = 3
-net.ipv4.tcp_fin_timeout = 30
-net.ipv4.tcp_keepalive_time = 300
-net.ipv4.tcp_tw_recycle = 1
-net.ipv4.tcp_tw_reuse = 1
-net.ipv4.route.max_size = 5242880
-net.ipv4.tcp_max_tw_buckets = 200000
-net.ipv4.tcp_synack_retries=3
-
-fs.file-max =65535
-vm.swappiness = 0
-
-</code></pre>
-
-<h3 id="toc_8">系统更新</h3>
-
-<p>安装软件前，需要先 yum update，因为大名鼎鼎的 bash 漏洞 （CentOS 6）</p>
-
-<p>可以安装一些必须的软件和开发包，顺便通过此步检查yum配置</p>
-
-<pre><code>yum update
-
-yum install gcc gcc-c++ autoconf automake make cmake libevent libtool libXaw expat-devel libxml2-devel libevent-devel asciidoc cyrus-sasl-devel cyrus-sasl-gssapi krb5-devel libtidy libxslt-devel python-devel openssl-devel gmp-devel
-yum install wget mlocate screen ntp unzip zip parted  rsync tree vim lrzsz tcpdump telnet sysstat lsof strace iptraf iotop snappy snappy-devel
-</code></pre>
-
-<h3 id="toc_9">时间同步</h3>
-
-<p>先手动同步一次，然后加入到计划任务，每8小时同步一次</p>
-
-<pre><code>cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
-ntpdate us.pool.ntp.org
-echo &quot;0 */8 * * * /usr/sbin/ntpdate us.pool.ntp.org&quot; &gt;&gt; /var/spool/cron/root
-
-/etc/init.d/crond restart
-</code></pre>
-
-<h3 id="toc_10">透明大页面</h3>
-
-<p>当服务器作为数据库、内存数据库、常驻任务服务器时（Redis、MySQL、Java、Hadoop等），启用透明大页面，它可能会导致重大的性能问题。</p>
-
-<p>当服务器只用于Webserver（Nginx+PHP），可以忽略。</p>
-
-<pre><code>echo never &gt; /sys/kernel/mm/transparent_hugepage/enabled
-echo never &gt; /sys/kernel/mm/transparent_hugepage/defrag
-
-# 同时添加到系统启动脚本中
-vi /etc/rc.local
-</code></pre>
-
-<h2 id="toc_11">服务器安全配置</h2>
-
-<h3 id="toc_12">避免系统管理弱口令</h3>
-
-<p>服务器、FTP、数据库等所有密码，请设置强有力密码，简单有效降低整体风险的安全漏洞，以下是关于一些强密码的建议：</p>
-
-<ul>
-<li>包括数字，符号，大小写字母组合</li>
-<li>密码长度应在12至14个字符，如果允许，可以更长。</li>
-<li>任何避免重复的密码，避免基于个人资料信息密码，如生日，姓名等。</li>
-<li>定时更换密码的习惯</li>
-</ul>
-
-<p>尽管我们一再强调密码复杂度的重要性，还依然有许多弱密码的存在。</p>
-
-<h3 id="toc_13">服务器SSH安全配置</h3>
-
-<p>互联网上无时不刻都有一些人四处开着扫描器进行弱密码扫描试探，SSH的22端口也不例外，在服务器上执行两条指令可查看所有登录成功与失败的日志：</p>
-
-<p>查看成功登录的日志</p>
-
-<pre><code>shell&gt; last | less 
-</code></pre>
-
-<p>查看登录失败的日志</p>
-
-<pre><code>shell&gt; lastb | less
-</code></pre>
-
-<p>如果你没修改过，应该看到了血淋淋的记录，没准已经被干了。所以在安装操作系统系统并设置好密码后，最好修改SSH默认端口。</p>
-
-<h4 id="toc_14">修改SSH服务端口</h4>
-
-<p>修改SSH配置文件，将其监听端口更改为大于10000的值，发挥您的想象力：</p>
-
-<pre><code>shell&gt; vi /etc/ssh/sshd_config
-Port 22345
-</code></pre>
-
-<p>修改iptables软件防火墙把默认的22端口改为刚才指定的端口，也可以使用 setup来进行配置iptables软件防火墙。</p>
-
-<pre><code>shell&gt; vi /etc/sysconfig/iptables
-</code></pre>
-
-<p>重启iptables，或者使用 service iptables restart</p>
-
-<p><strong>关于SSH这些配置、端口的修改，一定要在修改后立即进行连接测试，以防由于误操作，断开了当前连接而无法再次连接主机。</strong></p>
-
-<h4 id="toc_15">禁止root账户远程登录</h4>
-
-<p>通过修改默认端口基本上可以阻挡99%恶意扫描信息（根据个人观察），紧接着要做的就是禁止root远程直接登录。因为通过分析扫描日志，你会发现root账户试探的次数一直是永居榜首：</p>
-
-<pre><code>shell&gt; vi /etc/ssh/sshd_config
-PermitRootLogin no
-</code></pre>
-
-<p>然后创建个普通账户，当我们需要远程连接的时候，先通过普通账户登录，再su -到root。普通账户的用户名需要你费心思创造个奇葩的，admin, linux, centos 这类的用户名请先去反思：</p>
-
-<pre><code>shell&gt; useradd yaoniming
-shell&gt; passwd yaoniming
-</code></pre>
-
-<p>使用普通账户登录服务器后执行su –切换，注意su后面有个减号，是同时切换环境变量的意思</p>
-
-<h4 id="toc_16">管理员组账号</h4>
-
-<p>我们更推荐使用管理员组登陆，策略如下：</p>
-
-<p>管理员组用户可以直接使用sudo su -来切换到root账户，而不需要系统管理员告知root密码。</p>
-
-<p>只有管理员组的用户才能使用su 切换到root，即使普通用户知道root密码</p>
-
-<p>因为管理员组的用户权限极高，所以密码请参考强密码环节：</p>
-
-<pre><code># 添加wheel管理员组用户
-shell&gt; useradd -g wheel yaoniming
-
-# 限制wheel组用户才能su，去除该行注释
-shell&gt; vi /etc/pam.d/su
-auth            required        pam_wheel.so use_uid
-
-# wheel组可使用sudo，去除改行注释
-shell&gt; vi /etc/sudoers
-%wheel  ALL=(ALL)       NOPASSWD: ALL
-</code></pre>
-
-<p><strong>如果服务器是托管，SSH 相关修改一定要立即测试，否则这是个噩梦</strong><br/>
-<strong>如果服务器是托管，SSH 相关修改一定要立即测试，否则这是个噩梦</strong><br/>
-<strong>如果服务器是托管，SSH 相关修改一定要立即测试，否则这是个噩梦</strong></p>
-
-<h4 id="toc_17">限制服务器IP或VPN登入</h4>
-
-<p>某些情况有条件的情况下，我们可以限制SSH的来源IP以及通过VPN登入，进一步加强服务器的安全。</p>
-
-<p>我始终认为安全不能怕麻烦，因为你方便，其他人也方便。</p>
-
-<p>（未完待续）</p>
+<p>待续</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->
