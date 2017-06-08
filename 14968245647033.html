@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>观察者模式-行为型 - 蛮-com | 醉里挑灯看剑</title>
+    <title>PHP 扩展开发学习笔记（2）- 函数参数与返回值 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,267 +47,192 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14879154940276.html">观察者模式-行为型</a></h2>
-			            <p class="blog-post-meta">2017/2/24
-				            
-							 
+			            <h2 class="blog-post-title"><a href="14968245647033.html">PHP 扩展开发学习笔记（2）- 函数参数与返回值</a></h2>
+			            <p class="blog-post-meta">2015/6/7
+				            &nbsp;分类于 
 							
+							    <a class='category' href='php.html'>PHP</a>&nbsp;
+							 
+							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>观察者模式：定义对象间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。</p>
+			            <h2 id="toc_0">函数的参数</h2>
 
-<p>发生改变的对象称为观察目标，而被通知的对象称为观察者，一个观察目标可以对应多个观察者，而且这些观察者之间没有相互联系，可以根据需要增加和删除观察者，使得系统更易于扩展。</p>
+<p>最简单的获取函数调用者传递过来的参数便是使用zend_parse_parameters()函数，形式为：ZEND_NUM_ARGS() TSRMLS_CC，注意两者之间有个空格，但是没有逗号。从名字可以看出，ZEND_NUM_ARGS()代表着参数的个数。紧接着需要传递给zend_parse_parameters()函数的参数是一个用于格式化的字符串。</p>
 
-<p>观察者模式又叫做发布-订阅（Publish/Subscribe）模式、模型-视图（Model/View）模式、源-监听器（Source/Listener）模式或从属者（Dependents）模式。</p>
+<pre><code>type_spec是格式化字符串，其常见的含义如下：
+参数   代表着的类型
+b   Boolean
+l   Integer 整型
+d   Floating point 浮点型
+s   String 字符串
+r   Resource 资源
+a   Array 数组
+o   Object instance 对象
+O   Object instance of a specified type 特定类型的对象
+z   Non-specific zval 任意类型～
+Z   zval**类型
 
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">优点</h2>
-
-<ul>
-<li><p>观察者模式可以实现表示层和数据逻辑层的分离，并定义了稳定的消息更新传递机制，抽象了更新接口，使得可以有各种各样不同的表示层作为具体观察者角色。</p></li>
-<li><p>观察者模式在观察目标和观察者之间建立一个抽象的耦合。</p></li>
-<li><p>观察者模式支持广播通信。</p></li>
-<li><p>观察者模式符合“开闭原则”的要求。</p></li>
-</ul>
-
-<h2 id="toc_1">缺点</h2>
-
-<ul>
-<li><p>如果一个观察目标对象有很多直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间。</p></li>
-<li><p>如果在观察者和观察目标之间有循环依赖的话，观察目标会触发它们之间进行循环调用，可能导致系统崩溃。</p></li>
-<li><p>观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化。</p></li>
-</ul>
-
-<h2 id="toc_2">适用</h2>
-
-<p>一个抽象模型有两个方面，其中一个方面依赖于另一个方面。将这些方面封装在独立的对象中使它们可以各自独立地改变和复用。</p>
-
-<p>一个对象的改变将导致其他一个或多个对象也发生改变，而不知道具体有多少对象将发生改变，可以降低对象之间的耦合度。</p>
-
-<p>一个对象必须通知其他对象，而并不知道这些对象是谁。</p>
-
-<p>需要在系统中创建一个触发链，A对象的行为将影响B对象，B对象的行为将影响C对象……，可以使用观察者模式创建一种链式触发机制。</p>
-
-<h2 id="toc_3">应用</h2>
-
-<p>观察者模式在软件开发中应用非常广泛，如某电子商务网站可以在执行发送操作后给用户多个发送商品打折信息</p>
-
-<p>某团队战斗游戏中某队友牺牲将给所有成员提示等等，凡是涉及到一对一或者一对多的对象交互场景都可以使用观察者模式。</p>
-
-<p>在JDK的java.util包中，提供了Observable类以及Observer接口，它们构成了Java语言对观察者模式的支持。</p>
-
-<h2 id="toc_4">示例</h2>
-
-<h3 id="toc_5">方法1 手工实现</h3>
-
-<pre><code class="language-php">&lt;?php
-/**
- * Interface SubjectInterface
- */
-interface SubjectInterface
-{
-    public function attach(ObserverInterface $observer);
-
-    public function detach(ObserverInterface $observer);
-
-    public function notify();
-}
-
-/**
- * Class Subject
- */
-class Subject implements SubjectInterface
-{
-    protected $subject;
-
-    protected $observers = array();
-
-    public function __construct($subject)
-    {
-        $this-&gt;subject = $subject;
-    }
-
-    public function attach(ObserverInterface $observer)
-    {
-        $this-&gt;observers[] = $observer;
-    }
-
-    public function detach(ObserverInterface $observer)
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            if ($o === $observer) {
-                unset($this-&gt;observers[$key]);
-            }
-        }
-    }
-
-    public function notify()
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            $o-&gt;update($this);
-        }
-    }
-
-    public function getSubject()
-    {
-        return $this-&gt;subject;
-    }
-}
-
-/**
- * Interface ObserverInterface
- */
-interface ObserverInterface
-{
-    public function update(SubjectInterface $s);
-}
-
-/**
- * Class Observer
- */
-abstract class Observer implements ObserverInterface
-{
-    protected $name = null;
-
-    public function __construct($name)
-    {
-        $this-&gt;name = $name;
-    }
-
-    abstract public function update(SubjectInterface $s);
-}
-
-/**
- * Class Observer1
- */
-class Observer1 extends Observer
-{
-    public function update(SubjectInterface $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-/**
- * Class Observer2
- */
-class Observer2 extends Observer
-{
-    public function update(SubjectInterface $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-$subject = new Subject(&#39;subject&#39;);
-$observer = new Observer1(&#39;observerinstance&#39;);
-$observer1 = new Observer1(&#39;observerinstance1&#39;);
-$observer2 = new Observer2(&#39;observerinstance2&#39;);
-
-$subject-&gt;attach($observer);
-$subject-&gt;attach($observer1);
-$subject-&gt;attach($observer2);
-$subject-&gt;notify();
-
-echo PHP_EOL;
-
-$subject-&gt;detach($observer);
-$subject-&gt;notify();
+参数  对应C里的数据类型
+b   zend_bool
+l   long
+d   double
+s   char*, int 前者接收指针，后者接收长度
+r   zval*
+a   zval*
+o   zval*
+O   zval*, zend_class_entry*
+z   zval*
+Z   zval**
 </code></pre>
 
-<p>输出：</p>
+<p>后面的参数是与格式化字符串里的格式一一对应的。一些基础类型的数据会直接映射成C语言里的类型。如果是字符串，也就是s，那么后面接受参数还要有个字符串长度，下面看个例子：</p>
 
-<pre><code>subject-&gt;Observer1-&gt;observerinstance on update
-subject-&gt;Observer1-&gt;observerinstance1 on update
-subject-&gt;Observer2-&gt;observerinstance2 on update
-
-subject-&gt;Observer1-&gt;observerinstance1 on update
-subject-&gt;Observer2-&gt;observerinstance2 on update
+<pre><code>&lt;?php
+function sample_hello_world($name, $greeting) {
+    echo &quot;Hello $greeting $name!\n&quot;;
+}
+sample_hello_world(&#39;John Smith&#39;, &#39;Mr.&#39;);
 </code></pre>
 
-<h3 id="toc_6">方法2 使用SPL接口</h3>
+<p>如果传递给函数的参数数量小于zend_parse_parameters()要接收的参数数量，它便会执行失败，并返回FAILURE。<br/>
+如果我们需要接收多个参数，可以直接在zend_parse_paramenters()的参数里罗列接收载体便可以了</p>
 
-<pre><code class="language-php">&lt;?php
-/**
- * Class Subject
- */
-class Subject implements SplSubject
-{
-    protected $subject;
-
-    protected $observers = array();
-
-    public function __construct($subject)
-    {
-        $this-&gt;observers = new SplObjectStorage();
-        $this-&gt;subject = $subject;
+<pre><code>ZEND_FUNCTION(sample_hello_world) {
+    char *name;
+    int name_len;
+    char *greeting;
+    int greeting_len;
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, &quot;ss&quot;,&amp;name, &amp;name_len, &amp;greeting, &amp;greeting_len) == FAILURE) {
+        RETURN_NULL();
     }
-
-    public function attach(SplObserver $observer)
-    {
-        $this-&gt;observers-&gt;attach($observer);
-    }
-
-    public function detach(SplObserver $observer)
-    {
-        $this-&gt;observers-&gt;detach($observer);
-    }
-
-    public function notify()
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            $o-&gt;update($this);
-        }
-    }
-
-    public function getSubject()
-    {
-        return $this-&gt;subject;
-    }
-}
-
-/**
- * Class Observer
- */
-abstract class Observer implements SplObserver
-{
-    protected $name = null;
-
-    public function __construct($name)
-    {
-        $this-&gt;name = $name;
-    }
-
-    abstract public function update(SplSubject $s);
-}
-
-/**
- * Class Observer1
- */
-class Observer1 extends Observer
-{
-    public function update(SplSubject $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-/**
- * Class Observer2
- */
-class Observer2 extends Observer
-{
-    public function update(SplSubject $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
+    php_printf(&quot;Hello &quot;);
+    PHPWRITE(greeting, greeting_len);
+    php_printf(&quot; &quot;);
+    PHPWRITE(name, name_len);
+    php_printf(&quot;!\n&quot;);
 }
 </code></pre>
+
+<p>除此之外，还有其他三个格式化参数用来增强我们接收参数的能力：</p>
+
+<pre><code>|    它之前的参数都是必须的，之后的都是非必须的，也就是有默认值的。
+!    如果接收了一个PHP语言里的null变量，则直接把其转成C语言里的NULL，而不是封装成IS_NULL类型的zval。
+/    如果传递过来的变量与别的变量共用一个zval，而且不是引用，则进行强制分离，新的zval的is_ref__gc==0, and refcount__gc==1.
+</code></pre>
+
+<h2 id="toc_1">函数参数的默认值</h2>
+
+<pre><code>&lt;?php
+function sample_hello_world($name, $greeting=&#39;Mr./Ms.&#39;) {
+    echo &quot;Hello $greeting $name!\n&quot;;
+}
+sample_hello_world(&#39;Ginger Rogers&#39;,&#39;Ms.&#39;);
+sample_hello_world(&#39;Fred Astaire&#39;);
+</code></pre>
+
+<p>此时即可以只向sample_hello_world中传递一个参数，也可以传递完整的两个参数。 那同样的功能我们怎样在扩展函数里实现呢？我们需要借助 | 这个格式化参数，这个参数之前的参数被认为是必须的，之后的便认为是非必须的了，如果没有传递，则不会去修改载体。</p>
+
+<pre><code>ZEND_FUNCTION(sample_hello_world) {
+    char *name;
+    int name_len;
+    char *greeting = &quot;Mr./Mrs.&quot;;
+    int greeting_len = sizeof(&quot;Mr./Mrs.&quot;) - 1;
+
+
+    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, &quot;s|s&quot;,
+      &amp;name, &amp;name_len, &amp;greeting, &amp;greeting_len) == FAILURE) {
+        RETURN_NULL();
+    }
+    php_printf(&quot;Hello &quot;);
+    PHPWRITE(greeting, greeting_len);
+    php_printf(&quot; &quot;);
+    PHPWRITE(name, name_len);
+    php_printf(&quot;!\n&quot;);
+}
+</code></pre>
+
+<h2 id="toc_2">函数的返回值</h2>
+
+<p>PHP语言中函数的返回值是通过return来完成的，C语言也一样使用return关键字，例如：</p>
+
+<pre><code>// PHP语言
+&lt;?php
+function sample_long() {
+  return 42;
+}
+$bar = sample_long();
+
+// C语言
+int sample_long(void) {
+    return 42;
+}
+int main(void) {
+    int bar = sample_long();
+    return 1;
+}
+</code></pre>
+
+<p>那么问题来了，扩展中编写的PHP函数如何把返回值回馈给用户端的函数调用者呢？ 我们想当然的写出了下面一段代码：</p>
+
+<pre><code>ZEND_FUNCTION(sample_long_wrong)
+{
+    zval *retval;
+
+    MAKE_STD_ZVAL(retval);
+    ZVAL_LONG(retval, 42);
+
+    return retval;
+}
+</code></pre>
+
+<p>上面的写法是无效的！与其让扩展开发员每次都初始化一个zval并return之，zend引擎早就准备好了一个更好的方法。它在每个zif函数声明里加了一个zval*类型的形参，名为return_value，专门来解决返回值这个问题。</p>
+
+<p>在之前我们已经知道ZEND_FUNCTION展开后有个INTERNAL_FUNCTION_PARAMETERS参数，我们看下这个展开后是什么：</p>
+
+<pre><code>define INTERNAL_FUNCTION_PARAMETERS int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC
+
+</code></pre>
+
+<p>参数说明：</p>
+
+<pre><code>int ht
+zval *return_value，我们在函数内部修改这个指针，函数执行完成后，内核将把这个指针指向的zval返回给用户端的函数调用者。
+zval **return_value_ptr，
+zval *this_ptr，如果此函数是一个类的方法，那么这个指针的含义和PHP语言中$this变量差不多。
+int return_value_used，代表用户端在调用此函数时有没有使用到它的返回值。
+</code></pre>
+
+<p>现在我们看下刚才的例子，正确的写法为：</p>
+
+<pre><code>ZEND_FUNCTION(sample_long)
+{
+    ZVAL_LONG(return_value, 42);
+    return;
+}
+</code></pre>
+
+<p>ZEND_FUNCTION本身并没有通过return关键字返回任何有价值的东西，它只不过是在运行时修改了return_value指针所指向的变量的值而已，而内核则会把return_value指向的变量作为用户端调用此函数后的得到的返回值。</p>
+
+<p>return_value如此重要，内核肯定早已经为它准备了大量的宏，来简化我们的操作，接下来我们要介绍的宏的名字是：RETVAL。 再回到上面的那个例子，我们用RETVAL来重写一下：</p>
+
+<pre><code>ZEND_FUNCTION(sample_long)
+{
+    RETVAL_LONG(42);
+    //展开后相当与ZVAL_LONG(return_value, 42);
+    return;
+}
+</code></pre>
+
+<p>甚至，内核中还提供了RETURN_系列宏来为我们自动补上return，我们再改写一下;</p>
+
+<pre><code>ZEND_FUNCTION(sample_long)
+{
+    RETURN_LONG(42);
+}
+</code></pre>
+
+<h2 id="toc_3">引用与函数执行的结果</h2>
 
 			            </div>
 			          </div><!-- /.blog-post -->

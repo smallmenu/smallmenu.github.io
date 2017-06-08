@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>PHP - 蛮-com | 醉里挑灯看剑</title>
+    <title>PHP 扩展开发学习笔记（1）- 生命周期与PHP变量 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,262 +38,17 @@
       </div>
     </div>
     
-    <div class="container" id="content-wrap">
-      <script type="text/javascript">
+    <script type="text/javascript">
       $(function(){
       	$('#menu-index').addClass('active');
       });
       </script>
+   <div class="container" id="content-wrap">
       <div class="row">
         <div class="col-sm-9 blog-main">
-			
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14968246116794.html">PHP 扩展开发学习笔记（3）- 数组与HashTable</a></h2>
-			            <p class="blog-post-meta">2015/6/9 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <h2 id="toc_0">数组</h2>
-
-<p>PHP中使用最为频繁的数据类型是字符串和数组，PHP中的数组是通过哈希表来实现的。</p>
-
-<p>哈希表是一种通过哈希函数，将特定的键映射到特定值的一种数据结构，它维护键和值之间一一对应关系。</p>
-
-<pre><code>键(key)：用于操作数据的标示，例如PHP数组中的索引，或者字符串键等等。
-槽(slot/bucket)：哈希表中用于保存数据的一个单元，也就是数据真正存放的容器。
-哈希函数(hash function)：将key映射(map)到数据应该存放的slot所在位置的函数。
-哈希冲突(hash collision)：哈希函数将两个不同的key映射到同一个索引的情况。
-</code></pre>
-
-<pre><code>h(key) -&gt; index
-</code></pre>
-
-<p>通过合理设计的哈希函数，我们就能将key映射到合适的范围，因为我们的key空间可以很大(例如字符串key)， 在映射到一个较小的空间中时可能会出现两个不同的key映射被到同一个index上的情况， 这就是我们所说的出现了冲突。 目前解决hash冲突的方法主要有两种：链接法和开放寻址法。</p>
-
-<h2 id="toc_1">哈希表</h2>
-
-<h3 id="toc_2">数据结构</h3>
-
-<p>首先我们需要一个容器来保存我们的哈希表，哈希表需要保存的内容主要是保存进来的的数据， 同时为了方便的得知哈希表中存储的元素个数，需要保存一个大小字段， 第二个需要的就是保存数据的容器了。作为实例，下面将实现一个简易的哈希表。基本的数据结构主要有两个， 一个用于保存哈希表本身，另外一个就是用于实际保存数据的单链表了，定义如下：</p>
-
-<pre><code>typedef struct _Bucket
-{
-    char *key;
-    void *value;
-    struct _Bucket *next;
-} Bucket;
- 
-typedef struct _HashTable
-{
-    int size;
-    int elem_num;
-    Bucket** buckets;
-} HashTable;
-</code></pre>
-
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14968245647033.html">PHP 扩展开发学习笔记（2）- 函数参数与返回值</a></h2>
-			            <p class="blog-post-meta">2015/6/7 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <h2 id="toc_0">函数的参数</h2>
-
-<p>最简单的获取函数调用者传递过来的参数便是使用zend_parse_parameters()函数，形式为：ZEND_NUM_ARGS() TSRMLS_CC，注意两者之间有个空格，但是没有逗号。从名字可以看出，ZEND_NUM_ARGS()代表着参数的个数。紧接着需要传递给zend_parse_parameters()函数的参数是一个用于格式化的字符串。</p>
-
-<pre><code>type_spec是格式化字符串，其常见的含义如下：
-参数   代表着的类型
-b   Boolean
-l   Integer 整型
-d   Floating point 浮点型
-s   String 字符串
-r   Resource 资源
-a   Array 数组
-o   Object instance 对象
-O   Object instance of a specified type 特定类型的对象
-z   Non-specific zval 任意类型～
-Z   zval**类型
-
-参数  对应C里的数据类型
-b   zend_bool
-l   long
-d   double
-s   char*, int 前者接收指针，后者接收长度
-r   zval*
-a   zval*
-o   zval*
-O   zval*, zend_class_entry*
-z   zval*
-Z   zval**
-</code></pre>
-
-<p>后面的参数是与格式化字符串里的格式一一对应的。一些基础类型的数据会直接映射成C语言里的类型。如果是字符串，也就是s，那么后面接受参数还要有个字符串长度，下面看个例子：</p>
-
-<pre><code>&lt;?php
-function sample_hello_world($name, $greeting) {
-    echo &quot;Hello $greeting $name!\n&quot;;
-}
-sample_hello_world(&#39;John Smith&#39;, &#39;Mr.&#39;);
-</code></pre>
-
-<p>如果传递给函数的参数数量小于zend_parse_parameters()要接收的参数数量，它便会执行失败，并返回FAILURE。<br/>
-如果我们需要接收多个参数，可以直接在zend_parse_paramenters()的参数里罗列接收载体便可以了</p>
-
-<pre><code>ZEND_FUNCTION(sample_hello_world) {
-    char *name;
-    int name_len;
-    char *greeting;
-    int greeting_len;
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, &quot;ss&quot;,&amp;name, &amp;name_len, &amp;greeting, &amp;greeting_len) == FAILURE) {
-        RETURN_NULL();
-    }
-    php_printf(&quot;Hello &quot;);
-    PHPWRITE(greeting, greeting_len);
-    php_printf(&quot; &quot;);
-    PHPWRITE(name, name_len);
-    php_printf(&quot;!\n&quot;);
-}
-</code></pre>
-
-<p>除此之外，还有其他三个格式化参数用来增强我们接收参数的能力：</p>
-
-<pre><code>|    它之前的参数都是必须的，之后的都是非必须的，也就是有默认值的。
-!    如果接收了一个PHP语言里的null变量，则直接把其转成C语言里的NULL，而不是封装成IS_NULL类型的zval。
-/    如果传递过来的变量与别的变量共用一个zval，而且不是引用，则进行强制分离，新的zval的is_ref__gc==0, and refcount__gc==1.
-</code></pre>
-
-<h2 id="toc_1">函数参数的默认值</h2>
-
-<pre><code>&lt;?php
-function sample_hello_world($name, $greeting=&#39;Mr./Ms.&#39;) {
-    echo &quot;Hello $greeting $name!\n&quot;;
-}
-sample_hello_world(&#39;Ginger Rogers&#39;,&#39;Ms.&#39;);
-sample_hello_world(&#39;Fred Astaire&#39;);
-</code></pre>
-
-<p>此时即可以只向sample_hello_world中传递一个参数，也可以传递完整的两个参数。 那同样的功能我们怎样在扩展函数里实现呢？我们需要借助 | 这个格式化参数，这个参数之前的参数被认为是必须的，之后的便认为是非必须的了，如果没有传递，则不会去修改载体。</p>
-
-<pre><code>ZEND_FUNCTION(sample_hello_world) {
-    char *name;
-    int name_len;
-    char *greeting = &quot;Mr./Mrs.&quot;;
-    int greeting_len = sizeof(&quot;Mr./Mrs.&quot;) - 1;
-
-
-    if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC, &quot;s|s&quot;,
-      &amp;name, &amp;name_len, &amp;greeting, &amp;greeting_len) == FAILURE) {
-        RETURN_NULL();
-    }
-    php_printf(&quot;Hello &quot;);
-    PHPWRITE(greeting, greeting_len);
-    php_printf(&quot; &quot;);
-    PHPWRITE(name, name_len);
-    php_printf(&quot;!\n&quot;);
-}
-</code></pre>
-
-<h2 id="toc_2">函数的返回值</h2>
-
-<p>PHP语言中函数的返回值是通过return来完成的，C语言也一样使用return关键字，例如：</p>
-
-<pre><code>// PHP语言
-&lt;?php
-function sample_long() {
-  return 42;
-}
-$bar = sample_long();
-
-// C语言
-int sample_long(void) {
-    return 42;
-}
-int main(void) {
-    int bar = sample_long();
-    return 1;
-}
-</code></pre>
-
-<p>那么问题来了，扩展中编写的PHP函数如何把返回值回馈给用户端的函数调用者呢？ 我们想当然的写出了下面一段代码：</p>
-
-<pre><code>ZEND_FUNCTION(sample_long_wrong)
-{
-    zval *retval;
-
-    MAKE_STD_ZVAL(retval);
-    ZVAL_LONG(retval, 42);
-
-    return retval;
-}
-</code></pre>
-
-<p>上面的写法是无效的！与其让扩展开发员每次都初始化一个zval并return之，zend引擎早就准备好了一个更好的方法。它在每个zif函数声明里加了一个zval*类型的形参，名为return_value，专门来解决返回值这个问题。</p>
-
-<p>在之前我们已经知道ZEND_FUNCTION展开后有个INTERNAL_FUNCTION_PARAMETERS参数，我们看下这个展开后是什么：</p>
-
-<pre><code>define INTERNAL_FUNCTION_PARAMETERS int ht, zval *return_value, zval **return_value_ptr, zval *this_ptr, int return_value_used TSRMLS_DC
-
-</code></pre>
-
-<p>参数说明：</p>
-
-<pre><code>int ht
-zval *return_value，我们在函数内部修改这个指针，函数执行完成后，内核将把这个指针指向的zval返回给用户端的函数调用者。
-zval **return_value_ptr，
-zval *this_ptr，如果此函数是一个类的方法，那么这个指针的含义和PHP语言中$this变量差不多。
-int return_value_used，代表用户端在调用此函数时有没有使用到它的返回值。
-</code></pre>
-
-<p>现在我们看下刚才的例子，正确的写法为：</p>
-
-<pre><code>ZEND_FUNCTION(sample_long)
-{
-    ZVAL_LONG(return_value, 42);
-    return;
-}
-</code></pre>
-
-<p>ZEND_FUNCTION本身并没有通过return关键字返回任何有价值的东西，它只不过是在运行时修改了return_value指针所指向的变量的值而已，而内核则会把return_value指向的变量作为用户端调用此函数后的得到的返回值。</p>
-
-<p>return_value如此重要，内核肯定早已经为它准备了大量的宏，来简化我们的操作，接下来我们要介绍的宏的名字是：RETVAL。 再回到上面的那个例子，我们用RETVAL来重写一下：</p>
-
-<pre><code>ZEND_FUNCTION(sample_long)
-{
-    RETVAL_LONG(42);
-    //展开后相当与ZVAL_LONG(return_value, 42);
-    return;
-}
-</code></pre>
-
-<p>甚至，内核中还提供了RETURN_系列宏来为我们自动补上return，我们再改写一下;</p>
-
-<pre><code>ZEND_FUNCTION(sample_long)
-{
-    RETURN_LONG(42);
-}
-</code></pre>
-
-<h2 id="toc_3">引用与函数执行的结果</h2>
-
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
 					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14968245020347.html">PHP 扩展开发学习笔记（1）- 生命周期与PHP变量</a></h2>
-			            <p class="blog-post-meta">2015/6/7 
+			            <p class="blog-post-meta">2015/6/7
 				            &nbsp;分类于 
 							
 							    <a class='category' href='php.html'>PHP</a>&nbsp;
@@ -559,134 +314,20 @@ INTERNAL_FUNCTION_PARAMETERS 是一个很长的参数表，我们后面再说。
 
 <p>PHP_FE/ZEND_FE()宏函数是对我们walu_hello函数的一个声明，如果我们有多个函数可以直接写成多行，PHP_FE_END/ZEND_FE_END 是个固定的 { NULL, NULL, NULL, 0, 0 } 值，注意每个之间不需要加逗号。</p>
 
-						
-			           </div>
+			            </div>
 			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14866965563754.html">Gitlab CE + Gitbook 本地环境搭建</a></h2>
-			            <p class="blog-post-meta">2017/2/10 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>GitLab 是一个利用Ruby on Rails开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。<br/>
-它拥有与GitHub类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。</p>
-
-<p>GitBook 是一个基于 Node.js 的命令行工具，可使用 Github/Git 和 Markdown 来制作精美的电子书</p>
-
-
-						 
-						<a href="14866965563754.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14864571405778.html">php composer 配置</a></h2>
-			            <p class="blog-post-meta">2017/2/7 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <h2 id="toc_0">安装</h2>
-
-<p>参见官网：<a href="https://getcomposer.org/download/">https://getcomposer.org/download/</a></p>
-
-<pre><code>php -r &quot;copy(&#39;https://getcomposer.org/installer&#39;, &#39;composer-setup.php&#39;);&quot;
-php -r &quot;if (hash_file(&#39;SHA384&#39;, &#39;composer-setup.php&#39;) === &#39;55d6ead61b29c7bdee5cccfb50076874187bd9f21f65d8991d46ec5cc90518f447387fb9f76ebae1fbbacf329e583e30&#39;) { echo &#39;Installer verified&#39;; } else { echo &#39;Installer corrupt&#39;; unlink(&#39;composer-setup.php&#39;); } echo PHP_EOL;&quot;
-php composer-setup.php
-php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
-</code></pre>
-
-<h2 id="toc_1">配置</h2>
-
-<p>composer config -l -g</p>
-
-<pre><code>&quot;config&quot;: {
-    &quot;secure-http&quot;:false
-}
-</code></pre>
-
-<h2 id="toc_2">自更新</h2>
-
-<pre><code>composer selfupdate
-</code></pre>
-
-<h2 id="toc_3">中国全量镜像</h2>
-
-<p><a href="https://pkg.phpcomposer.com/">https://pkg.phpcomposer.com/</a></p>
-
-<pre><code>composer config -g repo.packagist composer https://packagist.phpcomposer.com
-</code></pre>
-
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14671892872587.html">PHP Opcache 扩展</a></h2>
-			            <p class="blog-post-meta">2016/6/29 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>OPcache 通过将 PHP 脚本预编译的字节码存储到共享内存中来提升 PHP 的性能， 存储预编译字节码的好处就是省去了每次加载和解析 PHP 脚本的开销。</p>
-
-<p>PHP 5.5.0 及后续版本中已经绑定了 OPcache 扩展。 5.3 和 5.4 版本可以使用扩展安装。</p>
-
-
-						 
-						<a href="14671892872587.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14657354899214.html">PHP 5.4 编译参数</a></h2>
-			            <p class="blog-post-meta">2016/6/23 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>本文主要整理了 PHP 5.4 的编译参数，并对一些参数和第三方扩展做以说明</p>
-
-<p>截止到目前 2016-06-23 PHP 5.4 的兼容性还是最好的。</p>
-
-
-						 
-						<a href="14657354899214.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			  
-          <nav>
-            <ul class="pager">
-            	<li class=""><a href="archives.html">归档</a></li>
-            
-            	<li class="  disabled "><a href="#index">上一页</a></li>
-            
-			
-            	<li class=" disabled "><a href="#index">下一页</a></li>
-            
-            </ul>
-          </nav>
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
         </div><!-- /.blog-main -->
-       <!-- slider start -->
-
-  		<div class="col-sm-3 blog-sidebar">
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
           <div class="sidebar-module">
             <h4>分类</h4>
             

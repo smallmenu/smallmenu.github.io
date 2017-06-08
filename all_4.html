@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>观察者模式-行为型 - 蛮-com | 醉里挑灯看剑</title>
+    <title>蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -38,291 +38,183 @@
       </div>
     </div>
     
-    <script type="text/javascript">
+    <div class="container" id="content-wrap">
+      <script type="text/javascript">
       $(function(){
       	$('#menu-index').addClass('active');
       });
       </script>
-   <div class="container" id="content-wrap">
       <div class="row">
         <div class="col-sm-9 blog-main">
+			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14879154940276.html">观察者模式-行为型</a></h2>
-			            <p class="blog-post-meta">2017/2/24
-				            
-							 
+			            <h2 class="blog-post-title"><a href="14541168338285.html">HBase VS MySQL 性能测试</a></h2>
+			            <p class="blog-post-meta">2016/1/30 
+				            &nbsp;分类于 
 							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							 
+							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>观察者模式：定义对象间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。</p>
+			            <p>HBase 1.0.0<br/>
+MySQL 5.6</p>
 
-<p>发生改变的对象称为观察目标，而被通知的对象称为观察者，一个观察目标可以对应多个观察者，而且这些观察者之间没有相互联系，可以根据需要增加和删除观察者，使得系统更易于扩展。</p>
 
-<p>观察者模式又叫做发布-订阅（Publish/Subscribe）模式、模型-视图（Model/View）模式、源-监听器（Source/Listener）模式或从属者（Dependents）模式。</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">优点</h2>
-
-<ul>
-<li><p>观察者模式可以实现表示层和数据逻辑层的分离，并定义了稳定的消息更新传递机制，抽象了更新接口，使得可以有各种各样不同的表示层作为具体观察者角色。</p></li>
-<li><p>观察者模式在观察目标和观察者之间建立一个抽象的耦合。</p></li>
-<li><p>观察者模式支持广播通信。</p></li>
-<li><p>观察者模式符合“开闭原则”的要求。</p></li>
-</ul>
-
-<h2 id="toc_1">缺点</h2>
-
-<ul>
-<li><p>如果一个观察目标对象有很多直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间。</p></li>
-<li><p>如果在观察者和观察目标之间有循环依赖的话，观察目标会触发它们之间进行循环调用，可能导致系统崩溃。</p></li>
-<li><p>观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化。</p></li>
-</ul>
-
-<h2 id="toc_2">适用</h2>
-
-<p>一个抽象模型有两个方面，其中一个方面依赖于另一个方面。将这些方面封装在独立的对象中使它们可以各自独立地改变和复用。</p>
-
-<p>一个对象的改变将导致其他一个或多个对象也发生改变，而不知道具体有多少对象将发生改变，可以降低对象之间的耦合度。</p>
-
-<p>一个对象必须通知其他对象，而并不知道这些对象是谁。</p>
-
-<p>需要在系统中创建一个触发链，A对象的行为将影响B对象，B对象的行为将影响C对象……，可以使用观察者模式创建一种链式触发机制。</p>
-
-<h2 id="toc_3">应用</h2>
-
-<p>观察者模式在软件开发中应用非常广泛，如某电子商务网站可以在执行发送操作后给用户多个发送商品打折信息</p>
-
-<p>某团队战斗游戏中某队友牺牲将给所有成员提示等等，凡是涉及到一对一或者一对多的对象交互场景都可以使用观察者模式。</p>
-
-<p>在JDK的java.util包中，提供了Observable类以及Observer接口，它们构成了Java语言对观察者模式的支持。</p>
-
-<h2 id="toc_4">示例</h2>
-
-<h3 id="toc_5">方法1 手工实现</h3>
-
-<pre><code class="language-php">&lt;?php
-/**
- * Interface SubjectInterface
- */
-interface SubjectInterface
-{
-    public function attach(ObserverInterface $observer);
-
-    public function detach(ObserverInterface $observer);
-
-    public function notify();
-}
-
-/**
- * Class Subject
- */
-class Subject implements SubjectInterface
-{
-    protected $subject;
-
-    protected $observers = array();
-
-    public function __construct($subject)
-    {
-        $this-&gt;subject = $subject;
-    }
-
-    public function attach(ObserverInterface $observer)
-    {
-        $this-&gt;observers[] = $observer;
-    }
-
-    public function detach(ObserverInterface $observer)
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            if ($o === $observer) {
-                unset($this-&gt;observers[$key]);
-            }
-        }
-    }
-
-    public function notify()
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            $o-&gt;update($this);
-        }
-    }
-
-    public function getSubject()
-    {
-        return $this-&gt;subject;
-    }
-}
-
-/**
- * Interface ObserverInterface
- */
-interface ObserverInterface
-{
-    public function update(SubjectInterface $s);
-}
-
-/**
- * Class Observer
- */
-abstract class Observer implements ObserverInterface
-{
-    protected $name = null;
-
-    public function __construct($name)
-    {
-        $this-&gt;name = $name;
-    }
-
-    abstract public function update(SubjectInterface $s);
-}
-
-/**
- * Class Observer1
- */
-class Observer1 extends Observer
-{
-    public function update(SubjectInterface $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-/**
- * Class Observer2
- */
-class Observer2 extends Observer
-{
-    public function update(SubjectInterface $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-$subject = new Subject(&#39;subject&#39;);
-$observer = new Observer1(&#39;observerinstance&#39;);
-$observer1 = new Observer1(&#39;observerinstance1&#39;);
-$observer2 = new Observer2(&#39;observerinstance2&#39;);
-
-$subject-&gt;attach($observer);
-$subject-&gt;attach($observer1);
-$subject-&gt;attach($observer2);
-$subject-&gt;notify();
-
-echo PHP_EOL;
-
-$subject-&gt;detach($observer);
-$subject-&gt;notify();
-</code></pre>
-
-<p>输出：</p>
-
-<pre><code>subject-&gt;Observer1-&gt;observerinstance on update
-subject-&gt;Observer1-&gt;observerinstance1 on update
-subject-&gt;Observer2-&gt;observerinstance2 on update
-
-subject-&gt;Observer1-&gt;observerinstance1 on update
-subject-&gt;Observer2-&gt;observerinstance2 on update
-</code></pre>
-
-<h3 id="toc_6">方法2 使用SPL接口</h3>
-
-<pre><code class="language-php">&lt;?php
-/**
- * Class Subject
- */
-class Subject implements SplSubject
-{
-    protected $subject;
-
-    protected $observers = array();
-
-    public function __construct($subject)
-    {
-        $this-&gt;observers = new SplObjectStorage();
-        $this-&gt;subject = $subject;
-    }
-
-    public function attach(SplObserver $observer)
-    {
-        $this-&gt;observers-&gt;attach($observer);
-    }
-
-    public function detach(SplObserver $observer)
-    {
-        $this-&gt;observers-&gt;detach($observer);
-    }
-
-    public function notify()
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            $o-&gt;update($this);
-        }
-    }
-
-    public function getSubject()
-    {
-        return $this-&gt;subject;
-    }
-}
-
-/**
- * Class Observer
- */
-abstract class Observer implements SplObserver
-{
-    protected $name = null;
-
-    public function __construct($name)
-    {
-        $this-&gt;name = $name;
-    }
-
-    abstract public function update(SplSubject $s);
-}
-
-/**
- * Class Observer1
- */
-class Observer1 extends Observer
-{
-    public function update(SplSubject $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-/**
- * Class Observer2
- */
-class Observer2 extends Observer
-{
-    public function update(SplSubject $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-</code></pre>
-
-			            </div>
+						 
+						<a href="14541168338285.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
 			          </div><!-- /.blog-post -->
-			<div class="share-comment">
-			<div id="SOHUCS"></div>
-<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
-<script type="text/javascript">
-    window.changyan.api.config({
-        appid: 'cysrW6HYf',
-        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
-    });
-</script>
-			</div>
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14541168198562.html">Hbase 集群需求</a></h2>
+			            <p class="blog-post-meta">2016/1/30 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            
+						 
+						<a href="14541168198562.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14541167482772.html">HBase 之Thrift Server</a></h2>
+			            <p class="blog-post-meta">2016/1/30 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>通过 Thrift 操作 HBase</p>
+
+
+						 
+						<a href="14541167482772.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14541166799354.html">HBase 之Block Cache 实现机制</a></h2>
+			            <p class="blog-post-meta">2016/1/30 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>HBase上Regionserver的内存分为两个部分：<br/>
+一部分作为Memstore，主要用来写，<br/>
+另一部分作为BlockCache，主要用于读。</p>
+
+
+						 
+						<a href="14541166799354.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14541166075496.html">HBase 之数据的导入与导出</a></h2>
+			            <p class="blog-post-meta">2016/1/30 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <ul>
+<li>使用Hbase的Put API
+不适合快速的导入大数据</li>
+<li>使用Hbase的bulkload工具
+大量数据导入最有效的方式，importtsv是个内置工具，以MapReduce任务的方式，可以将TSV文件转换成Hbase底层格式</li>
+<li>使用MapReduce任务
+从其他格式或者数据是动态产生，比较灵活，但是设计不当，会造成性能底下。</li>
+<li>Sqoop 导入
+将Hadoop和关系型数据库的数据互相转移的工具，通过mapReduce任务。</li>
+<li>DataX 不好用</li>
+<li>Kettle  不会用</li>
+</ul>
+
+
+						 
+						<a href="14541166075496.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14541165350405.html">HBase 之简介与基本概念</a></h2>
+			            <p class="blog-post-meta">2016/1/30 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>HBase 是一个构建在HDFS之上的、 可伸缩、高可靠、高性能、分布式和面向列的动态模式数据库，主要用于存储海量数据。<br/>
+和传统关系数据库不同，HBase采用了BigTable的数据模型：增强的稀疏排序映射表（Key/Value），其中，键由行关键字、列关键字和时间戳构成。HBase提供了对大规模数据的随机、实时读写访问，同时，HBase中保存的数据可以使用MapReduce来处理，它将数据存储和并行计算完美地结合在一起。</p>
+
+<p>HBase 数据模型：Schema--&gt;Table--&gt;Column Family--&gt;Column--&gt;RowKey--&gt;TimeStamp--&gt;Value</p>
+
+
+						 
+						<a href="14541165350405.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14541164917750.html">Flume + Kafka + Storm 部署指南</a></h2>
+			            <p class="blog-post-meta">2016/1/30 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='hadoop.html'>Hadoop</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>Flume是Cloudera提供的一个高可用的，高可靠的，分布式的海量日志采集、聚合和传输的系统，Flume支持在日志系统中定制各类数据发送方，用于收集数据；同时，Flume提供对数据进行简单处理，并写到各种数据接受方（可定制）的能力。<br/>
+当前Flume有两个版本Flume 0.9X版本的统称Flume-og，Flume1.X版本的统称Flume-ng</p>
+
+<p>Kafka是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据。 这种动作（网页浏览，搜索和其他用户的行动）是在现代网络上的许多社会功能的一个关键因素。 这些数据通常是由于吞吐量的要求而通过处理日志和日志聚合来解决。 </p>
+
+<p>Storm是一个分布式的、容错的实时计算系统,为分布式实时计算提供了一组通用原语，可被用于“流处理”之中，实时处理消息并更新数据库。这是管理队列及工作者集群的另一种方式。 Storm也可被用于连续计算（continuous computation），对数据流做连续查询，在计算时就将结果以流的形式输出给用户。</p>
+
+
+						 
+						<a href="14541164917750.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			  
+          <nav>
+            <ul class="pager">
+            	<li class=""><a href="archives.html">归档</a></li>
+            
+            	<li class=""><a href="all_3.html">上一页</a></li>
+            
+			
+            	<li class=" disabled "><a href="#index">下一页</a></li>
+            
+            </ul>
+          </nav>
         </div><!-- /.blog-main -->
-       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+       <!-- slider start -->
+
+  		<div class="col-sm-3 blog-sidebar">
           <div class="sidebar-module">
             <h4>分类</h4>
             

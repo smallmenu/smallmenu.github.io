@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>观察者模式-行为型 - 蛮-com | 醉里挑灯看剑</title>
+    <title>HBase 实现数据同步 ElasticSearch - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,267 +47,77 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14879154940276.html">观察者模式-行为型</a></h2>
-			            <p class="blog-post-meta">2017/2/24
-				            
-							 
+			            <h2 class="blog-post-title"><a href="14969255996574.html">HBase 实现数据同步 ElasticSearch</a></h2>
+			            <p class="blog-post-meta">2017/6/8
+				            &nbsp;分类于 
 							
+							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							
+							    <a class='category' href='elasticsearch.html'>ElasticSearch</a>&nbsp;
+							 
+							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>观察者模式：定义对象间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。</p>
+			            <p>HBase 作为 NoSQL 或列式数据库，虽然解决了海量数据存储需求，但查询满足非常有限。因为访问 HBase 表中的行，只有三种方式：</p>
 
-<p>发生改变的对象称为观察目标，而被通知的对象称为观察者，一个观察目标可以对应多个观察者，而且这些观察者之间没有相互联系，可以根据需要增加和删除观察者，使得系统更易于扩展。</p>
-
-<p>观察者模式又叫做发布-订阅（Publish/Subscribe）模式、模型-视图（Model/View）模式、源-监听器（Source/Listener）模式或从属者（Dependents）模式。</p>
+<ol>
+<li>通过单个RowKey</li>
+<li>通过RowKey的range（最好是前缀扫描）</li>
+<li>全表扫描</li>
+</ol>
 
 <span id="more"></span><!-- more -->
 
-<h2 id="toc_0">优点</h2>
+<p>如何实现 HBase 的复杂查询，有一些方案：</p>
+
+<ol>
+<li>借助 Phoenix，他会给 HBase，做了个映射，生成二级索引，同时支持 SQL， 可实现一些不太复杂的查询，我觉得更适用于离线数据分析的场景。参见《Phoenix 安装与使用》</li>
+<li>借助 HBase Indexer，Cloudera 平台默认集成，实际上就是把 HBase 数据同步到 Solr 进行索引，配置很繁琐，并且 Solr 的分布式感觉很蛋疼（除了那个admin ui还凑活）。参见《HBase Indexer 整合 Solr》</li>
+</ol>
+
+<p>所以，HBase 还是让它好好的干存储的事情吧，检索的事情交给搜索来做，通过对比 Solr 和 ES，无疑 ES 使用起来更爽一些。那么同步方案呢？</p>
+
+<h2 id="toc_0">方案</h2>
 
 <ul>
-<li><p>观察者模式可以实现表示层和数据逻辑层的分离，并定义了稳定的消息更新传递机制，抽象了更新接口，使得可以有各种各样不同的表示层作为具体观察者角色。</p></li>
-<li><p>观察者模式在观察目标和观察者之间建立一个抽象的耦合。</p></li>
-<li><p>观察者模式支持广播通信。</p></li>
-<li><p>观察者模式符合“开闭原则”的要求。</p></li>
+<li>客户端双写</li>
 </ul>
 
-<h2 id="toc_1">缺点</h2>
+<p>数据可能不同步？面对高并发的写入场景，HBase能扛住，ES能否扛住？双写之前再搞个消息队列？</p>
 
 <ul>
-<li><p>如果一个观察目标对象有很多直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间。</p></li>
-<li><p>如果在观察者和观察目标之间有循环依赖的话，观察目标会触发它们之间进行循环调用，可能导致系统崩溃。</p></li>
-<li><p>观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化。</p></li>
+<li>ES 从 HBase 拉数据</li>
 </ul>
 
-<h2 id="toc_2">适用</h2>
+<p>（类似 MySQL + Solr 的增量索引），如何增量，其实就是根据监控一个 update_time 来实现，问题也不少，比如不好监控删除的数据，并且 HBase 只有一个 Rowkey，貌似搞不了</p>
 
-<p>一个抽象模型有两个方面，其中一个方面依赖于另一个方面。将这些方面封装在独立的对象中使它们可以各自独立地改变和复用。</p>
+<ul>
+<li>HBase 入库后同步到 ES</li>
+</ul>
 
-<p>一个对象的改变将导致其他一个或多个对象也发生改变，而不知道具体有多少对象将发生改变，可以降低对象之间的耦合度。</p>
+<p>如何实现？还要考虑 ES 的索引性能。</p>
 
-<p>一个对象必须通知其他对象，而并不知道这些对象是谁。</p>
+<p>最终发现 HBase Coprocessor + ES BulkProcessor 可以解决上面的问题，不过要稍微写点代码，代码不是很复杂，但是调试和测试很蛋疼。</p>
 
-<p>需要在系统中创建一个触发链，A对象的行为将影响B对象，B对象的行为将影响C对象……，可以使用观察者模式创建一种链式触发机制。</p>
+<h2 id="toc_1">Coprocessor 与 BulkProcessor</h2>
 
-<h2 id="toc_3">应用</h2>
+<p>Coprocessor 是 HBase 的协处理器，可以理解为跟数据库触发器一样的东西，他能够监听 HBase 数据改变的事件，并且运行在不同的角色上，这里我们主要是运行在 HBase Region 的 Coprocessor，</p>
 
-<p>观察者模式在软件开发中应用非常广泛，如某电子商务网站可以在执行发送操作后给用户多个发送商品打折信息</p>
+<p>BulkProcessor 是 ES 提供的客户端API，能够实现，多少条记录，多大数据量，多少秒进行一次ES操作，相当于客户端实现的缓冲池。</p>
 
-<p>某团队战斗游戏中某队友牺牲将给所有成员提示等等，凡是涉及到一对一或者一对多的对象交互场景都可以使用观察者模式。</p>
+<h2 id="toc_2">问题总结</h2>
 
-<p>在JDK的java.util包中，提供了Observable类以及Observer接口，它们构成了Java语言对观察者模式的支持。</p>
+<ol>
+<li><p>生产环境 HBase 运行在集群中，所以 Coprocessor 实现的 jar 包需要上传到 HDFS，这样确保 HBase 集群才能加载到。开发环境本地就可以了。</p></li>
+<li><p>修改 Coprocessor 代码后，重新生成 jar 包上传到 HDFS 的文件名，必须和之前不一样，否则就算卸载掉原有的 Coprocessor 再重新安装也不能生效，建议给 jar 包增加一个版本号。</p></li>
+<li><p>不小心删除了上一个版本的 jar，然后还没有卸载 HBase 表上老版本的Coprocessor， 完蛋，HBase 死活启动不了，解决办法是先把上一个版本的 jar 恢复，卸载或删除 HBase 的表。</p></li>
+</ol>
 
-<h2 id="toc_4">示例</h2>
+<p>这几个问题导致调试和测试痛苦的一比。</p>
 
-<h3 id="toc_5">方法1 手工实现</h3>
+<h2 id="toc_3">具体实现</h2>
 
-<pre><code class="language-php">&lt;?php
-/**
- * Interface SubjectInterface
- */
-interface SubjectInterface
-{
-    public function attach(ObserverInterface $observer);
-
-    public function detach(ObserverInterface $observer);
-
-    public function notify();
-}
-
-/**
- * Class Subject
- */
-class Subject implements SubjectInterface
-{
-    protected $subject;
-
-    protected $observers = array();
-
-    public function __construct($subject)
-    {
-        $this-&gt;subject = $subject;
-    }
-
-    public function attach(ObserverInterface $observer)
-    {
-        $this-&gt;observers[] = $observer;
-    }
-
-    public function detach(ObserverInterface $observer)
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            if ($o === $observer) {
-                unset($this-&gt;observers[$key]);
-            }
-        }
-    }
-
-    public function notify()
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            $o-&gt;update($this);
-        }
-    }
-
-    public function getSubject()
-    {
-        return $this-&gt;subject;
-    }
-}
-
-/**
- * Interface ObserverInterface
- */
-interface ObserverInterface
-{
-    public function update(SubjectInterface $s);
-}
-
-/**
- * Class Observer
- */
-abstract class Observer implements ObserverInterface
-{
-    protected $name = null;
-
-    public function __construct($name)
-    {
-        $this-&gt;name = $name;
-    }
-
-    abstract public function update(SubjectInterface $s);
-}
-
-/**
- * Class Observer1
- */
-class Observer1 extends Observer
-{
-    public function update(SubjectInterface $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-/**
- * Class Observer2
- */
-class Observer2 extends Observer
-{
-    public function update(SubjectInterface $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-$subject = new Subject(&#39;subject&#39;);
-$observer = new Observer1(&#39;observerinstance&#39;);
-$observer1 = new Observer1(&#39;observerinstance1&#39;);
-$observer2 = new Observer2(&#39;observerinstance2&#39;);
-
-$subject-&gt;attach($observer);
-$subject-&gt;attach($observer1);
-$subject-&gt;attach($observer2);
-$subject-&gt;notify();
-
-echo PHP_EOL;
-
-$subject-&gt;detach($observer);
-$subject-&gt;notify();
-</code></pre>
-
-<p>输出：</p>
-
-<pre><code>subject-&gt;Observer1-&gt;observerinstance on update
-subject-&gt;Observer1-&gt;observerinstance1 on update
-subject-&gt;Observer2-&gt;observerinstance2 on update
-
-subject-&gt;Observer1-&gt;observerinstance1 on update
-subject-&gt;Observer2-&gt;observerinstance2 on update
-</code></pre>
-
-<h3 id="toc_6">方法2 使用SPL接口</h3>
-
-<pre><code class="language-php">&lt;?php
-/**
- * Class Subject
- */
-class Subject implements SplSubject
-{
-    protected $subject;
-
-    protected $observers = array();
-
-    public function __construct($subject)
-    {
-        $this-&gt;observers = new SplObjectStorage();
-        $this-&gt;subject = $subject;
-    }
-
-    public function attach(SplObserver $observer)
-    {
-        $this-&gt;observers-&gt;attach($observer);
-    }
-
-    public function detach(SplObserver $observer)
-    {
-        $this-&gt;observers-&gt;detach($observer);
-    }
-
-    public function notify()
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            $o-&gt;update($this);
-        }
-    }
-
-    public function getSubject()
-    {
-        return $this-&gt;subject;
-    }
-}
-
-/**
- * Class Observer
- */
-abstract class Observer implements SplObserver
-{
-    protected $name = null;
-
-    public function __construct($name)
-    {
-        $this-&gt;name = $name;
-    }
-
-    abstract public function update(SplSubject $s);
-}
-
-/**
- * Class Observer1
- */
-class Observer1 extends Observer
-{
-    public function update(SplSubject $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-/**
- * Class Observer2
- */
-class Observer2 extends Observer
-{
-    public function update(SplSubject $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-</code></pre>
+<p>待续</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->

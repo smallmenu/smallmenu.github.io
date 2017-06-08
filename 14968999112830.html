@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>观察者模式-行为型 - 蛮-com | 醉里挑灯看剑</title>
+    <title>Spring Boot QuickStart (2) - 基础 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,267 +47,207 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14879154940276.html">观察者模式-行为型</a></h2>
-			            <p class="blog-post-meta">2017/2/24
-				            
-							 
+			            <h2 class="blog-post-title"><a href="14968999112830.html">Spring Boot QuickStart (2) - 基础</a></h2>
+			            <p class="blog-post-meta">2017/3/8
+				            &nbsp;分类于 
 							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>观察者模式：定义对象间的一种一对多依赖关系，使得每当一个对象状态发生改变时，其相关依赖对象皆得到通知并被自动更新。</p>
-
-<p>发生改变的对象称为观察目标，而被通知的对象称为观察者，一个观察目标可以对应多个观察者，而且这些观察者之间没有相互联系，可以根据需要增加和删除观察者，使得系统更易于扩展。</p>
-
-<p>观察者模式又叫做发布-订阅（Publish/Subscribe）模式、模型-视图（Model/View）模式、源-监听器（Source/Listener）模式或从属者（Dependents）模式。</p>
-
-<span id="more"></span><!-- more -->
-
-<h2 id="toc_0">优点</h2>
+			            <p>基于 Spring Boot 创建一个命令行应用，先来个最基本的体验，体验一下：</p>
 
 <ul>
-<li><p>观察者模式可以实现表示层和数据逻辑层的分离，并定义了稳定的消息更新传递机制，抽象了更新接口，使得可以有各种各样不同的表示层作为具体观察者角色。</p></li>
-<li><p>观察者模式在观察目标和观察者之间建立一个抽象的耦合。</p></li>
-<li><p>观察者模式支持广播通信。</p></li>
-<li><p>观察者模式符合“开闭原则”的要求。</p></li>
+<li>配置管理（配置文件加载，多环境配置文件）</li>
+<li>日志</li>
+<li>单元测试</li>
 </ul>
 
-<h2 id="toc_1">缺点</h2>
+<h2 id="toc_0">创建项目</h2>
 
-<ul>
-<li><p>如果一个观察目标对象有很多直接和间接的观察者的话，将所有的观察者都通知到会花费很多时间。</p></li>
-<li><p>如果在观察者和观察目标之间有循环依赖的话，观察目标会触发它们之间进行循环调用，可能导致系统崩溃。</p></li>
-<li><p>观察者模式没有相应的机制让观察者知道所观察的目标对象是怎么发生变化的，而仅仅只是知道观察目标发生了变化。</p></li>
-</ul>
+<p>比较好的两种方法：</p>
 
-<h2 id="toc_2">适用</h2>
+<ol>
+<li>通过 <a href="https://start.spring.io/">https://start.spring.io/</a> 网站，生成项目框架，导入到 IDE</li>
+<li>IDEA 有Spring Boot的插件，直接按照提示创建</li>
+</ol>
 
-<p>一个抽象模型有两个方面，其中一个方面依赖于另一个方面。将这些方面封装在独立的对象中使它们可以各自独立地改变和复用。</p>
+<p>创建个最基本的应用，包含了devtools，logging，test，以及maven插件：</p>
 
-<p>一个对象的改变将导致其他一个或多个对象也发生改变，而不知道具体有多少对象将发生改变，可以降低对象之间的耦合度。</p>
+<pre><code>...
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;1.5.3.RELEASE&lt;/version&gt;
+    &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+&lt;/parent&gt;
+...
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-logging&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+        &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
 
-<p>一个对象必须通知其他对象，而并不知道这些对象是谁。</p>
-
-<p>需要在系统中创建一个触发链，A对象的行为将影响B对象，B对象的行为将影响C对象……，可以使用观察者模式创建一种链式触发机制。</p>
-
-<h2 id="toc_3">应用</h2>
-
-<p>观察者模式在软件开发中应用非常广泛，如某电子商务网站可以在执行发送操作后给用户多个发送商品打折信息</p>
-
-<p>某团队战斗游戏中某队友牺牲将给所有成员提示等等，凡是涉及到一对一或者一对多的对象交互场景都可以使用观察者模式。</p>
-
-<p>在JDK的java.util包中，提供了Observable类以及Observer接口，它们构成了Java语言对观察者模式的支持。</p>
-
-<h2 id="toc_4">示例</h2>
-
-<h3 id="toc_5">方法1 手工实现</h3>
-
-<pre><code class="language-php">&lt;?php
-/**
- * Interface SubjectInterface
- */
-interface SubjectInterface
-{
-    public function attach(ObserverInterface $observer);
-
-    public function detach(ObserverInterface $observer);
-
-    public function notify();
-}
-
-/**
- * Class Subject
- */
-class Subject implements SubjectInterface
-{
-    protected $subject;
-
-    protected $observers = array();
-
-    public function __construct($subject)
-    {
-        $this-&gt;subject = $subject;
-    }
-
-    public function attach(ObserverInterface $observer)
-    {
-        $this-&gt;observers[] = $observer;
-    }
-
-    public function detach(ObserverInterface $observer)
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            if ($o === $observer) {
-                unset($this-&gt;observers[$key]);
-            }
-        }
-    }
-
-    public function notify()
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            $o-&gt;update($this);
-        }
-    }
-
-    public function getSubject()
-    {
-        return $this-&gt;subject;
-    }
-}
-
-/**
- * Interface ObserverInterface
- */
-interface ObserverInterface
-{
-    public function update(SubjectInterface $s);
-}
-
-/**
- * Class Observer
- */
-abstract class Observer implements ObserverInterface
-{
-    protected $name = null;
-
-    public function __construct($name)
-    {
-        $this-&gt;name = $name;
-    }
-
-    abstract public function update(SubjectInterface $s);
-}
-
-/**
- * Class Observer1
- */
-class Observer1 extends Observer
-{
-    public function update(SubjectInterface $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-/**
- * Class Observer2
- */
-class Observer2 extends Observer
-{
-    public function update(SubjectInterface $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
-
-$subject = new Subject(&#39;subject&#39;);
-$observer = new Observer1(&#39;observerinstance&#39;);
-$observer1 = new Observer1(&#39;observerinstance1&#39;);
-$observer2 = new Observer2(&#39;observerinstance2&#39;);
-
-$subject-&gt;attach($observer);
-$subject-&gt;attach($observer1);
-$subject-&gt;attach($observer2);
-$subject-&gt;notify();
-
-echo PHP_EOL;
-
-$subject-&gt;detach($observer);
-$subject-&gt;notify();
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+    
+    ...
 </code></pre>
 
-<p>输出：</p>
+<h2 id="toc_1">配置管理</h2>
 
-<pre><code>subject-&gt;Observer1-&gt;observerinstance on update
-subject-&gt;Observer1-&gt;observerinstance1 on update
-subject-&gt;Observer2-&gt;observerinstance2 on update
+<h3 id="toc_2">修改 banner</h3>
 
-subject-&gt;Observer1-&gt;observerinstance1 on update
-subject-&gt;Observer2-&gt;observerinstance2 on update
+<p>Spring Boot 的默认 banner：</p>
+
+<pre><code>  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v1.5.3.RELEASE)
 </code></pre>
 
-<h3 id="toc_6">方法2 使用SPL接口</h3>
+<p>resources 目录下创建一个 banner.txt 文件可以修改，并且还提供了一些参数，可以配色。</p>
 
-<pre><code class="language-php">&lt;?php
-/**
- * Class Subject
- */
-class Subject implements SplSubject
-{
-    protected $subject;
+<p>当然也可以在配置文件或入口处关闭：</p>
 
-    protected $observers = array();
+<pre><code>spring.main.banner-mode=off
+</code></pre>
 
-    public function __construct($subject)
-    {
-        $this-&gt;observers = new SplObjectStorage();
-        $this-&gt;subject = $subject;
-    }
+<p>或</p>
 
-    public function attach(SplObserver $observer)
-    {
-        $this-&gt;observers-&gt;attach($observer);
-    }
-
-    public function detach(SplObserver $observer)
-    {
-        $this-&gt;observers-&gt;detach($observer);
-    }
-
-    public function notify()
-    {
-        foreach ($this-&gt;observers as $key =&gt; $o) {
-            $o-&gt;update($this);
-        }
-    }
-
-    public function getSubject()
-    {
-        return $this-&gt;subject;
-    }
+<pre><code>public static void main(String[] args) {
+   SpringApplication application = new SpringApplication(HelloApplication.class);
+   application.setBannerMode(Banner.Mode.OFF);
+   application.run(args);
 }
+</code></pre>
 
-/**
- * Class Observer
- */
-abstract class Observer implements SplObserver
-{
-    protected $name = null;
+<p>关闭 banner 竟然还弄这么多方式，我也是醉了，其实只是展示一下在入口处还可以进行很多应用的配置罢了。</p>
 
-    public function __construct($name)
-    {
-        $this-&gt;name = $name;
-    }
+<h3 id="toc_3">自定义属性</h3>
 
-    abstract public function update(SplSubject $s);
-}
+<p>如果不是特殊的应用场景，就只需要在 application.properties 中完成一些属性配置就能开启各模块的应用。</p>
 
-/**
- * Class Observer1
- */
-class Observer1 extends Observer
-{
-    public function update(SplSubject $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
-    }
-}
+<p>application.properties：</p>
 
-/**
- * Class Observer2
- */
-class Observer2 extends Observer
-{
-    public function update(SplSubject $s)
-    {
-        echo $s-&gt;getSubject() . &#39;-&gt;&#39; . __CLASS__ . &#39;-&gt;&#39; . $this-&gt;name . &#39; on update&#39;;
-        echo PHP_EOL;
+<pre><code>mysql.host=default
+mysql.user=default_user
+mysql.mix=${mysql.host}/${mysql.user}
+</code></pre>
+
+<p>如上所示：参数之间也可以使用变量直接引用来使用</p>
+
+<p>定义 MysqlProperties Class：</p>
+
+<pre><code>@Component
+public class MysqlProperties {
+    @Value(&quot;${mysql.host:localhost}&quot;)
+    private String host;
+
+    @Value(&quot;${admin.user:root}&quot;)
+    private String user;
+    
+    // 省略getter、setter、toString
+}    
+</code></pre>
+
+<p>@Value 注解未免有点蛋疼</p>
+
+<p>可以使用 @ConfigurationProperties 注解直接配置个属性前缀，同时还可以加载一个额外的 .properties 文件</p>
+
+<p>app.properties：</p>
+
+<pre><code>app.name=hello
+app.version=1.0
+</code></pre>
+
+<p>定义 AppProperties Class：</p>
+
+<pre><code>@Component
+@PropertySource(&quot;classpath:app.properties&quot;)
+@ConfigurationProperties(prefix = &quot;app&quot;)
+public class AppProperties {
+    private String name;
+    private String version;
+    
+    // 省略getter、setter、toString
+}    
+</code></pre>
+
+<h2 id="toc_4">命令行运行</h2>
+
+<p>Spring Boot 默认 Application 定义了 main 方法入口，所以要实现一个命令行运行的应用，需要实现 CommandLineRunner 接口，覆写 run 方法，这样命令行参数就通过变长参数 strings 接受到。</p>
+
+<pre><code>@SpringBootApplication
+public class HelloApplication implements CommandLineRunner {
+
+    @Override
+    public void run(String... strings) throws Exception {
     }
 }
 </code></pre>
+
+<h2 id="toc_5">多环境配置</h2>
+
+<p>Spring Boot中多环境配置文件名需要满足application-{profile}.properties的格式，其中{profile}对应你的环境标识，如：</p>
+
+<pre><code>application-dev.properties：开发环境
+application-test.properties：测试环境
+</code></pre>
+
+<p>同时，需要在application.properties文件中通过spring.profiles.active属性来设置，其值对应{profile}值，并且可以设置多个。</p>
+
+<p>其次，通过命令行参数 <code>--spring.profiles.active=test</code> 可以切换多环境。比如：</p>
+
+<pre><code>java -jar xxx.jar --spring.profiles.active=test
+</code></pre>
+
+<h2 id="toc_6">日志</h2>
+
+<p>Spring Boot 默认使用 Logback 作为第一选择，默认集成了 slf4j，并且支持配置使用 Log4j：</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-logging&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-log4j2&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>log4j2 貌似和 log4j 有点变化，暂时不折腾了</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->

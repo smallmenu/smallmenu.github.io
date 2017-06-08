@@ -48,6 +48,38 @@
         <div class="col-sm-9 blog-main">
 			
 					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14968096450665.html">Maven MyBatis 插件</a></h2>
+			            <p class="blog-post-meta">2017/2/7 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p><a href="http://www.mybatis.org/generator/running/runningWithMaven.html">http://www.mybatis.org/generator/running/runningWithMaven.html</a></p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14967346590885.html">Java Dao Domain Service</a></h2>
+			            <p class="blog-post-meta">2016/6/6 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>对于从 PHP 过来的 Java 新人，最近我经常看到 Dao, Domain, Service 这几个玩意，有点小困惑，对于传统 Web MVC 模式，其实控制器和视图都很容易理解，关键是在 Java 上的这个 M</p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14958668070136.html">Java QuickStart (3) - Web 开发</a></h2>
 			            <p class="blog-post-meta">2017/2/9 
 				            &nbsp;分类于 
@@ -63,6 +95,213 @@
 						 
 						<a href="14958668070136.html" class="more-link">查看全文 &rarr;</a>
 			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14968999112830.html">Spring Boot QuickStart (2) - 基础</a></h2>
+			            <p class="blog-post-meta">2017/3/8 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>基于 Spring Boot 创建一个命令行应用，先来个最基本的体验，体验一下：</p>
+
+<ul>
+<li>配置管理（配置文件加载，多环境配置文件）</li>
+<li>日志</li>
+<li>单元测试</li>
+</ul>
+
+<h2 id="toc_0">创建项目</h2>
+
+<p>比较好的两种方法：</p>
+
+<ol>
+<li>通过 <a href="https://start.spring.io/">https://start.spring.io/</a> 网站，生成项目框架，导入到 IDE</li>
+<li>IDEA 有Spring Boot的插件，直接按照提示创建</li>
+</ol>
+
+<p>创建个最基本的应用，包含了devtools，logging，test，以及maven插件：</p>
+
+<pre><code>...
+&lt;parent&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-parent&lt;/artifactId&gt;
+    &lt;version&gt;1.5.3.RELEASE&lt;/version&gt;
+    &lt;relativePath/&gt; &lt;!-- lookup parent from repository --&gt;
+&lt;/parent&gt;
+...
+&lt;dependencies&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-logging&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-devtools&lt;/artifactId&gt;
+        &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+        &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;
+
+&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+    
+    ...
+</code></pre>
+
+<h2 id="toc_1">配置管理</h2>
+
+<h3 id="toc_2">修改 banner</h3>
+
+<p>Spring Boot 的默认 banner：</p>
+
+<pre><code>  .   ____          _            __ _ _
+ /\\ / ___&#39;_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | &#39;_ | &#39;_| | &#39;_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  &#39;  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v1.5.3.RELEASE)
+</code></pre>
+
+<p>resources 目录下创建一个 banner.txt 文件可以修改，并且还提供了一些参数，可以配色。</p>
+
+<p>当然也可以在配置文件或入口处关闭：</p>
+
+<pre><code>spring.main.banner-mode=off
+</code></pre>
+
+<p>或</p>
+
+<pre><code>public static void main(String[] args) {
+   SpringApplication application = new SpringApplication(HelloApplication.class);
+   application.setBannerMode(Banner.Mode.OFF);
+   application.run(args);
+}
+</code></pre>
+
+<p>关闭 banner 竟然还弄这么多方式，我也是醉了，其实只是展示一下在入口处还可以进行很多应用的配置罢了。</p>
+
+<h3 id="toc_3">自定义属性</h3>
+
+<p>如果不是特殊的应用场景，就只需要在 application.properties 中完成一些属性配置就能开启各模块的应用。</p>
+
+<p>application.properties：</p>
+
+<pre><code>mysql.host=default
+mysql.user=default_user
+mysql.mix=${mysql.host}/${mysql.user}
+</code></pre>
+
+<p>如上所示：参数之间也可以使用变量直接引用来使用</p>
+
+<p>定义 MysqlProperties Class：</p>
+
+<pre><code>@Component
+public class MysqlProperties {
+    @Value(&quot;${mysql.host:localhost}&quot;)
+    private String host;
+
+    @Value(&quot;${admin.user:root}&quot;)
+    private String user;
+    
+    // 省略getter、setter、toString
+}    
+</code></pre>
+
+<p>@Value 注解未免有点蛋疼</p>
+
+<p>可以使用 @ConfigurationProperties 注解直接配置个属性前缀，同时还可以加载一个额外的 .properties 文件</p>
+
+<p>app.properties：</p>
+
+<pre><code>app.name=hello
+app.version=1.0
+</code></pre>
+
+<p>定义 AppProperties Class：</p>
+
+<pre><code>@Component
+@PropertySource(&quot;classpath:app.properties&quot;)
+@ConfigurationProperties(prefix = &quot;app&quot;)
+public class AppProperties {
+    private String name;
+    private String version;
+    
+    // 省略getter、setter、toString
+}    
+</code></pre>
+
+<h2 id="toc_4">命令行运行</h2>
+
+<p>Spring Boot 默认 Application 定义了 main 方法入口，所以要实现一个命令行运行的应用，需要实现 CommandLineRunner 接口，覆写 run 方法，这样命令行参数就通过变长参数 strings 接受到。</p>
+
+<pre><code>@SpringBootApplication
+public class HelloApplication implements CommandLineRunner {
+
+    @Override
+    public void run(String... strings) throws Exception {
+    }
+}
+</code></pre>
+
+<h2 id="toc_5">多环境配置</h2>
+
+<p>Spring Boot中多环境配置文件名需要满足application-{profile}.properties的格式，其中{profile}对应你的环境标识，如：</p>
+
+<pre><code>application-dev.properties：开发环境
+application-test.properties：测试环境
+</code></pre>
+
+<p>同时，需要在application.properties文件中通过spring.profiles.active属性来设置，其值对应{profile}值，并且可以设置多个。</p>
+
+<p>其次，通过命令行参数 <code>--spring.profiles.active=test</code> 可以切换多环境。比如：</p>
+
+<pre><code>java -jar xxx.jar --spring.profiles.active=test
+</code></pre>
+
+<h2 id="toc_6">日志</h2>
+
+<p>Spring Boot 默认使用 Logback 作为第一选择，默认集成了 slf4j，并且支持配置使用 Log4j：</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;exclusions&gt;
+        &lt;exclusion&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-logging&lt;/artifactId&gt;
+        &lt;/exclusion&gt;
+    &lt;/exclusions&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-log4j2&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>log4j2 貌似和 log4j 有点变化，暂时不折腾了</p>
+
+						
 			           </div>
 			          </div><!-- /.blog-post -->
 			 
@@ -115,7 +354,7 @@
 			 
 					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14949831725275.html">Maven QuickStart</a></h2>
-			            <p class="blog-post-meta">2017/1/15 
+			            <p class="blog-post-meta">2016/1/15 
 				            &nbsp;分类于 
 							
 							    <a class='category' href='java.html'>Java</a>&nbsp;
@@ -163,8 +402,27 @@ NumberUtils</p>
 			          </div><!-- /.blog-post -->
 			 
 					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14967316079795.html">Java, JDBC, MySQL 类型转换</a></h2>
+			            <p class="blog-post-meta">2017/2/6 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>一般情况下，MySQL的类型都能转换为 java.lang.String，并且任何数值类型也都能转换为 Java 的数值类型（但是有可能会丢失精度）</p>
+
+
+						 
+						<a href="14967316079795.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14841186341336.html">Java QuickStart (1)</a></h2>
-			            <p class="blog-post-meta">2017/1/11 
+			            <p class="blog-post-meta">2016/6/6 
 				            &nbsp;分类于 
 							
 							    <a class='category' href='java.html'>Java</a>&nbsp;
@@ -229,16 +487,16 @@ NumberUtils</p>
             
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="bigdata.html">大数据&nbsp;(24)</a>
+	        <a href="bigdata.html">大数据&nbsp;(25)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
 	        
-	        	<a href="hbase.html">HBase&nbsp;(10)</a>&nbsp;&nbsp;
+	        	<a href="hbase.html">HBase&nbsp;(11)</a>&nbsp;&nbsp;
 	        
 	        	<a href="solr.html">Solr&nbsp;(7)</a>&nbsp;&nbsp;
 	        
-	        	<a href="elasticsearch.html">ElasticSearch&nbsp;(1)</a>&nbsp;&nbsp;
+	        	<a href="elasticsearch.html">ElasticSearch&nbsp;(2)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
@@ -267,12 +525,12 @@ NumberUtils</p>
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(15)</a>
+	        <a href="program.html">编程语言&nbsp;(22)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="php.html">PHP&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="php.html">PHP&nbsp;(7)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(7)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(11)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -307,11 +565,43 @@ NumberUtils</p>
             <h4>最近文章</h4>
 	  
 	      
-		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
+		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
+	     
+	  
+	      
+		        <a href="14968096450665.html" title="Maven MyBatis 插件">Maven MyBatis 插件</a><br />
+	     
+	  
+	      
+		        <a href="14968246116794.html" title="PHP 扩展开发学习笔记（3）- 数组与HashTable">PHP 扩展开发学习笔记（3）- 数组与HashTable</a><br />
+	     
+	  
+	      
+		        <a href="14968245647033.html" title="PHP 扩展开发学习笔记（2）- 函数参数与返回值">PHP 扩展开发学习笔记（2）- 函数参数与返回值</a><br />
+	     
+	  
+	      
+		        <a href="14968245020347.html" title="PHP 扩展开发学习笔记（1）- 生命周期与PHP变量">PHP 扩展开发学习笔记（1）- 生命周期与PHP变量</a><br />
+	     
+	  
+	      
+		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
 	     
 	  
 	      
 		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+	     
+	  
+	      
+		        <a href="14968999112830.html" title="Spring Boot QuickStart (2) - 基础">Spring Boot QuickStart (2) - 基础</a><br />
+	     
+	  
+	      
+		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
+	     
+	  
+	      
+		        <a href="14896294544708.html" title="分布式系统的意义">分布式系统的意义</a><br />
 	     
 	  
 	      
@@ -331,39 +621,7 @@ NumberUtils</p>
 	     
 	  
 	      
-		        <a href="14943218854977.html" title="Linux/Mac 下伪分布式 HBase 开发测试环境">Linux/Mac 下伪分布式 HBase 开发测试环境</a><br />
-	     
-	  
-	      
 		        <a href="14914572882166.html" title="Apache Commons 工具集">Apache Commons 工具集</a><br />
-	     
-	  
-	      
-		        <a href="14896294544708.html" title="分布式系统的意义">分布式系统的意义</a><br />
-	     
-	  
-	      
-		        <a href="14879999782063.html" title="Unix 环境高级编程-进程">Unix 环境高级编程-进程</a><br />
-	     
-	  
-	      
-		        <a href="14879216457905.html" title="设计模式原则">设计模式原则</a><br />
-	     
-	  
-	      
-		        <a href="14879154940276.html" title="观察者模式-行为型">观察者模式-行为型</a><br />
-	     
-	  
-	      
-		        <a href="14879052822759.html" title="工厂模式之抽象工厂模式-创建型">工厂模式之抽象工厂模式-创建型</a><br />
-	     
-	  
-	      
-		        <a href="14878392980386.html" title="单例模式-创建型">单例模式-创建型</a><br />
-	     
-	  
-	      
-		        <a href="14878375722768.html" title="工厂模式之工厂方法模式-创建型">工厂模式之工厂方法模式-创建型</a><br />
 	     
 	  
 	      
