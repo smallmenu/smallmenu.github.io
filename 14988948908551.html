@@ -58,6 +58,8 @@
 			            <div class="content-responsive">
 			            <p>环境：Spring Boot 1.5.4</p>
 
+<p><strong><em>本文只是引子，后续会持续更新。</em></strong></p>
+
 <p>到了操作数据库的环节，以 MySQL 为基准，体验一下数据库的相关操作，先让我纠结一下，至少有以下四种姿势。</p>
 
 <ul>
@@ -142,6 +144,96 @@ TIMESTAMP
 
 <p>参考：<br/>
 <a href="https://stackoverflow.com/questions/2305973/java-util-date-vs-java-sql-date">https://stackoverflow.com/questions/2305973/java-util-date-vs-java-sql-date</a></p>
+
+<h1 id="toc_3">SQL</h1>
+
+<pre><code>DROP TABLE IF EXISTS `order`;
+CREATE TABLE `order` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `name` varchar(64) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT=&#39;订单&#39;;
+
+
+BEGIN;
+INSERT INTO `order` VALUES (&#39;1&#39;, &#39;1&#39;, &#39;订单一&#39;), (&#39;2&#39;, &#39;1&#39;, &#39;订单二&#39;), (&#39;3&#39;, &#39;1&#39;, &#39;订单三&#39;), (&#39;4&#39;, &#39;2&#39;, &#39;订单四&#39;), (&#39;5&#39;, &#39;2&#39;, &#39;订单五&#39;);
+COMMIT;
+
+
+DROP TABLE IF EXISTS `order_product`;
+CREATE TABLE `order_product` (
+  `order_id` int(10) unsigned NOT NULL,
+  `product_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`order_id`,`product_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT=&#39;订单产品关联表&#39;;
+
+
+BEGIN;
+INSERT INTO `order_product` VALUES (&#39;1&#39;, &#39;1&#39;), (&#39;1&#39;, &#39;2&#39;), (&#39;1&#39;, &#39;3&#39;), (&#39;2&#39;, &#39;2&#39;), (&#39;2&#39;, &#39;3&#39;);
+COMMIT;
+
+
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  `price` double(10,2) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT=&#39;产品&#39;;
+
+BEGIN;
+INSERT INTO `product` VALUES (&#39;1&#39;, &#39;大白菜&#39;, &#39;1.23&#39;), (&#39;2&#39;, &#39;土豆&#39;, &#39;2.45&#39;), (&#39;3&#39;, &#39;西红柿&#39;, &#39;3.78&#39;), (&#39;4&#39;, &#39;芹菜&#39;, &#39;2.08&#39;), (&#39;5&#39;, &#39;鸡蛋&#39;, &#39;0.51&#39;);
+COMMIT;
+
+DROP TABLE IF EXISTS `role`;
+CREATE TABLE `role` (
+  `id` tinyint(3) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT=&#39;角色&#39;;
+
+BEGIN;
+INSERT INTO `role` VALUES (&#39;1&#39;, &#39;管理员&#39;), (&#39;2&#39;, &#39;总编&#39;), (&#39;3&#39;, &#39;编辑&#39;);
+COMMIT;
+
+DROP TABLE IF EXISTS `user`;
+CREATE TABLE `user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT &#39;ID&#39;,
+  `role_id` tinyint(3) unsigned NOT NULL COMMENT &#39;角色ID&#39;,
+  `username` varchar(32) NOT NULL COMMENT &#39;Email用户名，唯一&#39;,
+  `password` varchar(32) NOT NULL COMMENT &#39;密码&#39;,
+  `salt` varchar(6) NOT NULL COMMENT &#39;盐&#39;,
+  `name` varchar(32) NOT NULL COMMENT &#39;姓名&#39;,
+  `birthday` date DEFAULT NULL COMMENT &#39;生日&#39;,
+  `sex` enum(&#39;male&#39;,&#39;female&#39;) NOT NULL COMMENT &#39;性别&#39;,
+  `access` datetime DEFAULT NULL COMMENT &#39;datetime类型&#39;,
+  `access_time` time DEFAULT NULL COMMENT &#39;time类型&#39;,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT &#39;创建时间&#39;,
+  `updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT &#39;修改时间&#39;,
+  `state` tinyint(1) unsigned NOT NULL DEFAULT &#39;0&#39; COMMENT &#39;状态&#39;,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT=&#39;用户&#39;;
+
+
+BEGIN;
+INSERT INTO `user` VALUES (&#39;1&#39;, &#39;1&#39;, &#39;a@a.com&#39;, &#39;6f5275a26b06ee3bdf4fb1d2ca89577c&#39;, &#39;wnyk0a&#39;, &#39;雷小军&#39;, &#39;1970-08-08&#39;, &#39;male&#39;, &#39;1987-09-08 01:02:03&#39;, &#39;01:02:03&#39;, &#39;2017-07-01 09:36:23&#39;, &#39;2017-07-01 17:29:06&#39;, &#39;1&#39;), (&#39;2&#39;, &#39;2&#39;, &#39;b@b.com&#39;, &#39;3206c77753829fc30fffa37881a63341&#39;, &#39;xxmao1&#39;, &#39;董明珠&#39;, &#39;1960-05-05&#39;, &#39;female&#39;, &#39;1987-09-08 01:02:03&#39;, &#39;01:02:03&#39;, &#39;2017-07-01 09:36:50&#39;, &#39;2017-07-01 17:28:42&#39;, &#39;1&#39;);
+COMMIT;
+
+DROP TABLE IF EXISTS `user_detail`;
+CREATE TABLE `user_detail` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(10) unsigned NOT NULL,
+  `address` varchar(32) NOT NULL DEFAULT &#39;&#39; COMMENT &#39;地址&#39;,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT=&#39;用户详情&#39;;
+
+
+BEGIN;
+INSERT INTO `user_detail` VALUES (&#39;1&#39;, &#39;1&#39;, &#39;北京&#39;), (&#39;2&#39;, &#39;2&#39;, &#39;广州&#39;);
+COMMIT;
+</code></pre>
 
 			            </div>
 			          </div><!-- /.blog-post -->
@@ -240,15 +332,7 @@ TIMESTAMP
             <h4>最近文章</h4>
 	  
 	      
-		        <a href="14969719294666.html" title="Spring QuickStart">Spring QuickStart</a><br />
-	     
-	  
-	      
-		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
-	     
-	  
-	      
-		        <a href="14968096450665.html" title="Maven MyBatis Generator 插件">Maven MyBatis Generator 插件</a><br />
+		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
 	     
 	  
 	      
@@ -256,11 +340,11 @@ TIMESTAMP
 	     
 	  
 	      
-		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+		        <a href="14968096450665.html" title="Maven MyBatis Generator 插件">Maven MyBatis Generator 插件</a><br />
 	     
 	  
 	      
-		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
+		        <a href="14982055707598.html" title="Spring Boot QuickStart (5) - Spring Data JPA">Spring Boot QuickStart (5) - Spring Data JPA</a><br />
 	     
 	  
 	      
@@ -273,10 +357,6 @@ TIMESTAMP
 	  
 	      
 		        <a href="14968245020347.html" title="PHP 扩展开发学习笔记（1）- 生命周期与PHP变量">PHP 扩展开发学习笔记（1）- 生命周期与PHP变量</a><br />
-	     
-	  
-	      
-		        <a href="14982055707598.html" title="Spring Boot QuickStart (5) - Spring Data JPA">Spring Boot QuickStart (5) - Spring Data JPA</a><br />
 	     
 	  
 	      
@@ -293,6 +373,18 @@ TIMESTAMP
 	  
 	      
 		        <a href="14963868024588.html" title="Spring Boot QuickStart (1)">Spring Boot QuickStart (1)</a><br />
+	     
+	  
+	      
+		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+	     
+	  
+	      
+		        <a href="14958691321034.html" title="Java QuickStart (2) - 常用类库，工具包，框架">Java QuickStart (2) - 常用类库，工具包，框架</a><br />
+	     
+	  
+	      
+		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
 	     
 	  
 	      

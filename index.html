@@ -48,154 +48,6 @@
         <div class="col-sm-9 blog-main">
 			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14969719294666.html">Spring QuickStart</a></h2>
-			            <p class="blog-post-meta">2017/6/9 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <h2 id="toc_0">Bean</h2>
-
-<p>看完 Java 基础和语法，翻开《Spring 实战》，最开始就是 Java Bean 的介绍，Java Bean 是个什么玩意。</p>
-
-<p>Java Bean 就是一个规范，是一个普通的 Java 类。最早的时候是为了 Java 可视化设计组件化的规范：</p>
-
-<ul>
-<li>这个类需要是 public 的， 然后需要有个无参数的构造函数</li>
-<li>这个类的属性应该是 private 的， 通过 set() 和 get() 来访问</li>
-<li>这个类需要能支持事件，</li>
-<li>这个类应该是可以序列化的，以便以后来恢复</li>
-</ul>
-
-<p>后面又经过一系列的发展。EJB，什么的。或者又可以这么理解，它是一个实体类，一个数据映射体，用来封装数据</p>
-
-<p>Spring 里面的 Bean 主要用来表示应用组件</p>
-
-<h2 id="toc_1">Sping 核心功能</h2>
-
-<p>通过依赖注入和面向接口实现松耦合<br/>
-通过切面和惯例进行声明式编程<br/>
-通过切面模板减少样板式代码</p>
-
-<h2 id="toc_2">Spring 装配机制</h2>
-
-<p>基于 XML 显式配置<br/>
-基于 Java 显式配置，@Configuration、@bean 注解<br/>
-隐式的发现机制和自动装配，@ComponentScan、@Autowired、@Component 注解</p>
-
-<p>应当优先使用自动装配和 Java 显式配置</p>
-
-<h2 id="toc_3">实践 SpringSide</h2>
-
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14977092347045.html">常用的开源镜像站</a></h2>
-			            <p class="blog-post-meta">2017/6/17 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='linux.html'>Linux</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>网易开源镜像站（）：</p>
-
-<p><a href="http://mirrors.163.com">http://mirrors.163.com</a></p>
-
-<p>搜狐开源镜像站：</p>
-
-<p><a href="http://mirrors.sohu.com/">http://mirrors.sohu.com/</a></p>
-
-<p>阿里云开源镜像站：</p>
-
-<p><a href="http://mirrors.aliyun.com/">http://mirrors.aliyun.com/</a></p>
-
-<h1 id="toc_0">CentOS 扩展与第三方源</h1>
-
-<h2 id="toc_1">EPEL</h2>
-
-<p>EPEL 来自于Fedora，基本上是官方扩展源</p>
-
-<p><a href="https://dl.fedoraproject.org/pub/epel/">https://dl.fedoraproject.org/pub/epel/</a></p>
-
-<h2 id="toc_2">webtatic</h2>
-
-<p><a href="https://webtatic.com/">https://webtatic.com/</a></p>
-
-<p>提供了 MySQL、Nginx、PHP 较新版本的yum源</p>
-
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14968096450665.html">Maven MyBatis Generator 插件</a></h2>
-			            <p class="blog-post-meta">2017/2/7 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p><a href="http://www.mybatis.org/generator/running/runningWithMaven.html">http://www.mybatis.org/generator/running/runningWithMaven.html</a></p>
-
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14967346590885.html">Java Dao Domain Service</a></h2>
-			            <p class="blog-post-meta">2016/6/6 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>对于从 PHP 过来的 Java 新人，最近我经常看到 Dao, Domain, Service 这几个玩意，有点小困惑</p>
-
-<p>对于 MVC 模式来说，其实控制器和视图都很容易理解，Model 呢？ 模型。简单理解一下，应该是数据操作和业务逻辑的集合，那么 Java Web 里面 Model ＝ (Dao + Domain + Service) ?</p>
-
-<p>好像如此，所以 Model 简单的分了三层，分别是：</p>
-
-<p>Domain 对应的是实体，如果是 JPA，它就是 Entity 类<br/>
-Dao 对应的是对数据库进行操作，如果是 Jpa，那么它就是 Repository<br/>
-Service 对应的是服务层，业务逻辑操作</p>
-
-<p>待有更深刻理解以后再补。</p>
-
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14958668070136.html">Java QuickStart (3) - Web 开发</a></h2>
-			            <p class="blog-post-meta">2017/2/9 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>入了Java的坑，看完了基础和语法之后，我进入了好长时间的迷茫期：</p>
-
-
-						 
-						<a href="14958668070136.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14969255996574.html">HBase 实现数据同步 ElasticSearch</a></h2>
 			            <p class="blog-post-meta">2017/6/8 
 				            &nbsp;分类于 
@@ -218,6 +70,64 @@ Service 对应的是服务层，业务逻辑操作</p>
 
 						 
 						<a href="14969255996574.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14967346590885.html">Java Dao Domain Service</a></h2>
+			            <p class="blog-post-meta">2016/6/6 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>对于从 PHP 过来的 Java 新人，最近我经常看到 Dao, Domain, Service 这几个玩意，有点小困惑</p>
+
+
+						 
+						<a href="14967346590885.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14968096450665.html">Maven MyBatis Generator 插件</a></h2>
+			            <p class="blog-post-meta">2017/2/7 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p><a href="http://www.mybatis.org/generator/running/runningWithMaven.html">http://www.mybatis.org/generator/running/runningWithMaven.html</a></p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14982055707598.html">Spring Boot QuickStart (5) - Spring Data JPA</a></h2>
+			            <p class="blog-post-meta">2017/3/23 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>接(4) - Database 系列.</p>
+
+<p>Java Persistence API，可以理解就是 Java 一个持久化标准或规范，Spring Data JPA 是对它的实现。并且提供多个 JPA 厂商适配，如 Hibernate、Apache 的 OpenJpa、Eclipse的EclipseLink等。</p>
+
+<p>spring-boot-starter-data-jpa 默认使用的是 Hibernate 实现。</p>
+
+
+						 
+						<a href="14982055707598.html" class="more-link">查看全文 &rarr;</a>
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
@@ -288,29 +198,6 @@ Service 对应的是服务层，业务逻辑操作</p>
 			          </div><!-- /.blog-post -->
 			 
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14982055707598.html">Spring Boot QuickStart (5) - Spring Data JPA</a></h2>
-			            <p class="blog-post-meta">2017/3/23 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>接 (4)。</p>
-
-<p>Java Persistence API，可以理解就是 Java 一个持久化标准或规范，Spring Data JPA 是对它的实现。并且提供多个 JPA 厂商适配，如 Hibernate、Apache 的 OpenJpa、Eclipse的EclipseLink等。</p>
-
-<p>spring-boot-starter-data-jpa 默认使用的是 Hibernate 实现。</p>
-
-
-						 
-						<a href="14982055707598.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14988948908551.html">Spring Boot QuickStart (4) - Database</a></h2>
 			            <p class="blog-post-meta">2017/3/22 
 				            &nbsp;分类于 
@@ -321,6 +208,8 @@ Service 对应的是服务层，业务逻辑操作</p>
 			            </p>
 			            <div class="content-responsive">
 			            <p>环境：Spring Boot 1.5.4</p>
+
+<p><strong><em>本文只是引子，后续会持续更新。</em></strong></p>
 
 <p>到了操作数据库的环节，以 MySQL 为基准，体验一下数据库的相关操作，先让我纠结一下，至少有以下四种姿势。</p>
 
@@ -416,6 +305,76 @@ Service 对应的是服务层，业务逻辑操作</p>
 
 						 
 						<a href="14963868024588.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14958668070136.html">Java QuickStart (3) - Web 开发</a></h2>
+			            <p class="blog-post-meta">2017/2/9 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>入了Java的坑，看完了基础和语法之后，我进入了好长时间的迷茫期：</p>
+
+
+						 
+						<a href="14958668070136.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14958691321034.html">Java QuickStart (2) - 常用类库，工具包，框架</a></h2>
+			            <p class="blog-post-meta">2017/2/5 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>整理自：</p>
+
+<p><a href="https://github.com/akullpp/awesome-java">https://github.com/akullpp/awesome-java</a><br/>
+<a href="https://github.com/jobbole/awesome-java-cn">https://github.com/jobbole/awesome-java-cn</a></p>
+
+
+						 
+						<a href="14958691321034.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14977092347045.html">常用的开源镜像站</a></h2>
+			            <p class="blog-post-meta">2017/1/17 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='linux.html'>Linux</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>网易开源镜像站：</p>
+
+<p><a href="http://mirrors.163.com">http://mirrors.163.com</a></p>
+
+<p>搜狐开源镜像站：</p>
+
+<p><a href="http://mirrors.sohu.com/">http://mirrors.sohu.com/</a></p>
+
+<p>阿里云开源镜像站：</p>
+
+<p><a href="http://mirrors.aliyun.com/">http://mirrors.aliyun.com/</a></p>
+
+
+						 
+						<a href="14977092347045.html" class="more-link">查看全文 &rarr;</a>
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
@@ -537,15 +496,7 @@ Service 对应的是服务层，业务逻辑操作</p>
             <h4>最近文章</h4>
 	  
 	      
-		        <a href="14969719294666.html" title="Spring QuickStart">Spring QuickStart</a><br />
-	     
-	  
-	      
-		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
-	     
-	  
-	      
-		        <a href="14968096450665.html" title="Maven MyBatis Generator 插件">Maven MyBatis Generator 插件</a><br />
+		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
 	     
 	  
 	      
@@ -553,11 +504,11 @@ Service 对应的是服务层，业务逻辑操作</p>
 	     
 	  
 	      
-		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+		        <a href="14968096450665.html" title="Maven MyBatis Generator 插件">Maven MyBatis Generator 插件</a><br />
 	     
 	  
 	      
-		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
+		        <a href="14982055707598.html" title="Spring Boot QuickStart (5) - Spring Data JPA">Spring Boot QuickStart (5) - Spring Data JPA</a><br />
 	     
 	  
 	      
@@ -570,10 +521,6 @@ Service 对应的是服务层，业务逻辑操作</p>
 	  
 	      
 		        <a href="14968245020347.html" title="PHP 扩展开发学习笔记（1）- 生命周期与PHP变量">PHP 扩展开发学习笔记（1）- 生命周期与PHP变量</a><br />
-	     
-	  
-	      
-		        <a href="14982055707598.html" title="Spring Boot QuickStart (5) - Spring Data JPA">Spring Boot QuickStart (5) - Spring Data JPA</a><br />
 	     
 	  
 	      
@@ -590,6 +537,18 @@ Service 对应的是服务层，业务逻辑操作</p>
 	  
 	      
 		        <a href="14963868024588.html" title="Spring Boot QuickStart (1)">Spring Boot QuickStart (1)</a><br />
+	     
+	  
+	      
+		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+	     
+	  
+	      
+		        <a href="14958691321034.html" title="Java QuickStart (2) - 常用类库，工具包，框架">Java QuickStart (2) - 常用类库，工具包，框架</a><br />
+	     
+	  
+	      
+		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
 	     
 	  
 	      
