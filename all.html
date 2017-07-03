@@ -11,7 +11,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!--     <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/dark.min.css"> -->
-    <link rel="stylesheet" href="/asset/css/style.css?v=20170602" >
+    <link rel="stylesheet" href="/asset/css/style.css?v=20170702" >
     <script src="//cdn.bootcss.com/jquery/1.12.2/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/asset/js/docs.js"></script>
@@ -48,6 +48,154 @@
         <div class="col-sm-9 blog-main">
 			
 					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14969719294666.html">Spring QuickStart</a></h2>
+			            <p class="blog-post-meta">2017/6/9 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <h2 id="toc_0">Bean</h2>
+
+<p>看完 Java 基础和语法，翻开《Spring 实战》，最开始就是 Java Bean 的介绍，Java Bean 是个什么玩意。</p>
+
+<p>Java Bean 就是一个规范，是一个普通的 Java 类。最早的时候是为了 Java 可视化设计组件化的规范：</p>
+
+<ul>
+<li>这个类需要是 public 的， 然后需要有个无参数的构造函数</li>
+<li>这个类的属性应该是 private 的， 通过 set() 和 get() 来访问</li>
+<li>这个类需要能支持事件，</li>
+<li>这个类应该是可以序列化的，以便以后来恢复</li>
+</ul>
+
+<p>后面又经过一系列的发展。EJB，什么的。或者又可以这么理解，它是一个实体类，一个数据映射体，用来封装数据</p>
+
+<p>Spring 里面的 Bean 主要用来表示应用组件</p>
+
+<h2 id="toc_1">Sping 核心功能</h2>
+
+<p>通过依赖注入和面向接口实现松耦合<br/>
+通过切面和惯例进行声明式编程<br/>
+通过切面模板减少样板式代码</p>
+
+<h2 id="toc_2">Spring 装配机制</h2>
+
+<p>基于 XML 显式配置<br/>
+基于 Java 显式配置，@Configuration、@bean 注解<br/>
+隐式的发现机制和自动装配，@ComponentScan、@Autowired、@Component 注解</p>
+
+<p>应当优先使用自动装配和 Java 显式配置</p>
+
+<h2 id="toc_3">实践 SpringSide</h2>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14977092347045.html">常用的开源镜像站</a></h2>
+			            <p class="blog-post-meta">2017/6/17 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='linux.html'>Linux</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>网易开源镜像站（）：</p>
+
+<p><a href="http://mirrors.163.com">http://mirrors.163.com</a></p>
+
+<p>搜狐开源镜像站：</p>
+
+<p><a href="http://mirrors.sohu.com/">http://mirrors.sohu.com/</a></p>
+
+<p>阿里云开源镜像站：</p>
+
+<p><a href="http://mirrors.aliyun.com/">http://mirrors.aliyun.com/</a></p>
+
+<h1 id="toc_0">CentOS 扩展与第三方源</h1>
+
+<h2 id="toc_1">EPEL</h2>
+
+<p>EPEL 来自于Fedora，基本上是官方扩展源</p>
+
+<p><a href="https://dl.fedoraproject.org/pub/epel/">https://dl.fedoraproject.org/pub/epel/</a></p>
+
+<h2 id="toc_2">webtatic</h2>
+
+<p><a href="https://webtatic.com/">https://webtatic.com/</a></p>
+
+<p>提供了 MySQL、Nginx、PHP 较新版本的yum源</p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14968096450665.html">Maven MyBatis Generator 插件</a></h2>
+			            <p class="blog-post-meta">2017/2/7 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p><a href="http://www.mybatis.org/generator/running/runningWithMaven.html">http://www.mybatis.org/generator/running/runningWithMaven.html</a></p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14967346590885.html">Java Dao Domain Service</a></h2>
+			            <p class="blog-post-meta">2016/6/6 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>对于从 PHP 过来的 Java 新人，最近我经常看到 Dao, Domain, Service 这几个玩意，有点小困惑</p>
+
+<p>对于 MVC 模式来说，其实控制器和视图都很容易理解，Model 呢？ 模型。简单理解一下，应该是数据操作和业务逻辑的集合，那么 Java Web 里面 Model ＝ (Dao + Domain + Service) ?</p>
+
+<p>好像如此，所以 Model 简单的分了三层，分别是：</p>
+
+<p>Domain 对应的是实体，如果是 JPA，它就是 Entity 类<br/>
+Dao 对应的是对数据库进行操作，如果是 Jpa，那么它就是 Repository<br/>
+Service 对应的是服务层，业务逻辑操作</p>
+
+<p>待有更深刻理解以后再补。</p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14958668070136.html">Java QuickStart (3) - Web 开发</a></h2>
+			            <p class="blog-post-meta">2017/2/9 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>入了Java的坑，看完了基础和语法之后，我进入了好长时间的迷茫期：</p>
+
+
+						 
+						<a href="14958668070136.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14969255996574.html">HBase 实现数据同步 ElasticSearch</a></h2>
 			            <p class="blog-post-meta">2017/6/8 
 				            &nbsp;分类于 
@@ -71,22 +219,6 @@
 						 
 						<a href="14969255996574.html" class="more-link">查看全文 &rarr;</a>
 			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14968096450665.html">Maven MyBatis Generator 插件</a></h2>
-			            <p class="blog-post-meta">2017/2/7 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p><a href="http://www.mybatis.org/generator/running/runningWithMaven.html">http://www.mybatis.org/generator/running/runningWithMaven.html</a></p>
-
-						
 			           </div>
 			          </div><!-- /.blog-post -->
 			 
@@ -156,8 +288,8 @@
 			          </div><!-- /.blog-post -->
 			 
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14967346590885.html">Java Dao Domain Service</a></h2>
-			            <p class="blog-post-meta">2016/6/6 
+			            <h2 class="blog-post-title"><a href="14982055707598.html">Spring Boot QuickStart (5) - Spring Data JPA</a></h2>
+			            <p class="blog-post-meta">2017/3/23 
 				            &nbsp;分类于 
 							
 							    <a class='category' href='java.html'>Java</a>&nbsp;
@@ -165,17 +297,22 @@
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>对于从 PHP 过来的 Java 新人，最近我经常看到 Dao, Domain, Service 这几个玩意，有点小困惑</p>
+			            <p>接 (4)。</p>
 
-<p>对于 MVC 模式来说，其实控制器和视图都很容易理解，关键是这个 Model，简单理解一下应该是数据和业务逻辑的实现，那么 Java Web 里面 Model ＝ (Dao + Domain + Service) ?</p>
+<p>Java Persistence API，可以理解就是 Java 一个持久化标准或规范，Spring Data JPA 是对它的实现。并且提供多个 JPA 厂商适配，如 Hibernate、Apache 的 OpenJpa、Eclipse的EclipseLink等。</p>
 
-						
+<p>spring-boot-starter-data-jpa 默认使用的是 Hibernate 实现。</p>
+
+
+						 
+						<a href="14982055707598.html" class="more-link">查看全文 &rarr;</a>
+			    		
 			           </div>
 			          </div><!-- /.blog-post -->
 			 
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14958668070136.html">Java QuickStart (3) - Web 开发</a></h2>
-			            <p class="blog-post-meta">2017/2/9 
+			            <h2 class="blog-post-title"><a href="14988948908551.html">Spring Boot QuickStart (4) - Database</a></h2>
+			            <p class="blog-post-meta">2017/3/22 
 				            &nbsp;分类于 
 							
 							    <a class='category' href='java.html'>Java</a>&nbsp;
@@ -183,11 +320,50 @@
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>入了Java的坑，看完了基础和语法之后，我进入了好长时间的迷茫期：</p>
+			            <p>环境：Spring Boot 1.5.4</p>
+
+<p>到了操作数据库的环节，以 MySQL 为基准，体验一下数据库的相关操作，先让我纠结一下，至少有以下四种姿势。</p>
+
+<ul>
+<li>JDBC。原生的 JDBC 操作，原生的 SQL语句，写一大堆的初始化、代码、异常捕获。</li>
+<li>JDBCTemplate。Spring 对 JDBC 的封装，基本上还是原生的 SQL 语句，操作方法要自己写，少了很多（他们叫样板式）代码。</li>
+<li>JPA。内置了一些接口，封装了常规的 CURD、分页操作，借助 Spring Data Jpa，能帮你自动实现大部分的单表操作，你要做的仅仅是定义实体，按照规范定义接口即可。</li>
+<li>MyBatis。一个 Java 当前很流行的 ORM 框架，如果你以前是写 PHP 的，我猜你不太敢相信它是 ORM 框架。</li>
+</ul>
 
 
 						 
-						<a href="14958668070136.html" class="more-link">查看全文 &rarr;</a>
+						<a href="14988948908551.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14969970515462.html">Spring Boot QuickStart (3) - Web & Restful</a></h2>
+			            <p class="blog-post-meta">2017/3/9 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>环境：Spring Boot 1.5.4</p>
+
+<p>基于 Spring Boot 可以快速创建一个Web &amp; Restful 应用，在开始应用之前，至少要了解以下用法：</p>
+
+<ul>
+<li>定义路由，定义 HTTP 方法</li>
+<li>获取Header、GET、POST、路径等参数</li>
+<li>Cookie、Session操作</li>
+<li>应用一个模板引擎，选择 Thymeleaf</li>
+<li>获取表单数据，以及文件上传数据</li>
+<li>完成一个登陆、登出、注册流程</li>
+</ul>
+
+
+						 
+						<a href="14969970515462.html" class="more-link">查看全文 &rarr;</a>
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
@@ -202,7 +378,9 @@
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>基于 Spring Boot 创建一个命令行应用，先来个最基本的体验，体验一下：</p>
+			            <p>环境：Spring Boot 1.5.4</p>
+
+<p>基于 Spring Boot 创建一个命令行应用，先来个最基本的体验，体验一下：</p>
 
 <ul>
 <li>配置管理（配置文件加载，多环境配置文件）</li>
@@ -213,67 +391,6 @@
 
 						 
 						<a href="14968999112830.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14924051544294.html">CentOS 7 几点改变</a></h2>
-			            <p class="blog-post-meta">2017/3/17 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='linux.html'>Linux</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>从 CentOS 6 升级到 CentOS 7 有一些变化，如管理服务的 service ，服务启动脚本，以及软件防火墙等。</p>
-
-
-						 
-						<a href="14924051544294.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14896294544708.html">分布式系统的意义</a></h2>
-			            <p class="blog-post-meta">2017/3/16 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='software.html'>软件设计</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <ul>
-<li>升级单机处理能力的性价比越来越低</li>
-<li>单机处理能力存在瓶颈</li>
-<li>稳定性和可用性</li>
-</ul>
-
-
-						 
-						<a href="14896294544708.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14944229387367.html">ElasticSearch 2.x 安装部署</a></h2>
-			            <p class="blog-post-meta">2017/5/10 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='elasticsearch.html'>ElasticSearch</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>ElasticSearch 5.x 要求 JDK 必须为 1.8+，并且目前大部分插件也不支持，截至到目前（2017-05-01），2.x 的版本更稳定一些。</p>
-
-
-						 
-						<a href="14944229387367.html" class="more-link">查看全文 &rarr;</a>
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
@@ -304,72 +421,20 @@
 			          </div><!-- /.blog-post -->
 			 
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14958691321034.html">Java QuickStart (2) - 常用类库，工具包，框架</a></h2>
-			            <p class="blog-post-meta">2017/2/5 
+			            <h2 class="blog-post-title"><a href="14924051544294.html">CentOS 7 几点改变</a></h2>
+			            <p class="blog-post-meta">2017/3/17 
 				            &nbsp;分类于 
 							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
+							    <a class='category' href='linux.html'>Linux</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>整理自：</p>
-
-<p><a href="https://github.com/akullpp/awesome-java">https://github.com/akullpp/awesome-java</a><br/>
-<a href="https://github.com/jobbole/awesome-java-cn">https://github.com/jobbole/awesome-java-cn</a></p>
+			            <p>从 CentOS 6 升级到 CentOS 7 有一些变化，如管理服务的 service ，服务启动脚本，以及软件防火墙等。</p>
 
 
 						 
-						<a href="14958691321034.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14949831725275.html">Maven QuickStart</a></h2>
-			            <p class="blog-post-meta">2016/1/15 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>Maven是基于项目对象模型(POM)，可以通过一小段描述信息来管理项目的构建，即pom.xml配置文件，报告和文档的软件项目管理工具。</p>
-
-<p>个人理解类似C下面的Makefile，用于编译打包jar，解决包依赖。</p>
-
-
-						 
-						<a href="14949831725275.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14914572882166.html">Apache Commons 工具集</a></h2>
-			            <p class="blog-post-meta">2017/1/12 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <h2 id="toc_0">Lang</h2>
-
-<p>提供JDK java.lang 的扩展功能</p>
-
-<p>ArrayUtils<br/>
-StringUtils<br/>
-StringEscapeUtils<br/>
-RandomUtils<br/>
-RandomStringUtils<br/>
-NumberUtils</p>
-
-
-						 
-						<a href="14914572882166.html" class="more-link">查看全文 &rarr;</a>
+						<a href="14924051544294.html" class="more-link">查看全文 &rarr;</a>
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
@@ -410,10 +475,10 @@ NumberUtils</p>
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(6)</a>
+	        <a href="server.html">服务器&nbsp;(7)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(5)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -432,12 +497,12 @@ NumberUtils</p>
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(22)</a>
+	        <a href="program.html">编程语言&nbsp;(26)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="php.html">PHP&nbsp;(7)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(11)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(15)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -448,10 +513,10 @@ NumberUtils</p>
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="software.html">软件设计&nbsp;(5)</a>
+	        <a href="software.html">软件设计&nbsp;(7)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="pattern-design.html">设计模式&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="pattern-design.html">设计模式&nbsp;(6)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
@@ -472,11 +537,27 @@ NumberUtils</p>
             <h4>最近文章</h4>
 	  
 	      
-		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
+		        <a href="14969719294666.html" title="Spring QuickStart">Spring QuickStart</a><br />
+	     
+	  
+	      
+		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
 	     
 	  
 	      
 		        <a href="14968096450665.html" title="Maven MyBatis Generator 插件">Maven MyBatis Generator 插件</a><br />
+	     
+	  
+	      
+		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
+	     
+	  
+	      
+		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+	     
+	  
+	      
+		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
 	     
 	  
 	      
@@ -492,11 +573,15 @@ NumberUtils</p>
 	     
 	  
 	      
-		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
+		        <a href="14982055707598.html" title="Spring Boot QuickStart (5) - Spring Data JPA">Spring Boot QuickStart (5) - Spring Data JPA</a><br />
 	     
 	  
 	      
-		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+		        <a href="14988948908551.html" title="Spring Boot QuickStart (4) - Database">Spring Boot QuickStart (4) - Database</a><br />
+	     
+	  
+	      
+		        <a href="14969970515462.html" title="Spring Boot QuickStart (3) - Web & Restful">Spring Boot QuickStart (3) - Web & Restful</a><br />
 	     
 	  
 	      
@@ -504,31 +589,11 @@ NumberUtils</p>
 	     
 	  
 	      
-		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
-	     
-	  
-	      
-		        <a href="14896294544708.html" title="分布式系统的意义">分布式系统的意义</a><br />
-	     
-	  
-	      
-		        <a href="14944229387367.html" title="ElasticSearch 2.x 安装部署">ElasticSearch 2.x 安装部署</a><br />
-	     
-	  
-	      
 		        <a href="14963868024588.html" title="Spring Boot QuickStart (1)">Spring Boot QuickStart (1)</a><br />
 	     
 	  
 	      
-		        <a href="14958691321034.html" title="Java QuickStart (2) - 常用类库，工具包，框架">Java QuickStart (2) - 常用类库，工具包，框架</a><br />
-	     
-	  
-	      
-		        <a href="14949831725275.html" title="Maven QuickStart">Maven QuickStart</a><br />
-	     
-	  
-	      
-		        <a href="14914572882166.html" title="Apache Commons 工具集">Apache Commons 工具集</a><br />
+		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
 	     
 	  
 	      

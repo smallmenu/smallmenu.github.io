@@ -36,11 +36,19 @@ blockquote {
 .content-responsive h3{ padding-top: 0.8em;font-size: 20px;font-weight: 600;}
 .content-responsive h4{ padding-top: 0.8em;font-size: 18px;}
 .content-responsive h5{ padding-top: 0.5em;font-size: 16px;}
-.content-responsive p{margin: 15px 0;}
+.content-responsive p{margin: 1.5em 0;}
 .content-responsive img{ max-width: 100%;}
 .container ul{ margin-left: 20px; padding-left: 0px;}
 
-pre{background-color: #132f44;font-size: 14px; line-height: 1.4;color:#ddd;border:1px solid #000;margin:20px 0;padding:14px;}   
+pre{background-color: #F6F6F6;
+font-size: 14px; 
+line-height: 1.1;
+color:#333;border:1px solid #999;margin:20px 0;padding:14px;
+
+}   
+code {
+  font-family: "Source Code Pro",Consolas,Menlo,Monaco,"Courier New",monospace
+}
 #content-wrap{ padding-top:2.5em; padding-bottom: 2.5em;}
 
 .product-name{  background: url('../img/header-bg.jpg') no-repeat center top;
@@ -103,9 +111,9 @@ vertical-align: middle; line-height: 19px; font-size: 14px; font-family: 'Helvet
  * Override Bootstrap's default container.
  */
 
-@media (min-width: 1000px) {
+@media (min-width: 1200px) {
   .container {
-    width: 970px; 
+    width: 1140px; 
   }
 }
 
@@ -191,10 +199,10 @@ vertical-align: middle; line-height: 19px; font-size: 14px; font-family: 'Helvet
  */
 
 .blog-main {
-  font-size: 16px;
-  line-height: 1.6;
+  font-size: 14px;
+  line-height: 1.4;
   padding-top:30px;
-  padding-right:30px;
+  padding-right:40px;
 }
 
 /* Sidebar modules for boxing content */

@@ -11,7 +11,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!--     <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/dark.min.css"> -->
-    <link rel="stylesheet" href="/asset/css/style.css?v=20170602" >
+    <link rel="stylesheet" href="/asset/css/style.css?v=20170702" >
     <script src="//cdn.bootcss.com/jquery/1.12.2/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/asset/js/docs.js"></script>
@@ -48,6 +48,53 @@
         <div class="col-sm-9 blog-main">
 			
 					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14969719294666.html">Spring QuickStart</a></h2>
+			            <p class="blog-post-meta">2017/6/9 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <h2 id="toc_0">Bean</h2>
+
+<p>看完 Java 基础和语法，翻开《Spring 实战》，最开始就是 Java Bean 的介绍，Java Bean 是个什么玩意。</p>
+
+<p>Java Bean 就是一个规范，是一个普通的 Java 类。最早的时候是为了 Java 可视化设计组件化的规范：</p>
+
+<ul>
+<li>这个类需要是 public 的， 然后需要有个无参数的构造函数</li>
+<li>这个类的属性应该是 private 的， 通过 set() 和 get() 来访问</li>
+<li>这个类需要能支持事件，</li>
+<li>这个类应该是可以序列化的，以便以后来恢复</li>
+</ul>
+
+<p>后面又经过一系列的发展。EJB，什么的。或者又可以这么理解，它是一个实体类，一个数据映射体，用来封装数据</p>
+
+<p>Spring 里面的 Bean 主要用来表示应用组件</p>
+
+<h2 id="toc_1">Sping 核心功能</h2>
+
+<p>通过依赖注入和面向接口实现松耦合<br/>
+通过切面和惯例进行声明式编程<br/>
+通过切面模板减少样板式代码</p>
+
+<h2 id="toc_2">Spring 装配机制</h2>
+
+<p>基于 XML 显式配置<br/>
+基于 Java 显式配置，@Configuration、@bean 注解<br/>
+隐式的发现机制和自动装配，@ComponentScan、@Autowired、@Component 注解</p>
+
+<p>应当优先使用自动装配和 Java 显式配置</p>
+
+<h2 id="toc_3">实践 SpringSide</h2>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14968096450665.html">Maven MyBatis Generator 插件</a></h2>
 			            <p class="blog-post-meta">2017/2/7 
 				            &nbsp;分类于 
@@ -60,6 +107,51 @@
 			            <p><a href="http://www.mybatis.org/generator/running/runningWithMaven.html">http://www.mybatis.org/generator/running/runningWithMaven.html</a></p>
 
 						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14967346590885.html">Java Dao Domain Service</a></h2>
+			            <p class="blog-post-meta">2016/6/6 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>对于从 PHP 过来的 Java 新人，最近我经常看到 Dao, Domain, Service 这几个玩意，有点小困惑</p>
+
+<p>对于 MVC 模式来说，其实控制器和视图都很容易理解，Model 呢？ 模型。简单理解一下，应该是数据操作和业务逻辑的集合，那么 Java Web 里面 Model ＝ (Dao + Domain + Service) ?</p>
+
+<p>好像如此，所以 Model 简单的分了三层，分别是：</p>
+
+<p>Domain 对应的是实体，如果是 JPA，它就是 Entity 类<br/>
+Dao 对应的是对数据库进行操作，如果是 Jpa，那么它就是 Repository<br/>
+Service 对应的是服务层，业务逻辑操作</p>
+
+<p>待有更深刻理解以后再补。</p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14958668070136.html">Java QuickStart (3) - Web 开发</a></h2>
+			            <p class="blog-post-meta">2017/2/9 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>入了Java的坑，看完了基础和语法之后，我进入了好长时间的迷茫期：</p>
+
+
+						 
+						<a href="14958668070136.html" class="more-link">查看全文 &rarr;</a>
+			    		
 			           </div>
 			          </div><!-- /.blog-post -->
 			 
@@ -129,8 +221,8 @@
 			          </div><!-- /.blog-post -->
 			 
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14967346590885.html">Java Dao Domain Service</a></h2>
-			            <p class="blog-post-meta">2016/6/6 
+			            <h2 class="blog-post-title"><a href="14982055707598.html">Spring Boot QuickStart (5) - Spring Data JPA</a></h2>
+			            <p class="blog-post-meta">2017/3/23 
 				            &nbsp;分类于 
 							
 							    <a class='category' href='java.html'>Java</a>&nbsp;
@@ -138,17 +230,22 @@
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>对于从 PHP 过来的 Java 新人，最近我经常看到 Dao, Domain, Service 这几个玩意，有点小困惑</p>
+			            <p>接 (4)。</p>
 
-<p>对于 MVC 模式来说，其实控制器和视图都很容易理解，关键是这个 Model，简单理解一下应该是数据和业务逻辑的实现，那么 Java Web 里面 Model ＝ (Dao + Domain + Service) ?</p>
+<p>Java Persistence API，可以理解就是 Java 一个持久化标准或规范，Spring Data JPA 是对它的实现。并且提供多个 JPA 厂商适配，如 Hibernate、Apache 的 OpenJpa、Eclipse的EclipseLink等。</p>
 
-						
+<p>spring-boot-starter-data-jpa 默认使用的是 Hibernate 实现。</p>
+
+
+						 
+						<a href="14982055707598.html" class="more-link">查看全文 &rarr;</a>
+			    		
 			           </div>
 			          </div><!-- /.blog-post -->
 			 
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14958668070136.html">Java QuickStart (3) - Web 开发</a></h2>
-			            <p class="blog-post-meta">2017/2/9 
+			            <h2 class="blog-post-title"><a href="14988948908551.html">Spring Boot QuickStart (4) - Database</a></h2>
+			            <p class="blog-post-meta">2017/3/22 
 				            &nbsp;分类于 
 							
 							    <a class='category' href='java.html'>Java</a>&nbsp;
@@ -156,11 +253,50 @@
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>入了Java的坑，看完了基础和语法之后，我进入了好长时间的迷茫期：</p>
+			            <p>环境：Spring Boot 1.5.4</p>
+
+<p>到了操作数据库的环节，以 MySQL 为基准，体验一下数据库的相关操作，先让我纠结一下，至少有以下四种姿势。</p>
+
+<ul>
+<li>JDBC。原生的 JDBC 操作，原生的 SQL语句，写一大堆的初始化、代码、异常捕获。</li>
+<li>JDBCTemplate。Spring 对 JDBC 的封装，基本上还是原生的 SQL 语句，操作方法要自己写，少了很多（他们叫样板式）代码。</li>
+<li>JPA。内置了一些接口，封装了常规的 CURD、分页操作，借助 Spring Data Jpa，能帮你自动实现大部分的单表操作，你要做的仅仅是定义实体，按照规范定义接口即可。</li>
+<li>MyBatis。一个 Java 当前很流行的 ORM 框架，如果你以前是写 PHP 的，我猜你不太敢相信它是 ORM 框架。</li>
+</ul>
 
 
 						 
-						<a href="14958668070136.html" class="more-link">查看全文 &rarr;</a>
+						<a href="14988948908551.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14969970515462.html">Spring Boot QuickStart (3) - Web & Restful</a></h2>
+			            <p class="blog-post-meta">2017/3/9 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>环境：Spring Boot 1.5.4</p>
+
+<p>基于 Spring Boot 可以快速创建一个Web &amp; Restful 应用，在开始应用之前，至少要了解以下用法：</p>
+
+<ul>
+<li>定义路由，定义 HTTP 方法</li>
+<li>获取Header、GET、POST、路径等参数</li>
+<li>Cookie、Session操作</li>
+<li>应用一个模板引擎，选择 Thymeleaf</li>
+<li>获取表单数据，以及文件上传数据</li>
+<li>完成一个登陆、登出、注册流程</li>
+</ul>
+
+
+						 
+						<a href="14969970515462.html" class="more-link">查看全文 &rarr;</a>
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
@@ -175,7 +311,9 @@
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>基于 Spring Boot 创建一个命令行应用，先来个最基本的体验，体验一下：</p>
+			            <p>环境：Spring Boot 1.5.4</p>
+
+<p>基于 Spring Boot 创建一个命令行应用，先来个最基本的体验，体验一下：</p>
 
 <ul>
 <li>配置管理（配置文件加载，多环境配置文件）</li>
@@ -285,122 +423,6 @@ NumberUtils</p>
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14967316079795.html">Java, JDBC, MySQL 类型转换</a></h2>
-			            <p class="blog-post-meta">2017/2/6 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>一般情况下，MySQL的类型都能转换为 java.lang.String，并且任何数值类型也都能转换为 Java 的数值类型（但是有可能会丢失精度）</p>
-
-
-						 
-						<a href="14967316079795.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14866965563754.html">Gitlab CE + Gitbook 本地环境搭建</a></h2>
-			            <p class="blog-post-meta">2017/2/10 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>GitLab 是一个利用Ruby on Rails开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。<br/>
-它拥有与GitHub类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。</p>
-
-<p>GitBook 是一个基于 Node.js 的命令行工具，可使用 Github/Git 和 Markdown 来制作精美的电子书</p>
-
-
-						 
-						<a href="14866965563754.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14864571405778.html">php composer 配置</a></h2>
-			            <p class="blog-post-meta">2017/2/7 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <h2 id="toc_0">安装</h2>
-
-<p>参见官网：<a href="https://getcomposer.org/download/">https://getcomposer.org/download/</a></p>
-
-<pre><code>php -r &quot;copy(&#39;https://getcomposer.org/installer&#39;, &#39;composer-setup.php&#39;);&quot;
-php -r &quot;if (hash_file(&#39;SHA384&#39;, &#39;composer-setup.php&#39;) === &#39;55d6ead61b29c7bdee5cccfb50076874187bd9f21f65d8991d46ec5cc90518f447387fb9f76ebae1fbbacf329e583e30&#39;) { echo &#39;Installer verified&#39;; } else { echo &#39;Installer corrupt&#39;; unlink(&#39;composer-setup.php&#39;); } echo PHP_EOL;&quot;
-php composer-setup.php
-php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
-</code></pre>
-
-<h2 id="toc_1">配置</h2>
-
-<p>composer config -l -g</p>
-
-<pre><code>&quot;config&quot;: {
-    &quot;secure-http&quot;:false
-}
-</code></pre>
-
-<h2 id="toc_2">自更新</h2>
-
-<pre><code>composer selfupdate
-</code></pre>
-
-<h2 id="toc_3">中国全量镜像</h2>
-
-<p><a href="https://pkg.phpcomposer.com/">https://pkg.phpcomposer.com/</a></p>
-
-<pre><code>composer config -g repo.packagist composer https://packagist.phpcomposer.com
-</code></pre>
-
-						
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14841186341336.html">Java QuickStart (1)</a></h2>
-			            <p class="blog-post-meta">2016/6/6 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='java.html'>Java</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>Java QuickStart 系列是个人学习Java的入坑笔记，求老司机带路。</p>
-
-<h2 id="toc_0">面向对象</h2>
-
-<h3 id="toc_1">Java 内存区域</h3>
-
-<ol>
-<li>栈内存空间，保存所有对象名称（保存了引用堆内存空间地址）</li>
-<li>堆内存空间：保存每个对象的具体属性内容</li>
-<li>全局数据区：保存 static 类型的属性</li>
-<li>全局代码区：保存所有方法定义</li>
-</ol>
-
-
-						 
-						<a href="14841186341336.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
 			  
           <nav>
             <ul class="pager">
@@ -438,10 +460,10 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(6)</a>
+	        <a href="server.html">服务器&nbsp;(7)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(5)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -460,12 +482,12 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(22)</a>
+	        <a href="program.html">编程语言&nbsp;(26)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="php.html">PHP&nbsp;(7)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(11)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(15)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -476,10 +498,10 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="software.html">软件设计&nbsp;(5)</a>
+	        <a href="software.html">软件设计&nbsp;(7)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="pattern-design.html">设计模式&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="pattern-design.html">设计模式&nbsp;(6)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
@@ -500,11 +522,27 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
             <h4>最近文章</h4>
 	  
 	      
-		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
+		        <a href="14969719294666.html" title="Spring QuickStart">Spring QuickStart</a><br />
+	     
+	  
+	      
+		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
 	     
 	  
 	      
 		        <a href="14968096450665.html" title="Maven MyBatis Generator 插件">Maven MyBatis Generator 插件</a><br />
+	     
+	  
+	      
+		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
+	     
+	  
+	      
+		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+	     
+	  
+	      
+		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
 	     
 	  
 	      
@@ -520,11 +558,15 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
 	     
 	  
 	      
-		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
+		        <a href="14982055707598.html" title="Spring Boot QuickStart (5) - Spring Data JPA">Spring Boot QuickStart (5) - Spring Data JPA</a><br />
 	     
 	  
 	      
-		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+		        <a href="14988948908551.html" title="Spring Boot QuickStart (4) - Database">Spring Boot QuickStart (4) - Database</a><br />
+	     
+	  
+	      
+		        <a href="14969970515462.html" title="Spring Boot QuickStart (3) - Web & Restful">Spring Boot QuickStart (3) - Web & Restful</a><br />
 	     
 	  
 	      
@@ -532,31 +574,11 @@ php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
 	     
 	  
 	      
-		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
-	     
-	  
-	      
-		        <a href="14896294544708.html" title="分布式系统的意义">分布式系统的意义</a><br />
-	     
-	  
-	      
-		        <a href="14944229387367.html" title="ElasticSearch 2.x 安装部署">ElasticSearch 2.x 安装部署</a><br />
-	     
-	  
-	      
 		        <a href="14963868024588.html" title="Spring Boot QuickStart (1)">Spring Boot QuickStart (1)</a><br />
 	     
 	  
 	      
-		        <a href="14958691321034.html" title="Java QuickStart (2) - 常用类库，工具包，框架">Java QuickStart (2) - 常用类库，工具包，框架</a><br />
-	     
-	  
-	      
-		        <a href="14949831725275.html" title="Maven QuickStart">Maven QuickStart</a><br />
-	     
-	  
-	      
-		        <a href="14914572882166.html" title="Apache Commons 工具集">Apache Commons 工具集</a><br />
+		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
 	     
 	  
 	      

@@ -11,7 +11,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!--     <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/dark.min.css"> -->
-    <link rel="stylesheet" href="/asset/css/style.css?v=20170602" >
+    <link rel="stylesheet" href="/asset/css/style.css?v=20170702" >
     <script src="//cdn.bootcss.com/jquery/1.12.2/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/asset/js/docs.js"></script>
@@ -58,9 +58,39 @@
 			            <div class="content-responsive">
 			            <p>Java QuickStart 系列是个人学习Java的入坑笔记，求老司机带路。</p>
 
-<h2 id="toc_0">面向对象</h2>
+<h2 id="toc_0">基础</h2>
 
-<h3 id="toc_1">Java 内存区域</h3>
+<h3 id="toc_1">数据类型</h3>
+
+<p>基本数据类型：数值型（byte、short、int、long、float、double），字符型（char），布尔型（boolean）<br/>
+引用数据类型：类，接口，数组</p>
+
+<h3 id="toc_2">自动转换</h3>
+
+<p>也叫扩大转换</p>
+
+<ol>
+<li>转换前后数据类型兼容</li>
+<li>转换后的数据类型表示范围比转换前大
+如，short类型转换为 int 类型</li>
+</ol>
+
+<p>任何数据类型碰到 String 类型，都会向 String 类型转换</p>
+
+<h3 id="toc_3">强制转换</h3>
+
+<p>也叫显式转换，可能会丢失精度</p>
+
+<p>float f = 33.3f<br/>
+int x = (int) f;</p>
+
+<h3 id="toc_4">null</h3>
+
+<p>null 表示引用数据类型的默认值</p>
+
+<h2 id="toc_5">面向对象</h2>
+
+<h3 id="toc_6">Java 内存区域</h3>
 
 <ol>
 <li>栈内存空间，保存所有对象名称（保存了引用堆内存空间地址）</li>
@@ -71,47 +101,47 @@
 
 <span id="more"></span><!-- more -->
 
-<h3 id="toc_2">this 关键字</h3>
+<h3 id="toc_7">this 关键字</h3>
 
 <p>使用 this 调用本类中的属性：this.name = &quot;&quot;<br/>
 this() 可以用来调用构造方法<br/>
 this 表示当前实例化的对象</p>
 
-<h3 id="toc_3">static 关键词</h3>
+<h3 id="toc_8">static 关键词</h3>
 
 <p>使用 static 表示类属性<br/>
 static 方法不可以调用非 static 类型的属性和方法<br/>
 可以在 Class 中声明 static { 静态代码块 }，它会优于主方法执行</p>
 
-<h3 id="toc_4">内部类</h3>
+<h3 id="toc_9">内部类</h3>
 
 <p>在类内部可以通过 public 或 private 声明内部类，访问权限与变量和方法完全相同。 <br/>
 在类中定义内部静态类<br/>
 在方法中定义内部类</p>
 
-<h3 id="toc_5">super()</h3>
+<h3 id="toc_10">super()</h3>
 
 <p>子类默认会自动调用父类的无参构造。super()。<br/>
 子类可以手动调用父类的有参构造 super(参数)</p>
 
-<h3 id="toc_6">final</h3>
+<h3 id="toc_11">final</h3>
 
 <p>使用 final 声明的类不能有子类<br/>
 使用 final 声明的方法不能被子类覆盖<br/>
 使用 final 声明的变量即成为常量，常量不可以修改。</p>
 
-<h3 id="toc_7">抽象类</h3>
+<h3 id="toc_12">抽象类</h3>
 
 <p>包含一个抽象方法的类必须是抽象类，都要使用 abstract 关键字声明<br/>
 抽象方法只需要声明，不需要实现。抽象方法不能使用 private 声明<br/>
 public abstract void print();</p>
 
-<h3 id="toc_8">接口</h3>
+<h3 id="toc_13">接口</h3>
 
 <p>接口可以理解为一种特殊的类，是由全局常量和公共的抽象方法组成。并且默认是这样，所以声明时候可以简化。<br/>
 接口的抽象方法必须定义 public 权限</p>
 
-<h3 id="toc_9">克隆</h3>
+<h3 id="toc_14">克隆</h3>
 
 <p>实现 Cloneable 接口，并覆写 clone() 方法</p>
 
@@ -122,21 +152,23 @@ public abstract void print();</p>
 }
 </code></pre>
 
-<h3 id="toc_10">多态性</h3>
+<h3 id="toc_15">多态性</h3>
 
 <p>多态主要体现两方面：<br/>
 1. 方法的重载与重写<br/>
 2. 对象的多态性</p>
 
-<p>对象的多态性，分为向上转型，向下转型。<br/>
-向上转型，程序会自动完成。向下转型，必须明确指明要转型的子类类型。<br/>
-向上转型关系发生以后，<strong><em>调用的方法是子类覆盖后的方法。并且无法调用子类独有的方法。</em></strong></p>
+<p>对象的多态性，分为向上转型，向下转型。</p>
 
-<h3 id="toc_11">instance of 关键词，用于判断一个对象是否是一个类的实例</h3>
+<p>向上转型，程序会自动完成。<br/>
+向下转型，必须明确指明要转型的子类类型。<br/>
+向上转型关系发生以后，调用的方法是子类覆盖后的方法。并且无法调用子类独有的方法。</p>
+
+<h3 id="toc_16">instance of 关键词，用于判断一个对象是否是一个类的实例</h3>
 
 <p>返回 boolean</p>
 
-<h3 id="toc_12">抽象类和接口的区别</h3>
+<h3 id="toc_17">抽象类和接口的区别</h3>
 
 <table>
 <thead>
@@ -203,12 +235,15 @@ public abstract void print();</p>
 
 <p>类的设计中，尽量不要去继承一个已经实现好的类，而通过继承抽象类或实现接口来实现，如果两者都可以使用，那么优先使用接口。</p>
 
-<h3 id="toc_13">Object 类</h3>
+<h3 id="toc_18">Object 类</h3>
 
 <p>所有的类都有一个公共的父类，Object。有以下主要方法： equals()、hashCode()、toString();<br/>
-比如String类就继承了Object类，单独覆盖实现了equals()方法</p>
+Object 类提供的 equals() 方法默认是比较地址的<br/>
+比如 String 类就继承了Object类，单独覆盖实现了 equals() 方法</p>
 
-<h3 id="toc_14">包装类</h3>
+<p>既然Object是所有对象的父类，则所有的对象都可以向 Object 进行转换（向上转型），即一切引用数据类型都可以使用 Object 进行接收</p>
+
+<h3 id="toc_19">包装类</h3>
 
 <p>Java设计中提倡一切皆对象。<br/>
 所以需要将基本数据类型进行包装：</p>
@@ -236,37 +271,59 @@ string str2 = &quot;30.3&quot;;<br/>
 int x = Integer.parseInt(str1);<br/>
 float f = Float.parseFloat(str2);</p>
 
-<h3 id="toc_15">异常</h3>
+<h3 id="toc_20">异常</h3>
+
+<p>如果不对异常进行正确的处理，则可能导致程序的中断执行。</p>
+
+<p>如果没有异常处理，就必须要用大量的判断语句。</p>
 
 <p>定义方法时 throws 关键字表示此方法不处理异常，交给方法调用者进行处理<br/>
 throw 表示抛出异常</p>
 
-<h3 id="toc_16">包</h3>
+<p>可以直接使用 Exception 捕获所有异常，但是捕获范围小的异常必须放在捕获大的异常之前。</p>
+
+<p>e.printStackTrace();</p>
+
+<pre><code>Throwable
+- Exception 表示程序中出现的问题，可以用 try...catch处理
+- Error JVM 错误，程序无法处理
+</code></pre>
+
+<h3 id="toc_21">包</h3>
 
 <p>import * 不会产生性能问题。<br/>
 如果在不同的包中，有类重名，那么调用的时候需要写出完整的包、类名称。</p>
 
 <p>常用的系统开发包：<br/>
+java.beans<br/>
+java.math<br/>
 java.lang  基本包，目前JDK已经自动导入<br/>
 java.lang.reflect 反射机制<br/>
 java.util  工具包，包含常用的类库，重点掌握<br/>
 java.text 提供了文本处理的类库<br/>
 java.sql 数据库操作<br/>
 java.net 网络编程，http、socket、cookie、ip<br/>
-java.io 输入输出</p>
+java.io 输入输出<br/>
+java.nio<br/>
+java.security 安全相关，加密算法等<br/>
+javax.imageio 图形相关<br/>
+javax.sound  声音相关<br/>
+javax.xml XML相关</p>
 
 <p>import static 可以静态导入全部使用static声明的静态方法的类。这时候比较像某些语言的函数，因为可以直接使用静态方法调用。</p>
 
-<h3 id="toc_17">权限控制</h3>
+<h3 id="toc_22">权限控制</h3>
 
 <p>private 仅限本类访问<br/>
 default 可以被本包中的其他类访问<br/>
 protected 可以被本包及不同包的子类访问<br/>
 public 所有</p>
 
-<h2 id="toc_18">应用</h2>
+<h2 id="toc_23">应用</h2>
 
-<h3 id="toc_19">多线程</h3>
+<h3 id="toc_24">多线程</h3>
+
+<p>Java 每次运行至少启动2个线程，每当使用Java命令执行一个类时，实际会启动一个JVM，每个JVM就是一个进程，同时启动两个线程：main线程，gc线程。</p>
 
 <p>多线程是指在一个进程执行过程中可以产生多个线程。这些线程可以同时存在，同时运行。</p>
 
@@ -308,7 +365,7 @@ t2.start();
 后台运行线程 setDaemon()<br/>
 暂停线程 yield()</p>
 
-<h4 id="toc_20">同步与死锁</h4>
+<h4 id="toc_25">同步与死锁</h4>
 
 <p>同步：多个操作在同一时间只能有一个线程进行，其他线程要等待此线程完成之后才可以继续运行。</p>
 
@@ -322,7 +379,12 @@ public synchronized run() {
 
 <p>死锁：两个线程都在彼此等待，过多的同步就有可能产生死锁。</p>
 
-<h3 id="toc_21">IO</h3>
+<p>死锁的解决办法：<br/>
+1. 避免过多的同步<br/>
+2. 确保加锁的顺序一致<br/>
+3. 提供加锁的超时时间</p>
+
+<h3 id="toc_26">IO</h3>
 
 <p>java.io包中的流主要有字节流、字符流两大类。字节流对应OutputStream/InputStream，字符流对应Writer/Reader类，它们均是抽象类。</p>
 
@@ -369,10 +431,10 @@ public synchronized run() {
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(6)</a>
+	        <a href="server.html">服务器&nbsp;(7)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(5)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -391,12 +453,12 @@ public synchronized run() {
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(22)</a>
+	        <a href="program.html">编程语言&nbsp;(26)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="php.html">PHP&nbsp;(7)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(11)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(15)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -407,10 +469,10 @@ public synchronized run() {
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="software.html">软件设计&nbsp;(5)</a>
+	        <a href="software.html">软件设计&nbsp;(7)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="pattern-design.html">设计模式&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="pattern-design.html">设计模式&nbsp;(6)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
@@ -431,11 +493,27 @@ public synchronized run() {
             <h4>最近文章</h4>
 	  
 	      
-		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
+		        <a href="14969719294666.html" title="Spring QuickStart">Spring QuickStart</a><br />
+	     
+	  
+	      
+		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
 	     
 	  
 	      
 		        <a href="14968096450665.html" title="Maven MyBatis Generator 插件">Maven MyBatis Generator 插件</a><br />
+	     
+	  
+	      
+		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
+	     
+	  
+	      
+		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+	     
+	  
+	      
+		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
 	     
 	  
 	      
@@ -451,11 +529,15 @@ public synchronized run() {
 	     
 	  
 	      
-		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
+		        <a href="14982055707598.html" title="Spring Boot QuickStart (5) - Spring Data JPA">Spring Boot QuickStart (5) - Spring Data JPA</a><br />
 	     
 	  
 	      
-		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+		        <a href="14988948908551.html" title="Spring Boot QuickStart (4) - Database">Spring Boot QuickStart (4) - Database</a><br />
+	     
+	  
+	      
+		        <a href="14969970515462.html" title="Spring Boot QuickStart (3) - Web & Restful">Spring Boot QuickStart (3) - Web & Restful</a><br />
 	     
 	  
 	      
@@ -463,31 +545,11 @@ public synchronized run() {
 	     
 	  
 	      
-		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
-	     
-	  
-	      
-		        <a href="14896294544708.html" title="分布式系统的意义">分布式系统的意义</a><br />
-	     
-	  
-	      
-		        <a href="14944229387367.html" title="ElasticSearch 2.x 安装部署">ElasticSearch 2.x 安装部署</a><br />
-	     
-	  
-	      
 		        <a href="14963868024588.html" title="Spring Boot QuickStart (1)">Spring Boot QuickStart (1)</a><br />
 	     
 	  
 	      
-		        <a href="14958691321034.html" title="Java QuickStart (2) - 常用类库，工具包，框架">Java QuickStart (2) - 常用类库，工具包，框架</a><br />
-	     
-	  
-	      
-		        <a href="14949831725275.html" title="Maven QuickStart">Maven QuickStart</a><br />
-	     
-	  
-	      
-		        <a href="14914572882166.html" title="Apache Commons 工具集">Apache Commons 工具集</a><br />
+		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
 	     
 	  
 	      

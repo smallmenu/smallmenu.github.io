@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>HBase 之Thrift Server - 蛮-com | 醉里挑灯看剑</title>
+    <title>Spring Boot QuickStart (4) - Database - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,20 +47,101 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541167482772.html">HBase 之Thrift Server</a></h2>
-			            <p class="blog-post-meta">2016/1/30
+			            <h2 class="blog-post-title"><a href="14988948908551.html">Spring Boot QuickStart (4) - Database</a></h2>
+			            <p class="blog-post-meta">2017/3/22
 				            &nbsp;分类于 
 							
-							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							    <a class='category' href='java.html'>Java</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>通过 Thrift 操作 HBase</p>
+			            <p>环境：Spring Boot 1.5.4</p>
+
+<p>到了操作数据库的环节，以 MySQL 为基准，体验一下数据库的相关操作，先让我纠结一下，至少有以下四种姿势。</p>
+
+<ul>
+<li>JDBC。原生的 JDBC 操作，原生的 SQL语句，写一大堆的初始化、代码、异常捕获。</li>
+<li>JDBCTemplate。Spring 对 JDBC 的封装，基本上还是原生的 SQL 语句，操作方法要自己写，少了很多（他们叫样板式）代码。</li>
+<li>JPA。内置了一些接口，封装了常规的 CURD、分页操作，借助 Spring Data Jpa，能帮你自动实现大部分的单表操作，你要做的仅仅是定义实体，按照规范定义接口即可。</li>
+<li>MyBatis。一个 Java 当前很流行的 ORM 框架，如果你以前是写 PHP 的，我猜你不太敢相信它是 ORM 框架。</li>
+</ul>
 
 <span id="more"></span><!-- more -->
 
-<p>thrift -gen php /opt/cloudera/parcels/CDH-5.5.1-1.cdh5.5.1.p0.11/lib/hue/apps/hbase/thrift/Hbase.thrift</p>
+<p>JPA、MyBatis 将是学习重点。尤其是 MyBatis，这也是现在号称流行的 SSM 组合。（Spring + Spring MVC + MyBatis）？幸亏 Structs、Hibernate 现在看起来不主流了。</p>
+
+<p>体验的基线：</p>
+
+<ul>
+<li>单表。增、删、改、查（多条件组合查询、分页，排序等）</li>
+<li>多表关联。一对一，一对多，多对多</li>
+</ul>
+
+<h1 id="toc_0">lombok</h1>
+
+<p>Java 是强类型的，所以经常要定义实体，或domain，或dao，或dto。</p>
+
+<p>而每个类写上构造函数，Getter、Setter、toString，实在是蛋疼。虽然 PHPStorm 提供了快捷键可以快速生成(CTRL+N)，但当你要修改属性、属性类型的时候，还是需要手动搞一下的。</p>
+
+<p>所以我发现了 lombok 这个项目，通过一定的注解，配合 PHPStorm 插件，可以消除以上那些常规代码。</p>
+
+<p>甚至，还可以通过 builder() 模式，消除重复的 .setXXX() 语句</p>
+
+<p>官网地址：<a href="https://projectlombok.org/">https://projectlombok.org/</a></p>
+
+<h1 id="toc_1">数据库结构</h1>
+
+<p>先意淫几张表，通过这几张表，期望能够覆盖常规的需求，其包含了各种类型的的字段，以及多种表关系。</p>
+
+<pre><code>user (id, role_id, xx)
+user_detail (id, user_id, xx)
+role (id, xx)
+order (id, user_id, xx)
+product (id, xx)
+order_product (order_id, product_id)
+
+关系如下：
+user&lt;-&gt;user_detail 一对一
+user-&gt;role 一对一（假设一个用户只有一个角色）
+role-&gt;user 一对多
+user-&gt;order 一对多
+order-&gt;user 多对一
+order&lt;-&gt;product 多对多
+</code></pre>
+
+<p>同时在 application.properties 中配置 datasource 数据源相关配置，这里使用 MySQL</p>
+
+<pre><code>spring.datasource.url=jdbc:mysql://localhost:3306/springboot
+spring.datasource.username=root
+spring.datasource.password=123123
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+</code></pre>
+
+<h1 id="toc_2">字段映射</h1>
+
+<p>Java 与 MySQL 类型映射，可以参考 <Java, JDBC, MySQL 类型转换></p>
+
+<p>但，我目前还很困惑的是时间相关的几个类型，在 MySQL 中，有以下几个：</p>
+
+<pre><code>DATE
+TIME
+DATETIME
+TIMESTAMP
+</code></pre>
+
+<p>其中，TIMESTAMP、TIME 貌似只能对应 java.sql.Timestamp 与 java.sql.Time</p>
+
+<p>那么 DATE、DATETIME 呢？首先对应 java.sql.Date 与 java.sql.Timestamp 肯定是可以的。</p>
+
+<p>能对应 java.util.Date 吗？</p>
+
+<p>能对应 java.time.LocalDate、java.time.LocalDateTime 吗？</p>
+
+<p>应当如何选择？标准姿势是什么？</p>
+
+<p>参考：<br/>
+<a href="https://stackoverflow.com/questions/2305973/java-util-date-vs-java-sql-date">https://stackoverflow.com/questions/2305973/java-util-date-vs-java-sql-date</a></p>
 
 			            </div>
 			          </div><!-- /.blog-post -->

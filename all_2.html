@@ -11,7 +11,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 <!--     <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/dark.min.css"> -->
-    <link rel="stylesheet" href="/asset/css/style.css?v=20170602" >
+    <link rel="stylesheet" href="/asset/css/style.css?v=20170702" >
     <script src="//cdn.bootcss.com/jquery/1.12.2/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="/asset/js/docs.js"></script>
@@ -47,6 +47,174 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 			
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14864571405778.html">php composer 配置</a></h2>
+			            <p class="blog-post-meta">2017/2/7 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='php.html'>PHP</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <h2 id="toc_0">安装</h2>
+
+<p>参见官网：<a href="https://getcomposer.org/download/">https://getcomposer.org/download/</a></p>
+
+<pre><code>php -r &quot;copy(&#39;https://getcomposer.org/installer&#39;, &#39;composer-setup.php&#39;);&quot;
+php -r &quot;if (hash_file(&#39;SHA384&#39;, &#39;composer-setup.php&#39;) === &#39;55d6ead61b29c7bdee5cccfb50076874187bd9f21f65d8991d46ec5cc90518f447387fb9f76ebae1fbbacf329e583e30&#39;) { echo &#39;Installer verified&#39;; } else { echo &#39;Installer corrupt&#39;; unlink(&#39;composer-setup.php&#39;); } echo PHP_EOL;&quot;
+php composer-setup.php
+php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
+</code></pre>
+
+<h2 id="toc_1">配置</h2>
+
+<p>composer config -l -g</p>
+
+<pre><code>&quot;config&quot;: {
+    &quot;secure-http&quot;:false
+}
+</code></pre>
+
+<h2 id="toc_2">自更新</h2>
+
+<pre><code>composer selfupdate
+</code></pre>
+
+<h2 id="toc_3">中国全量镜像</h2>
+
+<p><a href="https://pkg.phpcomposer.com/">https://pkg.phpcomposer.com/</a></p>
+
+<pre><code>composer config -g repo.packagist composer https://packagist.phpcomposer.com
+</code></pre>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14841186341336.html">Java QuickStart (1)</a></h2>
+			            <p class="blog-post-meta">2016/6/6 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>Java QuickStart 系列是个人学习Java的入坑笔记，求老司机带路。</p>
+
+<h2 id="toc_0">基础</h2>
+
+<h3 id="toc_1">数据类型</h3>
+
+<p>基本数据类型：数值型（byte、short、int、long、float、double），字符型（char），布尔型（boolean）<br/>
+引用数据类型：类，接口，数组</p>
+
+<h3 id="toc_2">自动转换</h3>
+
+<p>也叫扩大转换</p>
+
+<ol>
+<li>转换前后数据类型兼容</li>
+<li>转换后的数据类型表示范围比转换前大
+如，short类型转换为 int 类型</li>
+</ol>
+
+<p>任何数据类型碰到 String 类型，都会向 String 类型转换</p>
+
+<h3 id="toc_3">强制转换</h3>
+
+<p>也叫显式转换，可能会丢失精度</p>
+
+<p>float f = 33.3f<br/>
+int x = (int) f;</p>
+
+<h3 id="toc_4">null</h3>
+
+<p>null 表示引用数据类型的默认值</p>
+
+<h2 id="toc_5">面向对象</h2>
+
+<h3 id="toc_6">Java 内存区域</h3>
+
+<ol>
+<li>栈内存空间，保存所有对象名称（保存了引用堆内存空间地址）</li>
+<li>堆内存空间：保存每个对象的具体属性内容</li>
+<li>全局数据区：保存 static 类型的属性</li>
+<li>全局代码区：保存所有方法定义</li>
+</ol>
+
+
+						 
+						<a href="14841186341336.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14805801026400.html">搜索引擎老板开了个杂货店</a></h2>
+			            <p class="blog-post-meta">2016/12/1 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='algorithm.html'>其他</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>搜索引擎百度老板开了个杂货店，你新开了一家供货店，你们俩怎么开始做生意？</p>
+
+<p>这是一篇关于网站海量数据长尾词 SEO 的一些个人理解。</p>
+
+
+						 
+						<a href="14805801026400.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14731420304516.html">浏览器缓存与相关 HTTP Header</a></h2>
+			            <p class="blog-post-meta">2016/9/6 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='webserver.html'>Webserver</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>在 HTTP 请求中，内容由 Web 服务器产生，而浏览器缓存内容存储在浏览器本地，他们之间不可能独立完成整个请求过程，所以这个沟通机制就叫缓存协商。</p>
+
+<p>而缓存协商，毕竟还需要浏览器与 Web 服务器的一次 HTTP 请求响应头的确认，如何彻底的消灭请求，就需要用到浏览器缓存。</p>
+
+
+						 
+						<a href="14731420304516.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14727802575210.html">Sass + Compass</a></h2>
+			            <p class="blog-post-meta">2016/9/2 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='css.html'>Css</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>Sass 是一种 CSS 的开发工具，是对 CSS 的一种扩充，提供了许多便利的写法，节省了设计者的时间，使得 CSS 的开发，变得简单和可维护。</p>
+
+<p>Compass 在 Sass 的基础上，封装了一系列有用的模块和模板，补充 Sass 的功能。</p>
+
+
+						 
+						<a href="14727802575210.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
 					<div class="blog-post">
 			            <h2 class="blog-post-title"><a href="14722814557558.html">SEO 优化</a></h2>
 			            <p class="blog-post-meta">2016/8/27 
@@ -256,110 +424,6 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14613994523878.html">HTML/CSS 开发人员编码规范</a></h2>
-			            <p class="blog-post-meta">2016/9/1 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='css.html'>Css</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>不管有多少人共同参与同一项目，一定要确保每一行代码都像是同一个人编写的。这是个黄金定律，永远遵循同一套编码规范。</p>
-
-<p>本文参考了不少文档，最后整理了这个规范，主要也是个人的学习总结。</p>
-
-
-						 
-						<a href="14613994523878.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14603696258384.html">Cloudera 集群修改IP</a></h2>
-			            <p class="blog-post-meta">2016/4/11 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='hadoop.html'>Hadoop</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>原则上我以为Cloudera是使用hostname节点通信，修改IP地址只需要修改hostanme就可以了，事实不是这样。</p>
-
-<p>以下是 Cloudera 集群修改IP的方法：</p>
-
-
-						 
-						<a href="14603696258384.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14589730453584.html">MySQL 开发人员规范</a></h2>
-			            <p class="blog-post-meta">2016/3/26 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='mysql.html'>MySQL</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>对于Web线上业务推荐使用 InnoDB，这也是现在 MySQL 默认的数据引擎。</p>
-
-<p>虽然 MyISAM 非常适用于读远大于写的场景，但是请不要在同一个库中混用这两种引擎，因为目前大数据量情况下的备份和容灾还没有好的方案。</p>
-
-
-						 
-						<a href="14589730453584.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14580995696531.html">Solr 5.5.1 单机版安装部署</a></h2>
-			            <p class="blog-post-meta">2016/3/16 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='solr.html'>Solr</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>Solr 4 到 Solr 5 的一些变更：</p>
-
-<ul>
-<li>可通过内置脚本一键安装，同时支持安装为Linux的服务，启动脚本也增加了更多的参数支持。并且Solr 5通过内置Server实现Http接口（虽然还是使用Jetty）</li>
-<li>schemal.xml 变更为managed-solr</li>
-</ul>
-
-
-						 
-						<a href="14580995696531.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14574190257937.html">Nginx 常用编译参数说明及扩展模块介绍</a></h2>
-			            <p class="blog-post-meta">2016/3/8 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='webserver.html'>Webserver</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            
-						 
-						<a href="14574190257937.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
 			  
           <nav>
             <ul class="pager">
@@ -397,10 +461,10 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(6)</a>
+	        <a href="server.html">服务器&nbsp;(7)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(5)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -419,12 +483,12 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(22)</a>
+	        <a href="program.html">编程语言&nbsp;(26)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="php.html">PHP&nbsp;(7)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(11)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(15)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -435,10 +499,10 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="software.html">软件设计&nbsp;(5)</a>
+	        <a href="software.html">软件设计&nbsp;(7)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="pattern-design.html">设计模式&nbsp;(4)</a>&nbsp;&nbsp;
+	        	<a href="pattern-design.html">设计模式&nbsp;(6)</a>&nbsp;&nbsp;
 	        
 	         </p> 
 	      </li>
@@ -459,11 +523,27 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
             <h4>最近文章</h4>
 	  
 	      
-		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
+		        <a href="14969719294666.html" title="Spring QuickStart">Spring QuickStart</a><br />
+	     
+	  
+	      
+		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
 	     
 	  
 	      
 		        <a href="14968096450665.html" title="Maven MyBatis Generator 插件">Maven MyBatis Generator 插件</a><br />
+	     
+	  
+	      
+		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
+	     
+	  
+	      
+		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+	     
+	  
+	      
+		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
 	     
 	  
 	      
@@ -479,11 +559,15 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 	     
 	  
 	      
-		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
+		        <a href="14982055707598.html" title="Spring Boot QuickStart (5) - Spring Data JPA">Spring Boot QuickStart (5) - Spring Data JPA</a><br />
 	     
 	  
 	      
-		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+		        <a href="14988948908551.html" title="Spring Boot QuickStart (4) - Database">Spring Boot QuickStart (4) - Database</a><br />
+	     
+	  
+	      
+		        <a href="14969970515462.html" title="Spring Boot QuickStart (3) - Web & Restful">Spring Boot QuickStart (3) - Web & Restful</a><br />
 	     
 	  
 	      
@@ -491,31 +575,11 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 	     
 	  
 	      
-		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
-	     
-	  
-	      
-		        <a href="14896294544708.html" title="分布式系统的意义">分布式系统的意义</a><br />
-	     
-	  
-	      
-		        <a href="14944229387367.html" title="ElasticSearch 2.x 安装部署">ElasticSearch 2.x 安装部署</a><br />
-	     
-	  
-	      
 		        <a href="14963868024588.html" title="Spring Boot QuickStart (1)">Spring Boot QuickStart (1)</a><br />
 	     
 	  
 	      
-		        <a href="14958691321034.html" title="Java QuickStart (2) - 常用类库，工具包，框架">Java QuickStart (2) - 常用类库，工具包，框架</a><br />
-	     
-	  
-	      
-		        <a href="14949831725275.html" title="Maven QuickStart">Maven QuickStart</a><br />
-	     
-	  
-	      
-		        <a href="14914572882166.html" title="Apache Commons 工具集">Apache Commons 工具集</a><br />
+		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
 	     
 	  
 	      

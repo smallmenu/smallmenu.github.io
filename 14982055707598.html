@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <title>Spring Boot QuickStart (5) - Spring Data JPA - 蛮-com | 醉里挑灯看剑</title>
+    <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
+    <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="renderer" content="webkit">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!--     <link rel="stylesheet" href="//cdn.bootcss.com/highlight.js/9.6.0/styles/dark.min.css"> -->
+    <link rel="stylesheet" href="/asset/css/style.css?v=20170702" >
+    <script src="//cdn.bootcss.com/jquery/1.12.2/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/asset/js/docs.js"></script>
+    <script src="/asset/js/ie10-viewport-bug-workaround.js"></script>
+    <!--    <script src="asset/highlightjs/highlight.pack.js"></script>
+	  <script>hljs.initHighlightingOnLoad();</script> -->
+    <!--[if lt IE 9]>
+    <script src="//cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <script src="//cdn.bootcss.com/placeholders/4.0.1/placeholders.min.js"></script>
+    <script src="//cdn.bootcss.com/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="blog-masthead">
+      <div class="container">
+        <nav class="blog-nav">
+          <h1><a href="http://www.niuchaoqun.com" title="蛮-com | 醉里挑灯看剑">蛮-com | 醉里挑灯看剑</a></h1>
+          <a class="blog-nav-item" id="menu-index" href="index.html">首页</a>
+          <a class="blog-nav-item" id="menu-recommend" href="recommend.html">推荐</a>
+          <a class="blog-nav-item" id="menu-archives" href="archives.html">归档</a>
+          <a class="blog-nav-item" id="menu-about" href="about.html">关于</a>
+          <a class="blog-nav-item" id="menu-about" href="https://www.github.com/smallmenu" target="_blank">GitHub</a>
+        </nav>
+      </div>
+    </div>
+    
+    <script type="text/javascript">
+      $(function(){
+      	$('#menu-index').addClass('active');
+      });
+      </script>
+   <div class="container" id="content-wrap">
+      <div class="row">
+        <div class="col-sm-9 blog-main">
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14982055707598.html">Spring Boot QuickStart (5) - Spring Data JPA</a></h2>
+			            <p class="blog-post-meta">2017/3/23
+				            &nbsp;分类于 
+							
+							    <a class='category' href='java.html'>Java</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>接 (4)。</p>
+
+<p>Java Persistence API，可以理解就是 Java 一个持久化标准或规范，Spring Data JPA 是对它的实现。并且提供多个 JPA 厂商适配，如 Hibernate、Apache 的 OpenJpa、Eclipse的EclipseLink等。</p>
+
+<p>spring-boot-starter-data-jpa 默认使用的是 Hibernate 实现。</p>
+
+<span id="more"></span><!-- more -->
+
+<p>直接引入依赖：</p>
+
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+
+<p>开启 SQL 调试：</p>
+
+<pre><code>spring.jpa.database=mysql
+spring.jpa.show-sql=true
+</code></pre>
+
+<p>在 SpringBoot + Spring Data Jpa 中，不需要额外的配置什么，只需要编写实体类（Entity）与数据访问接口（Repository）就能开箱即用，Spring Data JPA 能基于接口中的方法规范命名自动的帮你生成实现（根据方法命名生成实现，是不是很牛逼？）</p>
+
+<p>Spring Data JPA 还默认提供了几个常用的Repository接口：</p>
+
+<ul>
+<li>Repository： 仅仅是一个标识，没有任何方法，方便 Spring 自动扫描识别</li>
+<li>CrudRepository： 继承 Repository，实现了一组 CRUD 相关的方法</li>
+<li>PagingAndSortingRepository： 继承 CrudRepository，实现了一组分页排序相关的方法</li>
+<li>JpaRepository： 继承 PagingAndSortingRepository，实现一组JPA规范相关的方法</li>
+</ul>
+
+<p>推荐教程：Spring Data JPA实战入门训练 <a href="https://course.tianmaying.com/spring-data-jpa">https://course.tianmaying.com/spring-data-jpa</a></p>
+
+<h2 id="toc_0">Entity 实体和 Respository 接口</h2>
+
+<p>根据 user 表结构，我们定义好 User 实体类与 UserRespository 接口类。</p>
+
+<p>这里，还自定义了一个 @Query 接口，为了体验下自定义查询。因为使用了 lombok，所以实体类看起来很干净。</p>
+
+<p>User.java</p>
+
+<pre><code>@Data
+@Entity
+public class User {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    @JsonProperty(value = &quot;email&quot;)
+    private String username;
+
+    @Column(nullable = false)
+    @JsonIgnore
+    private String password;
+
+    @Column(nullable = false)
+    @JsonIgnore
+    private String salt;
+
+    @Column(nullable = true)
+    private Date birthday;
+
+    @Column(nullable = false)
+    private String sex;
+
+    @Column(nullable = true)
+    @JsonFormat(pattern=&quot;yyyy-MM-dd HH:mm:ss&quot;)
+    private Timestamp access;
+
+    @Column(nullable = true)
+    @JsonFormat(pattern=&quot;HH:mm:ss&quot;)
+    private Time accessTime;
+
+    @Column(nullable = false)
+    private Integer state;
+
+    @Column(nullable = false, insertable = false, updatable = false)
+    @JsonFormat(pattern=&quot;yyyy-MM-dd HH:mm:ss&quot;)
+    private Timestamp created;
+
+    @Column(nullable = false, insertable = false, updatable = false)
+    @JsonFormat(pattern=&quot;yyyy-MM-dd HH:mm:ss&quot;)
+    private Timestamp updated;
+}
+</code></pre>
+
+<ul>
+<li>@Data 是 lombok 的注解，自动生成Getter，Setter，toString，构造函数等</li>
+<li>@Entity 注解这是个实体类</li>
+<li>@Table 注解表相关，如别名等</li>
+<li>@Id 注解主键，@GeneratedValue 表示自动生成</li>
+<li>@DynamicUpdate，@DynamicInsert 注解可以动态的生成insert、update 语句，默认会生成全部的update</li>
+<li>@Column 标识一些字段特性，字段别名，是否允许为空，是否唯一，是否进行插入和更新（比如由MySQL自动维护）</li>
+<li>@Transient 标识该字段并非数据库字段映射</li>
+<li>@JsonProperty 定义 Spring JSON 别名，@JsonIgnore 定义 JSON 时忽略该字段，@JsonFormat 定义 JSON 时进行格式化操作</li>
+</ul>
+
+<p>UserRepository.java</p>
+
+<pre><code>public interface UserRepository extends JpaRepository&lt;User, Long&gt;, UserCustomRepository {
+    User findByUsername(String username);
+
+    @Transactional
+    @Modifying
+    @Query(&quot;UPDATE User SET state = ?2 WHERE id = ?1 &quot;)
+    Integer saveState(Long id, Integer state);
+}
+</code></pre>
+
+<ul>
+<li>@Transactional 用来标识事务，一般修改、删除会用到， @Modifying 标识这是个修改、删除的Query</li>
+<li>@Param 标注在参数上，可用于标识参数式绑定（不使用 ?1 而使用 :param）</li>
+</ul>
+
+<p>好了，接下来我们就可以进行单表的增、删、改、查分页排序操作了：</p>
+
+<pre><code>@Autowired
+private UserRepository userRepository;
+    
+User user = new User();
+userRepository.save(user); // 插入或保存
+userRepository.saveFlush(user); // 保存并刷新
+userRepository.exists(1) // 主键查询是否存在
+userRepository.findOne(1); // 主键查询单条
+userRepository.delete(1); // 主键删除
+userRepository.findByUsername(&quot;a@b.com&quot;); // 查询单条
+userRepository.findAll(pageable); // 带排序和分页的查询列表
+userRepository.saveState(1, 0); // 更新单个字段
+</code></pre>
+
+<p>通常，exist()，delete()之类的方法，我们可能直接会操作 UserRepository，但是一般情况下，在 UserRepository 上面还会提供一个 UserService 来进行一系列的操作（比如数据校验，逻辑判断之类）</p>
+
+<h2 id="toc_1">分页和排序</h2>
+
+<p>PagingAndSortingRepository 和 JpaRepository 接口都具有分页和排序的功能。因为后者继承自前者。比如下面这个方法：</p>
+
+<pre><code>Page&lt;T&gt; findAll(Pageable var1);
+</code></pre>
+
+<p>Pageable 是Spring Data库中定义的一个接口，该接口是所有分页相关信息的一个抽象，通过该接口，我们可以得到和分页相关所有信息（例如pageNumber、pageSize等），这样，Jpa就能够通过pageable参数来组装一个带分页信息的SQL语句。</p>
+
+<p>Page 类也是Spring Data提供的一个接口，该接口表示一部分数据的集合以及其相关的下一部分数据、数据总数等相关信息，通过该接口，我们可以得到数据的总体信息（数据总数、总页数...）以及当前数据的信息（当前数据的集合、当前页数等）</p>
+
+<p>Pageable只是一个抽象的接口。可以通过两种途径生成 Pageable 对象：</p>
+
+<ol>
+<li>通过参数，自己接收参数，自己构造生成 Pageable 对象</li>
+</ol>
+
+<pre><code>@RequestMapping(value = &quot;&quot;, method = RequestMethod.GET)
+public Object page(@RequestParam(name = &quot;page&quot;, required = false) Integer page,
+                  @RequestParam(name=&quot;size&quot;, required = false) Integer size) {
+                  
+   Sort sort = new Sort(Sort.Direction.DESC, &quot;id&quot;);
+   Pageable pageable = new PageRequest(page, size, sort);
+
+   Page&lt;User&gt; users = userRepository.findAll(pageable);
+
+   return this.responseData(users);
+}
+</code></pre>
+
+<p>这种方式你可以灵活的定义传参。</p>
+
+<ol>
+<li>通过 @PageableDefault 注解，会把参数自动注入成 Pageable 对象，默认是三个参数值：</li>
+</ol>
+
+<p>page=，第几页，从0开始，默认为第0页<br/>
+size=，每一页的大小<br/>
+sort=，排序相关的信息，例如sort=firstname&amp;sort=lastname,desc</p>
+
+<pre><code>@RequestMapping(value = &quot;/search&quot;, method = RequestMethod.GET)
+public Object search(@PageableDefault(size = 3, sort = &quot;id&quot;, direction = Sort.Direction.DESC) Pageable pageable) {
+   Page&lt;User&gt; users = userRepository.findAll(pageable);
+
+   return this.responseData(users);
+}
+</code></pre>
+
+<p>看起来，这种方式更优雅一些。</p>
+
+<h1 id="toc_2">关联关系</h1>
+
+<p>Spring Data JPA 的关联关系定义上，感觉并不是很灵活，姿势也比较难找。</p>
+
+<p>视频教程：<a href="http://www.jikexueyuan.com/course/807_4.html">http://www.jikexueyuan.com/course/807_4.html</a></p>
+
+<h2 id="toc_3">OneToOne 一对一</h2>
+
+<p>一对一的关系，拿 user，user_detail 来说，一般应用起来，有以下几种情况：</p>
+
+<ul>
+<li>主键直接关联：user(id, xx)；user_detail(id, xx) 或 user(id, xx)，user_detail(user_id, xx) 其中 id, userid 为主键</li>
+<li>主表含外键的关联：user(id, role_id, xx)；role(id, xx) 。 其中 id 为自增主键</li>
+<li>附表含外键的关联：user(id, xx)；user_detail(id, user_id, xx) 。其中 id 为自增主键</li>
+</ul>
+
+<p>主表含外键的关联：用户-&gt;角色是一对一，而角色-&gt;用户是多对一，而大部分情况，我们是通过 user 表来查询某个角色的列表，而通过 role 来查询某个角色的列表可能性很小。</p>
+
+<p>附表表含外键的关联：其实和主表含外键的关联完全相反，关联的定义也是相反的。</p>
+
+<h3 id="toc_4">主键ID关联</h3>
+
+<p>单向关联，直接在 User 上定义 @OneToOne 与 @PrimaryKeyJoinColumn 即可完成</p>
+
+<pre><code>@Entity
+@Data
+public class User {
+...
+     @OneToOne
+    @PrimaryKeyJoinColumn
+    private UserDetail detail;
+...
+}
+
+// 获取的user，会包含detail属性
+User user = userRepository.findOne(userId);
+</code></pre>
+
+<p>双向关联，除了要定义 User 的 @OneToOne，还需要定义 UserDetail 的 @OneToOne，用 mappedBy 指示 User 表的属性名。</p>
+
+<pre><code>@Entity
+@Data
+public class UserDetail {
+...
+    @OneToOne(mappedBy = &quot;detail&quot;)
+    private User user;
+...
+}
+</code></pre>
+
+<p>出问题了，双向关联，涉及到一个循环引用无限递归的问题，这个问题会发生在 toString、 JSON 转换上。可能这只是个基础问题，但对于我这个入门汉，抓瞎了好长时间。</p>
+
+<p>解决办法：<br/>
+1. 分别给User、UserDetail的关联属性加上：@JsonManagedReference、@JsonBackReference注解，解决 JSON 问题<br/>
+2. 给 UserDetail 实体类加上 @ToString(exclude = &quot;user&quot;) 注解，解决 toString 的问题。</p>
+
+<p>所以 UserDetail 最终造型应该是这样的：</p>
+
+<pre><code>@Entity
+@Data
+@ToString(exclude = &quot;user&quot;)
+public class UserDetail {
+...
+
+    @OneToOne(mappedBy = &quot;detail&quot;)
+    @JsonBackReference
+    private User user;
+}
+
+// 现在可以进行双向查询了
+User user1 = userRepository.findOne(userId);
+userDetail userdetail = userDetailRepository.findOne(userId);
+User user2 = userdetail.getUser();
+</code></pre>
+
+<p>@PrimaryKeyJoinColumn 注解主要用于主键关联，注意实体属性需要使用 @Id 的为主键，假如现在是：user(id, xx)，user_detail(user_id, xx) 这种情况。则需要在 User 类上自定义它的属性：</p>
+
+<pre><code>// User
+@OneToOne
+@PrimaryKeyJoinColumn(referencedColumnName = &quot;user_id&quot;)
+@JsonManagedReference
+private UserDetail detail;
+</code></pre>
+
+<h3 id="toc_5">主表含外键</h3>
+
+<p>使用 @JoinColumn 注解即可完成，默认使用的外键是（属性名+下划线+id)。关联附表的主键 id。</p>
+
+<p>可以通过 name=，referencedColumnName= 属性重新自定义。</p>
+
+<pre><code>@Entity
+@Data
+public class User {
+...
+    // 属性名为role，所以 @JoinColumn 会默认外键是 role_id
+    @OneToOne
+    @JoinColumn
+    @JsonManagedReference
+    private Role role;
+...
+}
+</code></pre>
+
+<p>对于 user-&gt;role 的表关联需求，我们不需要定义 OneToOne 反向关系，并且 role-&gt;user 本来是个一对多关系。</p>
+
+<h3 id="toc_6">附表含外键</h3>
+
+<p>这种情况一般也会经常出现，它可以保证每个表都有一个自增主键的id</p>
+
+<p>因为外键在附表上，所以需要反过来，在 User 上定义 mapped。</p>
+
+<p>如果是双向关联，同样需要加上忽略 toString()，JSON 的注解</p>
+
+<pre><code>@Entity
+@Data
+public class User {
+...
+    @OneToOne(mappedBy = &quot;user&quot;)
+    @JsonManagedReference
+    private UserDetail detail;
+...
+}
+
+@Entity
+@Data
+@ToString(exclude = &quot;user&quot;)
+public class UserDetail {
+...
+    @OneToOne
+    @JoinColumn
+    @JsonBackReference
+    private User user;
+...
+}
+
+User user1 = userRepository.findOne(userId);
+
+// 给 UserDetail 定义一个独立的 findByUserId 接口，这样可以通过操作 UserDetail 反向获取到 user 的数据
+userDetail userdetail = userDetailRepository.findByUserId(userId);
+User user2 = userdetail.getUser();
+</code></pre>
+
+<p>实际上，在上面的例子里面，考虑实际的场景，几乎不需要定义 OneToOne 的反向关联（伪需求），这样就不用解决循环引用的问题了。这里只是意淫，不是吗？</p>
+
+<p>现在有个问题出现了，这种情况下（附表含外键），我如何定义 User-&gt;UserDetail 的单向关系呢？</p>
+
+<h2 id="toc_7">关联关系：一对多</h2>
+
+<p>接着上面的例子，Role -&gt; User 实际上是个一对多的关系。但我们一般不会这么做。直接通过 User 就可以查询嘛。所以这里演示另一个例子。</p>
+
+<p>User-&gt;Order 是一对多，Order-&gt;User 是多对一，定义 Order 实体，注意@Table 注解，因为 order 是 MySQL 关键词（此处中枪）</p>
+
+<pre><code>@Entity
+@Data
+@Table(name = &quot;`order`&quot;)
+public class Order {
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+}
+</code></pre>
+
+<p>然后在 User 中定义 @OneToMany，因为是一对多，所以返回的是List<Order>，并且一般设置为 LAZY</p>
+
+<pre><code>@OneToMany(fetch = FetchType.LAZY)
+@JoinColumn(name=&quot;user_id&quot;)
+private List&lt;Order&gt; orders;
+</code></pre>
+
+<p>测试一下：</p>
+
+<pre><code>User user = userService.findOne(userId);
+if (user != null) {
+     // LAZY 的缘故，在 getOrders 才会触发获取操作
+     List&lt;Order&gt; orders = user.getOrders();
+     return this.responseData(orders);
+}
+</code></pre>
+
+<p>再看看反向关联，也就是 @ManyToOne，稍作调整</p>
+
+<pre><code>User 实体类
+@OneToMany(fetch = FetchType.LAZY, mappedBy = &quot;user&quot;)
+private List&lt;Order&gt; orders;
+
+Order 实体类
+@ManyToOne
+private User user;
+</code></pre>
+
+<p>再测试一下：</p>
+
+<pre><code>Order order = orderRepository.findOne(orderId);
+if (order != null) {
+    User user = order.getUser();
+    return this.responseData(user);
+}
+</code></pre>
+
+<h3 id="toc_8">总结</h3>
+
+<p>想想实际场景，我们不太需要定义 User-&gt;Order 这种关联，因为用户可能有很多订单，这个量是无可预测的。这时候这种关联查询，不能分页，没有意义（也可能是我姿势不对）。</p>
+
+<p>如果是有限的 XToMany 关联，是有意义的。比如配置管理。一个应用拥有有限的多项配置？</p>
+
+<p>Order-&gt;User 这种关联是有意义的。拿到一个 order_id 去反查用户信息。</p>
+
+<h2 id="toc_9">关联关系：多对多</h2>
+
+<p>Order &lt;-&gt; Product 是多对多的关系，关联表是 order_product，</p>
+
+<p>Order 实体配置 @ManyToMany 属性，不需要定义 OrderProduct 实体类，</p>
+
+<pre><code>// @JoinTable 实际可以省略，因为使用的是默认配置
+@ManyToMany(fetch = FetchType.LAZY)
+@JoinTable(
+   name = &quot;order_product&quot;,
+   joinColumns = @JoinColumn(name = &quot;order_id&quot;),
+   inverseJoinColumns = @JoinColumn(name = &quot;product_id&quot;))
+@JsonManagedReference
+private List&lt;Product&gt; products;
+</code></pre>
+
+<p>这样就定义了单向关联，双向关联类似在 Product 实体配置：</p>
+
+<pre><code>@ManyToMany(mappedBy = &quot;products&quot;, fetch = FetchType.LAZY)
+@JsonIgnore
+private List&lt;Order&gt; orders;
+</code></pre>
+
+<p>好了，这样就OK了，实际按照上面的解释，Product -&gt; Order 是不太有意义的。</p>
+
+<h1 id="toc_10">属性参数</h1>
+
+<p>@OneToOne的属性：</p>
+
+<ul>
+<li>cascade 属性表示级联操作策略，有 CascadeType.ALL 等值。</li>
+<li>fetch 属性表示实体的加载方式，有 FetchType.LAZY 和 FetchType.EAGER 两种取值，默认值为 EAGER</li>
+</ul>
+
+<h1 id="toc_11">级联</h1>
+
+<p>在未定义级联的情况下，我们通常需要手动插入。</p>
+
+<p>如 user(id, xx)，user_detail(id, user_id, xx)</p>
+
+<pre><code>User user = new User();
+userRepository.save(user);
+
+UserDetail userDetail = new UserDetail();
+userDetail.setUserId(user.getId());
+userDetailRepository.save(userDetail);
+</code></pre>
+
+<p>定义在关联关系上的 cascade 参数可以设置级联的相关东西。</p>
+
+<p>经过一番研究，这部分暂时我还没搞明白正确姿势，玩不转。</p>
+
+<h1 id="toc_12">复杂的查询</h1>
+
+<h1 id="toc_13">问题</h1>
+
+<h2 id="toc_14">数据库默认值字段，插入后不会自动返回默认值。Entity not return default value after insert</h2>
+
+<p>一般关键表会记录创建、更新时间，满足基本审计需求，以前我喜欢使用 MySQL 默认值特性，这样应用层就可以不用管他们了，如：</p>
+
+<pre><code>`created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+`updated` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+</code></pre>
+
+<p>在实体中，我们要忽略插入和更新对他们的操作。</p>
+
+<pre><code>@Column(nullable = false, insertable = false, updatable = false)
+@JsonFormat(pattern=&quot;yyyy-MM-dd HH:mm:ss&quot;)
+private Timestamp created;
+
+@Column(nullable = false, insertable = false, updatable = false)
+@JsonFormat(pattern=&quot;yyyy-MM-dd HH:mm:ss&quot;)
+private Timestamp updated;
+</code></pre>
+
+<p>看起来不错哦，工作正常，但是：</p>
+
+<p>Spring Data Jpa 在 save() 完成以后，对于这种数据库默认插入的值，拿不到回写的数据啊，无论我尝试网上的方法使用 saveAndFlush() 还是手动 flush() 都是扯淡。</p>
+
+<p>这个坑，我踩了好久，到现在，依然不知道这种情况怎么解决。</p>
+
+<p>临时解决方案：</p>
+
+<p>抛弃数据库默认值特性，在实体类借助 @PrePersist、@PreUpdate 手动实现，如果有多个表，遵循同一规范，可以搞个基类，虽然不太爽，但是能正常工作。</p>
+
+<pre><code>@MappedSuperclass
+@Getter
+@Setter
+public class BaseEntity {
+    @Column(nullable = false, updatable = false)
+    @JsonFormat(pattern=&quot;yyyy-MM-dd HH:mm:ss&quot;)
+    private Timestamp created;
+
+    @Column(nullable = false)
+    @JsonFormat(pattern=&quot;yyyy-MM-dd HH:mm:ss&quot;)
+    private Timestamp updated;
+
+    @PrePersist
+    public void basePrePersist() {
+       long timestamp = new java.util.Date().getTime();
+       created = new Timestamp(timestamp);
+       updated = new Timestamp(timestamp);
+    }
+    
+    @PreUpdate
+    public void basePreUpdate() {
+       updated = new Timestamp(new java.util.Date().getTime());
+    }
+}
+
+</code></pre>
+
+<h2 id="toc_15">XToOne 关联关系，指定 FetchType.LAZY，会出错，得不到数据</h2>
+
+			            </div>
+			          </div><!-- /.blog-post -->
+			<div class="share-comment">
+			<div id="SOHUCS"></div>
+<script charset="utf-8" type="text/javascript" src="http://changyan.sohu.com/upload/changyan.js" ></script>
+<script type="text/javascript">
+    window.changyan.api.config({
+        appid: 'cysrW6HYf',
+        conf: 'prod_3c0ae592afab755fb1154ced90f987b0'
+    });
+</script>
+			</div>
+        </div><!-- /.blog-main -->
+       <!-- slider start -->  		<div class="col-sm-3 blog-sidebar">
+          <div class="sidebar-module">
+            <h4>分类</h4>
+            
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="bigdata.html">大数据&nbsp;(25)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	        	<a href="hbase.html">HBase&nbsp;(11)</a>&nbsp;&nbsp;
+	        
+	        	<a href="solr.html">Solr&nbsp;(7)</a>&nbsp;&nbsp;
+	        
+	        	<a href="elasticsearch.html">ElasticSearch&nbsp;(2)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="server.html">服务器&nbsp;(7)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="linux.html">Linux&nbsp;(5)</a>&nbsp;&nbsp;
+	        
+	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="db.html">数据库&nbsp;(4)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mysql.html">MySQL&nbsp;(4)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="program.html">编程语言&nbsp;(26)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="php.html">PHP&nbsp;(7)</a>&nbsp;&nbsp;
+	        
+	        	<a href="java.html">Java&nbsp;(15)</a>&nbsp;&nbsp;
+	        
+	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
+	        
+	        	<a href="css.html">Css&nbsp;(2)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="software.html">软件设计&nbsp;(7)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="pattern-design.html">设计模式&nbsp;(6)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	  
+            <ol class="list-unstyled">
+	      <li class="post">
+	        <a href="algorithm.html">其他&nbsp;(3)</a>
+	         <p class="cat-children-p"> 
+	        
+	        	<a href="mac.html">Mac&nbsp;(1)</a>&nbsp;&nbsp;
+	        
+	         </p> 
+	      </li>
+	   
+            </ol>
+          </div>
+          <div class="sidebar-module">
+            <h4>最近文章</h4>
+	  
+	      
+		        <a href="14969719294666.html" title="Spring QuickStart">Spring QuickStart</a><br />
+	     
+	  
+	      
+		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
+	     
+	  
+	      
+		        <a href="14968096450665.html" title="Maven MyBatis Generator 插件">Maven MyBatis Generator 插件</a><br />
+	     
+	  
+	      
+		        <a href="14967346590885.html" title="Java Dao Domain Service">Java Dao Domain Service</a><br />
+	     
+	  
+	      
+		        <a href="14958668070136.html" title="Java QuickStart (3) - Web 开发">Java QuickStart (3) - Web 开发</a><br />
+	     
+	  
+	      
+		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
+	     
+	  
+	      
+		        <a href="14968246116794.html" title="PHP 扩展开发学习笔记（3）- 数组与HashTable">PHP 扩展开发学习笔记（3）- 数组与HashTable</a><br />
+	     
+	  
+	      
+		        <a href="14968245647033.html" title="PHP 扩展开发学习笔记（2）- 函数参数与返回值">PHP 扩展开发学习笔记（2）- 函数参数与返回值</a><br />
+	     
+	  
+	      
+		        <a href="14968245020347.html" title="PHP 扩展开发学习笔记（1）- 生命周期与PHP变量">PHP 扩展开发学习笔记（1）- 生命周期与PHP变量</a><br />
+	     
+	  
+	      
+		        <a href="14982055707598.html" title="Spring Boot QuickStart (5) - Spring Data JPA">Spring Boot QuickStart (5) - Spring Data JPA</a><br />
+	     
+	  
+	      
+		        <a href="14988948908551.html" title="Spring Boot QuickStart (4) - Database">Spring Boot QuickStart (4) - Database</a><br />
+	     
+	  
+	      
+		        <a href="14969970515462.html" title="Spring Boot QuickStart (3) - Web & Restful">Spring Boot QuickStart (3) - Web & Restful</a><br />
+	     
+	  
+	      
+		        <a href="14968999112830.html" title="Spring Boot QuickStart (2) - 基础">Spring Boot QuickStart (2) - 基础</a><br />
+	     
+	  
+	      
+		        <a href="14963868024588.html" title="Spring Boot QuickStart (1)">Spring Boot QuickStart (1)</a><br />
+	     
+	  
+	      
+		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
+	     
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	  
+	      
+	   
+          </div>
+          <div class="sidebar-module">
+            <h4>好友链接</h4>
+            <a class="somelink" href="http://www.phpboy.net" title="徐典阳">PHPBoy-专注WEB架构N年</a><br />
+            <a class="somelink" href="http://onbing.com" title="宴兵兵">Binglog-涓涓细流汇成大海</a><br />
+            <a class="goodlink" href="http://www.yaoyanbaike.com" title="谣言百科">谣言百科</a><br />
+            <a class="goodlink" href="http://www.jinghuimeng.com" title="京徽蒙">京徽蒙</a><br />
+          </div>
+          <div class="sidebar-module">
+            <h4>关于</h4>
+            <p><a target="_blank" href="about.html">关于蛮-com</a></p>
+          </div>
+        </div><!-- /.blog-sidebar -->
+      </div><!-- /.row -->
+    </div><!-- /.container -->  <footer class="blog-footer">
+      <p>CopyRight &copy; 2010-2016 本站采用 <a href="http://creativecommons.org/licenses/by/3.0/cn/" target="_blank" rel="nofollow">知识共享署名 3.0 中国大陆许可协议</a> 进行许可</p>
+      <p><a href="about.html" title="牛超群">蛮-com</a> 由 <a target="_blank" href="http://zh.mweb.im/" rel="nofollow">MWeb</a> 强力驱动</p>
+    </footer>
+    
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?11d84d21f7b7ebd8c51896d5f3678f45";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+  </body>
+</html>
