@@ -40,11 +40,12 @@ blockquote {
 .content-responsive img{ max-width: 100%;}
 .container ul{ margin-left: 20px; padding-left: 0px;}
 
-pre{background-color: #F6F6F6;
+pre{
+background:url(../img/blueprint.png) #F6F6F6;
 font-size: 14px; 
-line-height: 1.1;
-color:#333;border:1px solid #999;margin:20px 0;padding:14px;
-
+line-height: 1.0;
+margin:20px 0;padding:14px;
+max-height: 35em;
 }   
 code {
   font-family: "Source Code Pro",Consolas,Menlo,Monaco,"Courier New",monospace
