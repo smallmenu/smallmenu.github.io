@@ -2,7 +2,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8">
-    <title>HBase VS MySQL 性能测试 - 蛮-com | 醉里挑灯看剑</title>
+    <title>Solr 地理位置搜索 - 蛮-com | 醉里挑灯看剑</title>
     <meta name="keywords" content="大数据,数据仓库,数据挖掘,服务器运维,后端开发,架构师,PHP,Linux,smallmenu,niuchaoqun,蛮-com">
     <meta name="description" content="关注大数据技术与应用，数据仓库，数据挖掘；致力于高性能、高可用大型网站技术架构；擅长Linux系统运维，系统安全网站安全，Web后端技术架构。smallmenu@gmail.com。">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -47,86 +47,41 @@
       <div class="row">
         <div class="col-sm-9 blog-main">
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14541168338285.html">HBase VS MySQL 性能测试</a></h2>
-			            <p class="blog-post-meta">2016/1/30
+			            <h2 class="blog-post-title"><a href="14696213063076.html">Solr 地理位置搜索</a></h2>
+			            <p class="blog-post-meta">2016/7/27
 				            &nbsp;分类于 
 							
-							    <a class='category' href='hbase.html'>HBase</a>&nbsp;
+							    <a class='category' href='solr.html'>Solr</a>&nbsp;
 							 
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>HBase 1.0.0<br/>
-MySQL 5.6</p>
+			            <p>不需要排序 <br/>
+fq<br/>
+{!geofilt sfield=LatitudeLongitude pt=31.8671998804321,117.308743414503 d=5} </p>
 
-<span id="more"></span><!-- more -->
+<p>fl<br/>
+LatitudeLongitude,CompanyName,Address,distance:geodist(LatitudeLongitude,31.8671998804321,117.308743414503)</p>
 
-<h2 id="toc_0">存储情况</h2>
+<p>需要排序<br/>
+q<br/>
+{!geofilt score=distance sfield=LatitudeLongitude pt=31.8671998804321,117.308743414503 d=1}</p>
 
-<p>MYISAM存储空间最小、其次InnoDB、HBase启用压缩单副本大小略大</p>
+<p>fl<br/>
+score,LatitudeLongitude,CompanyName,Address,distance:geodist(LatitudeLongitude,31.8671998804321,117.308743414503)</p>
 
-<pre><code>66.8 M  200.4 M  /hbase/data/test/content
-34.9 M  104.8 M  /hbase/data/test/content_compress
-</code></pre>
+<p>sort<br/>
+score desc</p>
 
-<p>MYISAM具有索引缓存，可通过以下方法禁用：</p>
+<p>filter=false</p>
 
-<pre><code>echo 3 &gt; /proc/sys/vm/drop_caches
-flush tables;
-SELECT SQL_NO_CACHE * FROM cailiao WHERE id = 100000;  
-</code></pre>
+<p>{!geofilt score=distance filter=false}<br/>
+City:&quot;合肥&quot;<br/>
+score,LatitudeLongitude,CompanyName,Address,distance:geodist(LatitudeLongitude,31.8671998804321,117.308743414503)</p>
 
-<h2 id="toc_1">百万级别主键查询</h2>
+<p>sort</p>
 
-<p>MySQL 20-30ms，Hbase 20-200ms， MySQL快半个数量级</p>
-
-<h2 id="toc_2">千万级别主键查询</h2>
-
-<p>Hbase 性能更好，该对比是在MySQL关闭索引缓存的情况下，MySQL的索引缓存非常牛逼，一旦索引已被缓存，查询一般是几ms：</p>
-
-<pre><code>/*[10:42:09][ 563 ms]*/ SELECT SQL_NO_CACHE * FROM tableinfo WHERE id = 1543 LIMIT 0, 1000;
-/*[10:42:40][ 640 ms]*/ SELECT SQL_NO_CACHE * FROM tableinfo WHERE id = 1000000 LIMIT 0, 1000;
-/*[10:43:15][ 438 ms]*/ SELECT SQL_NO_CACHE * FROM tableinfo WHERE id = 5000000 LIMIT 0, 1000;
-/*[10:43:46][ 485 ms]*/ SELECT SQL_NO_CACHE * FROM tableinfo WHERE id = 10000000 LIMIT 0, 1000;
-</code></pre>
-
-<pre><code>scan &#39;tableinfo&#39;, {COLUMNS =&gt; &#39;data&#39;, LIMIT =&gt; 1, STARTROW =&gt; &#39;1543&#39; ,CACHE_BLOCKS=&gt;false}
-1 row(s) in 0.1360 seconds
-scan &#39;tableinfo&#39;, {COLUMNS =&gt; &#39;data&#39;, LIMIT =&gt; 1, STARTROW =&gt; &#39;1000000&#39; ,CACHE_BLOCKS=&gt;false}
-1 row(s) in 0.1160 seconds
-scan &#39;tableinfo&#39;, {COLUMNS =&gt; &#39;data&#39;, LIMIT =&gt; 1, STARTROW =&gt; &#39;5000000&#39; ,CACHE_BLOCKS=&gt;false}
-1 row(s) in 0.0790 seconds
-scan &#39;tableinfo&#39;, {COLUMNS =&gt; &#39;data&#39;, LIMIT =&gt; 1, STARTROW =&gt; &#39;10000000&#39; ,CACHE_BLOCKS=&gt;false}
-1 row(s) in 0.0870 seconds
-tableinfo
-get &#39;tableinfo&#39;, &#39;1543&#39;id
-25 row(s) in 0.2690 seconds
-get &#39;tableinfo&#39;, &#39;1000000&#39;
-25 row(s) in 0.0490 seconds
-get &#39;tableinfo&#39;, &#39;5000000&#39;
-25 row(s) in 0.0490 seconds
-get &#39;tableinfo&#39;, &#39;10000000&#39;
-25 row(s) in 0.0390 seconds
-</code></pre>
-
-<h2 id="toc_3">千万级别插入：MySQL慢一个数量级</h2>
-
-<pre><code>/*[11:04:12][ 125 ms]*/ INSERT INTO `test`.`tableinfo`(`id`,`InfoUrl`,`ApplyNo`,`InternationCat`,`ApplyDate`,`ApplyNameC`,`ApplyAddC`,`ApplyNameE`,`ApplyAddE`,`ImageAddress`,`Service`,`Same`,`FirstDate`,`RegisterDate`,`CheckDate`,`NoticeDate`,`SpecialDate`,`LastDate`,`Internation`,`Defanced`,`FriendName`,`Color`,`Type`,`Common`,`Status`,`Workflow`) VALUES ( &#39;1&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;);
-/*[11:04:30][ 125 ms]*/ INSERT INTO `test`.`tableinfo`(`id`,`InfoUrl`,`ApplyNo`,`InternationCat`,`ApplyDate`,`ApplyNameC`,`ApplyAddC`,`ApplyNameE`,`ApplyAddE`,`ImageAddress`,`Service`,`Same`,`FirstDate`,`RegisterDate`,`CheckDate`,`NoticeDate`,`SpecialDate`,`LastDate`,`Internation`,`Defanced`,`FriendName`,`Color`,`Type`,`Common`,`Status`,`Workflow`) VALUES ( &#39;100000000&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;);
-/*[11:05:01][  94 ms]*/ INSERT INTO `test`.`tableinfo`(`id`,`InfoUrl`,`ApplyNo`,`InternationCat`,`ApplyDate`,`ApplyNameC`,`ApplyAddC`,`ApplyNameE`,`ApplyAddE`,`ImageAddress`,`Service`,`Same`,`FirstDate`,`RegisterDate`,`CheckDate`,`NoticeDate`,`SpecialDate`,`LastDate`,`Internation`,`Defanced`,`FriendName`,`Color`,`Type`,`Common`,`Status`,`Workflow`) VALUES ( &#39;100000001&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;);
-/*[11:09:46][ 110 ms]*/ INSERT INTO `test`.`tableinfo`(`id`,`InfoUrl`,`ApplyNo`,`InternationCat`,`ApplyDate`,`ApplyNameC`,`ApplyAddC`,`ApplyNameE`,`ApplyAddE`,`ImageAddress`,`Service`,`Same`,`FirstDate`,`RegisterDate`,`CheckDate`,`NoticeDate`,`SpecialDate`,`LastDate`,`Internation`,`Defanced`,`FriendName`,`Color`,`Type`,`Common`,`Status`,`Workflow`) VALUES ( NULL,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;,&#39;0&#39;);
-
-</code></pre>
-
-<pre><code>put &#39;tableinfo&#39;, &#39;100000001&#39;, &#39;data:Color&#39;, &#39;6&#39;
-0 row(s) in 0.0060 seconds
-put &#39;tableinfo&#39;, &#39;110000001&#39;, &#39;data:Color&#39;, &#39;6&#39;
-0 row(s) in 0.0100 seconds
-put &#39;tableinfo&#39;, &#39;100000001&#39;, &#39;data:ApplyNo&#39;, &#39;6&#39;
-0 row(s) in 0.0080 seconds
-</code></pre>
-
-<h2 id="toc_4">亿级别查询</h2>
+<p>geodist() desc</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->

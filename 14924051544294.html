@@ -64,12 +64,12 @@
 
 <p>之前的版本，可以使用 setup 进行网卡、服务的配置，CentOS 7 安装完以后没有 setup 甚至没有 ifconfig，顿时感觉到蛋疼。好在有替代方案，那就是：</p>
 
-<pre><code>shell&gt;nmtui
+<pre><code>shell&gt; nmtui
 </code></pre>
 
 <p>查看网卡状态可以暂时使用：</p>
 
-<pre><code>shell&gt;ip address
+<pre><code>shell&gt; ip address
 </code></pre>
 
 <blockquote>
@@ -80,38 +80,37 @@
 
 <h2 id="toc_1">安装网络工具 net-tools</h2>
 
-<pre><code>shell&gt;yum install net-tools
+<pre><code>shell&gt; yum install net-tools
 </code></pre>
 
 <p>安装完以后网络工具如 ifconfig, netstat 又回来了</p>
 
 <h2 id="toc_2">服务管理</h2>
 
-<p>CentOS的服务管理使用 systemctl，但是你有没有觉得很蛋疼，因为很多时候你记不得服务名。</p>
+<p>CentOS 的服务管理使用 systemctl，但是你有没有觉得很蛋疼，因为很多时候你记不得服务名。</p>
 
 <p>以前我通过 /etc/init.d/[tab] 切出来补全服务名，现在 systemctl status 切不出来了。</p>
 
 <p>但可以安装 bash-completion 解决，安装后重启你的session生效</p>
 
-<pre><code>shell&gt;yum install bash-completion
+<pre><code>shell&gt; yum install bash-completion
 </code></pre>
 
 <p>现在你 systemctl status [tab][tab] 就可以切出来了。</p>
 
-<h2 id="toc_3">iptables 防火墙</h2>
+<h2 id="toc_3">iptables 防火墙与 GUI</h2>
 
 <p>如果你不熟悉新的软件防火墙，可以安装老的 iptables</p>
 
-<pre><code>shell&gt;systemctl stop firewalld
-shell&gt;systemctl disable firewalld
+<pre><code>shell&gt; systemctl stop firewalld
+shell&gt; systemctl disable firewalld
 
-shell&gt;yum install iptables-services
+shell&gt; yum install system-config-firewall system-config-firewall-tui iptables-services
 
-shell&gt;systemctl enable iptables
-shell&gt;systemctl start iptables
+shell&gt; systemctl enable iptables
+shell&gt; systemctl start iptables
+shell&gt; system-config-firewall-tui
 </code></pre>
-
-<p>待续</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->
@@ -132,14 +131,14 @@ shell&gt;systemctl start iptables
             
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="bigdata.html">大数据&nbsp;(25)</a>
+	        <a href="bigdata.html">大数据&nbsp;(26)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
 	        
 	        	<a href="hbase.html">HBase&nbsp;(11)</a>&nbsp;&nbsp;
 	        
-	        	<a href="solr.html">Solr&nbsp;(7)</a>&nbsp;&nbsp;
+	        	<a href="solr.html">Solr&nbsp;(8)</a>&nbsp;&nbsp;
 	        
 	        	<a href="elasticsearch.html">ElasticSearch&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -148,10 +147,10 @@ shell&gt;systemctl start iptables
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(7)</a>
+	        <a href="server.html">服务器&nbsp;(8)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(5)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(6)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -170,12 +169,12 @@ shell&gt;systemctl start iptables
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(26)</a>
+	        <a href="program.html">编程语言&nbsp;(27)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="php.html">PHP&nbsp;(7)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(15)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(16)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -210,6 +209,10 @@ shell&gt;systemctl start iptables
             <h4>最近文章</h4>
 	  
 	      
+		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
+	     
+	  
+	      
 		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
 	     
 	  
@@ -231,6 +234,10 @@ shell&gt;systemctl start iptables
 	  
 	      
 		        <a href="14968245020347.html" title="PHP 扩展开发学习笔记（1）- 生命周期与PHP变量">PHP 扩展开发学习笔记（1）- 生命周期与PHP变量</a><br />
+	     
+	  
+	      
+		        <a href="14992154022184.html" title="Spring Boot QuickStart (6) - MyBatis">Spring Boot QuickStart (6) - MyBatis</a><br />
 	     
 	  
 	      
@@ -259,14 +266,6 @@ shell&gt;systemctl start iptables
 	  
 	      
 		        <a href="14958691321034.html" title="Java QuickStart (2) - 常用类库，工具包，框架">Java QuickStart (2) - 常用类库，工具包，框架</a><br />
-	     
-	  
-	      
-		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
-	     
-	  
-	      
-		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
 	     
 	  
 	      

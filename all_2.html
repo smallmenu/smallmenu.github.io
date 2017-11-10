@@ -48,7 +48,52 @@
         <div class="col-sm-9 blog-main">
 			
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14864571405778.html">php composer 配置</a></h2>
+			            <h2 class="blog-post-title"><a href="14878346074790.html">工厂模式之简单工厂模式（静态工厂模式）-创建型</a></h2>
+			            <p class="blog-post-meta">2017/2/23 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='pattern-design.html'>设计模式</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>在简单工厂模式中，可以根据参数的不同返回不同类的实例。简单工厂模式专门定义一个类来负责创建其他类的实例，被创建的实例通常都具有共同的父类（接口）。</p>
+
+<p>具有产品接口、产品实现、工厂实现。没有工厂接口。</p>
+
+<p>简单工厂模式用于生产静态或独立的产品。</p>
+
+
+						 
+						<a href="14878346074790.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14866965563754.html">Gitlab CE + Gitbook 本地环境搭建</a></h2>
+			            <p class="blog-post-meta">2017/2/10 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='php.html'>PHP</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>GitLab 是一个利用Ruby on Rails开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。<br/>
+它拥有与GitHub类似的功能，能够浏览源代码，管理缺陷和注释。可以管理团队对仓库的访问，它非常易于浏览提交过的版本并提供一个文件历史库。</p>
+
+<p>GitBook 是一个基于 Node.js 的命令行工具，可使用 Github/Git 和 Markdown 来制作精美的电子书</p>
+
+
+						 
+						<a href="14866965563754.html" class="more-link">查看全文 &rarr;</a>
+			    		
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14864571405778.html">php composer 与 NPM 配置</a></h2>
 			            <p class="blog-post-meta">2017/2/7 
 				            &nbsp;分类于 
 							
@@ -57,7 +102,7 @@
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <h2 id="toc_0">安装</h2>
+			            <h2 id="toc_0">composer</h2>
 
 <p>参见官网：<a href="https://getcomposer.org/download/">https://getcomposer.org/download/</a></p>
 
@@ -67,26 +112,32 @@ php composer-setup.php
 php -r &quot;unlink(&#39;composer-setup.php&#39;);&quot;
 </code></pre>
 
-<h2 id="toc_1">配置</h2>
+<h3 id="toc_1">配置</h3>
 
 <p>composer config -l -g</p>
+
+<p>vi /root/.config/composer/config.json</p>
 
 <pre><code>&quot;config&quot;: {
     &quot;secure-http&quot;:false
 }
 </code></pre>
 
-<h2 id="toc_2">自更新</h2>
+<h3 id="toc_2">自更新</h3>
 
 <pre><code>composer selfupdate
 </code></pre>
 
-<h2 id="toc_3">中国全量镜像</h2>
+<h3 id="toc_3">中国全量镜像</h3>
 
 <p><a href="https://pkg.phpcomposer.com/">https://pkg.phpcomposer.com/</a></p>
 
 <pre><code>composer config -g repo.packagist composer https://packagist.phpcomposer.com
 </code></pre>
+
+<h2 id="toc_4">NPM</h2>
+
+<p>npm config set registry <a href="https://registry.npm.taobao.org">https://registry.npm.taobao.org</a></p>
 
 						
 			           </div>
@@ -235,8 +286,49 @@ int x = (int) f;</p>
 			          </div><!-- /.blog-post -->
 			 
 					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14685928997529.html">通过 logrotate 配置日志轮滚</a></h2>
-			            <p class="blog-post-meta">2016/7/15 
+			            <h2 class="blog-post-title"><a href="14696213063076.html">Solr 地理位置搜索</a></h2>
+			            <p class="blog-post-meta">2016/7/27 
+				            &nbsp;分类于 
+							
+							    <a class='category' href='solr.html'>Solr</a>&nbsp;
+							 
+							 
+			            </p>
+			            <div class="content-responsive">
+			            <p>不需要排序 <br/>
+fq<br/>
+{!geofilt sfield=LatitudeLongitude pt=31.8671998804321,117.308743414503 d=5} </p>
+
+<p>fl<br/>
+LatitudeLongitude,CompanyName,Address,distance:geodist(LatitudeLongitude,31.8671998804321,117.308743414503)</p>
+
+<p>需要排序<br/>
+q<br/>
+{!geofilt score=distance sfield=LatitudeLongitude pt=31.8671998804321,117.308743414503 d=1}</p>
+
+<p>fl<br/>
+score,LatitudeLongitude,CompanyName,Address,distance:geodist(LatitudeLongitude,31.8671998804321,117.308743414503)</p>
+
+<p>sort<br/>
+score desc</p>
+
+<p>filter=false</p>
+
+<p>{!geofilt score=distance filter=false}<br/>
+City:&quot;合肥&quot;<br/>
+score,LatitudeLongitude,CompanyName,Address,distance:geodist(LatitudeLongitude,31.8671998804321,117.308743414503)</p>
+
+<p>sort</p>
+
+<p>geodist() desc</p>
+
+						
+			           </div>
+			          </div><!-- /.blog-post -->
+			 
+					<div class="blog-post">
+			            <h2 class="blog-post-title"><a href="14661279980383.html">Linux服务器部署规范（CentOS 6）</a></h2>
+			            <p class="blog-post-meta">2016/6/17 
 				            &nbsp;分类于 
 							
 							    <a class='category' href='linux.html'>Linux</a>&nbsp;
@@ -244,15 +336,11 @@ int x = (int) f;</p>
 							 
 			            </p>
 			            <div class="content-responsive">
-			            <p>logrotate 是一个日志管理程序，用来把旧的日志文件删除（备份），并创建新的日志文件，这个过程称为转储。这个程序目前是 CentOS 自带的。</p>
-
-<p>logrotate 的执行由系统的 crond 服务实现，通过 crond 的日执行脚本 /etc/cron.daily/logrotate 来触发。</p>
-
-<p>logrotata 使用起来非常舒服，能满足大多数情况的需求，我忽然想起 Nginx 竟然有一个网上流传很久的日志切割脚本，这真是多此一举。</p>
+			            <p>本规范主要用于团队内部服务器部署统一约定，当前使用 CentOS 6 作为模板。</p>
 
 
 						 
-						<a href="14685928997529.html" class="more-link">查看全文 &rarr;</a>
+						<a href="14661279980383.html" class="more-link">查看全文 &rarr;</a>
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
@@ -363,67 +451,6 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 			    		
 			           </div>
 			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14661279980383.html">Linux服务器部署规范（CentOS 6）</a></h2>
-			            <p class="blog-post-meta">2016/6/17 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='linux.html'>Linux</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>本规范主要用于团队内部服务器部署统一约定，当前使用 CentOS 6 作为模板。</p>
-
-
-						 
-						<a href="14661279980383.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14657354899214.html">PHP 5.4 编译参数</a></h2>
-			            <p class="blog-post-meta">2016/6/23 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='php.html'>PHP</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>本文主要整理了 PHP 5.4 的编译参数，并对一些参数和第三方扩展做以说明</p>
-
-<p>截止到目前 2016-06-23 PHP 5.4 的兼容性还是最好的。</p>
-
-
-						 
-						<a href="14657354899214.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
-			 
-					<div class="blog-post">
-			            <h2 class="blog-post-title"><a href="14643975993511.html">TokuDB 引擎 （Percona Server）</a></h2>
-			            <p class="blog-post-meta">2016/5/28 
-				            &nbsp;分类于 
-							
-							    <a class='category' href='mysql.html'>MySQL</a>&nbsp;
-							 
-							 
-			            </p>
-			            <div class="content-responsive">
-			            <p>Percona Server可以看做是Linux上优化过的MySQL，Percona团队都是MySQL专家，比如Percona针对InnoDB优化的XtraDB 引擎是兼容InnoDB的，Percona还提供了TokuDB版本的Percona Server，TokuDB是一个面向大数据，支持事务的存储引擎，有着非常好的随机写性能，并且支持在线 DDL。</p>
-
-<p>Percona Server 可以看作是 MySQL 的增强版，因为和MySQL几乎完全兼容，在使用 yum 安装的时候只是包名不一样，安装后的产物都几乎相同。</p>
-
-
-						 
-						<a href="14643975993511.html" class="more-link">查看全文 &rarr;</a>
-			    		
-			           </div>
-			          </div><!-- /.blog-post -->
 			  
           <nav>
             <ul class="pager">
@@ -445,14 +472,14 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
             
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="bigdata.html">大数据&nbsp;(25)</a>
+	        <a href="bigdata.html">大数据&nbsp;(26)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="hadoop.html">Hadoop&nbsp;(6)</a>&nbsp;&nbsp;
 	        
 	        	<a href="hbase.html">HBase&nbsp;(11)</a>&nbsp;&nbsp;
 	        
-	        	<a href="solr.html">Solr&nbsp;(7)</a>&nbsp;&nbsp;
+	        	<a href="solr.html">Solr&nbsp;(8)</a>&nbsp;&nbsp;
 	        
 	        	<a href="elasticsearch.html">ElasticSearch&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -461,10 +488,10 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="server.html">服务器&nbsp;(7)</a>
+	        <a href="server.html">服务器&nbsp;(8)</a>
 	         <p class="cat-children-p"> 
 	        
-	        	<a href="linux.html">Linux&nbsp;(5)</a>&nbsp;&nbsp;
+	        	<a href="linux.html">Linux&nbsp;(6)</a>&nbsp;&nbsp;
 	        
 	        	<a href="webserver.html">Webserver&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -483,12 +510,12 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 	  
             <ol class="list-unstyled">
 	      <li class="post">
-	        <a href="program.html">编程语言&nbsp;(26)</a>
+	        <a href="program.html">编程语言&nbsp;(27)</a>
 	         <p class="cat-children-p"> 
 	        
 	        	<a href="php.html">PHP&nbsp;(7)</a>&nbsp;&nbsp;
 	        
-	        	<a href="java.html">Java&nbsp;(15)</a>&nbsp;&nbsp;
+	        	<a href="java.html">Java&nbsp;(16)</a>&nbsp;&nbsp;
 	        
 	        	<a href="lua.html">Lua&nbsp;(2)</a>&nbsp;&nbsp;
 	        
@@ -523,6 +550,10 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
             <h4>最近文章</h4>
 	  
 	      
+		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
+	     
+	  
+	      
 		        <a href="14969255996574.html" title="HBase 实现数据同步 ElasticSearch">HBase 实现数据同步 ElasticSearch</a><br />
 	     
 	  
@@ -544,6 +575,10 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 	  
 	      
 		        <a href="14968245020347.html" title="PHP 扩展开发学习笔记（1）- 生命周期与PHP变量">PHP 扩展开发学习笔记（1）- 生命周期与PHP变量</a><br />
+	     
+	  
+	      
+		        <a href="14992154022184.html" title="Spring Boot QuickStart (6) - MyBatis">Spring Boot QuickStart (6) - MyBatis</a><br />
 	     
 	  
 	      
@@ -572,14 +607,6 @@ Cloudera Express 和 Cloudera Enterprise 为 Cloudera 商业产品软件，包�
 	  
 	      
 		        <a href="14958691321034.html" title="Java QuickStart (2) - 常用类库，工具包，框架">Java QuickStart (2) - 常用类库，工具包，框架</a><br />
-	     
-	  
-	      
-		        <a href="14977092347045.html" title="常用的开源镜像站">常用的开源镜像站</a><br />
-	     
-	  
-	      
-		        <a href="14924051544294.html" title="CentOS 7 几点改变">CentOS 7 几点改变</a><br />
 	     
 	  
 	      
