@@ -322,17 +322,27 @@ systemctl start mysqld
 ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;Coowin123.com&#39;;
 </code></pre>
 
-<h2 id="toc_17">Nginx</h2>
+<h2 id="toc_17">Nginx + PHP</h2>
 
-<h2 id="toc_18">Redis</h2>
+<p>rpm -Uvh <a href="https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm">https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm</a><br/>
+rpm -Uvh <a href="https://mirror.webtatic.com/yum/el7/webtatic-release.rpm">https://mirror.webtatic.com/yum/el7/webtatic-release.rpm</a><br/>
+yum install php71w-fpm php71w-opcache php71w-bcmath php71w-cli php71w-devel php71w-gd php71w-mbstring php71w-mcrypt php71w-mysqlnd php71w-tidy php71w-xml php71w-xmlrpc php71w-process php71w-pecl-redis php71w-pecl-mongodb php71w-pecl-imagick php71w-pdo_dblib php71w-pdo</p>
 
-<h2 id="toc_19">PHP</h2>
+<p>mkdir -p /var/log/server/nginx<br/>
+mkdir -p /var/log/server/redis<br/>
+mkdir -p /var/log/server/php<br/>
+mkdir -p /var/log/server/php-fpm<br/>
+mkdir -p /var/lib/php/session</p>
 
-<h2 id="toc_20">Composer</h2>
+<h2 id="toc_18">Composer</h2>
 
-<h1 id="toc_21">NodeJS 运行环境</h1>
+<h2 id="toc_19">Node &amp; NPM</h2>
 
-<h1 id="toc_22">Python 运行环境</h1>
+<p>curl --silent --location <a href="https://rpm.nodesource.com/setup_8.x">https://rpm.nodesource.com/setup_8.x</a> | sudo bash -<br/>
+yum -y install nodejs<br/>
+npm config set registry <a href="https://registry.npm.taobao.org">https://registry.npm.taobao.org</a></p>
+
+<h1 id="toc_20">Python 运行环境</h1>
 
 			            </div>
 			          </div><!-- /.blog-post -->
