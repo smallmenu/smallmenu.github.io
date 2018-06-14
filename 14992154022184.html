@@ -58,11 +58,17 @@
 			            <div class="content-responsive">
 			            <p>接(4) - Database 系列.</p>
 
-<p>MyBatis 是支持定制化 SQL、存储过程以及高级映射的优秀的持久层框架。MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。MyBatis 可以对配置和原生Map使用简单的 XML 或注解，将接口和 Java 的 POJOs映射成数据库中的记录。</p>
+<p>MyBatis 是支持定制化 SQL、存储过程以及高级映射的优秀的持久层框架。MyBatis 避免了几乎所有的 JDBC 代码和手动设置参数以及获取结果集。</p>
+
+<p>MyBatis 可以对配置和原生Map使用简单的 XML 或注解，将接口和 Java 的 POJOs 映射成数据库中的记录。</p>
 
 <p>官网：<a href="http://www.mybatis.org/">http://www.mybatis.org/</a></p>
 
 <span id="more"></span><!-- more -->
+
+<p>传统的 MyBatis 使用需要一个 XML 或 Java 配置，而 mybatis-spring-boot-starter 解决了自动配置的问题</p>
+
+<p>并且可以在 application.properties 中定义一些配置参数，比如 mybatis.config-location 定义一个 XML 配置文件的路径</p>
 
 <p>直接引入依赖：</p>
 
@@ -79,7 +85,7 @@
 
 <p>与 JPA 不同的是，在 SpringBoot + MyBatis 中，除了需要编写实体类（Entity），还需要写数据访问接口（Mapper）</p>
 
-<p>早期的 MyBatis 只能通过 XML 来进行 Mapper 映射，MyBatis 3 开始，Mapper 可以通过注解、XML 以及注解和XML混合定义。</p>
+<p>早期的 MyBatis 只能通过 XML 来进行 Mapper 映射，MyBatis 3 开始，Mapper 可以通过注解、XML 以及注解与XML混合定义。</p>
 
 <p>其实就是需要手写一些 SQL 完成接口的部分，好处是这样显的更灵活一些，因为 SQL 大家都懂，并且让程序员更接近底层一些</p>
 
@@ -95,134 +101,199 @@
 
 <p>定义 Mapper 只需要一个 @Mapper 注解，也可以在入口处引入 @MapperScan(&quot;com.niuchaoqun.springboot.mapper&quot;) 扫描包。</p>
 
-<p>定义一些最简单的基本操作：</p>
+<p>先来个快速的体验，完全使用注解进行单表的基本操作：</p>
+
+<p>mybatis 表结构 (id, name, birthday, sex, access, access_time, created, updated, state)</p>
 
 <pre><code>@Mapper
-public interface UserMapper {
-    @Select(&quot;SELECT * FROM user WHERE id = #{id}&quot;)
-    User findOne(long id);
+@Repository
+public interface MybatisMapper {
+    @Select(&quot;SELECT * FROM mybatis WHERE id = #{id}&quot;)
+    Mybatis findById(long id);
 
-    @Select(&quot;SELECT * FROM user WHERE username = #{useranme}&quot;)
-    User findByUsername(String username);
+    @Select(&quot;SELECT * FROM mybatis WHERE name = #{useranme}&quot;)
+    Mybatis findByName(String username);
 
-    @Select(&quot;SELECT * FROM user&quot;)
-    List&lt;User&gt; findAll();
+    @Select(&quot;SELECT * FROM mybatis&quot;)
+    List&lt;Mybatis&gt; findAll();
 
     @Insert({
-        &quot;INSERT INTO user&quot;,
-        &quot;(role_id, username, password, salt, name, birthday, sex, access, access_time, state)&quot;,
-        &quot;VALUES&quot;,
-        &quot;(#{role_id}, #{username}, #{password}, #{salt}, #{name}, #{birthday}, #{sex}, #{access}, #{access_time}, #{state})&quot;
+            &quot;INSERT INTO mybatis&quot;,
+            &quot;(name, birthday, sex, access, access_time, state)&quot;,
+            &quot;VALUES&quot;,
+            &quot;(#{name}, #{birthday}, #{sex}, #{access}, #{access_time}, #{state})&quot;
     })
     @Options(useGeneratedKeys = true, keyColumn = &quot;id&quot;, keyProperty = &quot;id&quot;)
-    int insert(User user);
+    int insert(Mybatis mybatis);
 
-    @Delete(&quot;DELETE FROM user WHERE id = #{id}&quot;)
-    int delete(long id);
+    @Delete(&quot;DELETE FROM mybatis WHERE id = #{id}&quot;)
+    int deleteById(long id);
 }
 </code></pre>
 
-<p>@Mapper 注解表示这是一个 Mapper，SpringBoot 可以自动扫描生成实例。类似 JPA 的 Repository。<br/>
- @Options 属性配置了一些参数，这里是保证插入的主键能回写到 user 对象。</p>
+<pre><code>@Mapper 注解表示这是一个 Mapper，SpringBoot 可以自动扫描生成实例。类似 JPA 的 Repository。
+@Repository 注解仅仅是为了提示 IDEA 在自动注入的时候不会报错
+@Options 属性配置了一些参数，这里是保证插入的主键能直接回写。
+#{name} 标识这是一个占位符（预处理），name表示参数名称，如果是 POJO，一般需要提供 parameterType，然后通过属性值 #{UserCustom.name} 获取
+${name}:表示拼接sql串，将接收到参数的内容不加任何修饰拼接在sql中，会有 SQL 注入的风险
+</code></pre>
 
 <p>然后我们就可以像 JPA 一样使用了：</p>
 
-<pre><code> @Autowired
- UserMapper userMapper;
+<pre><code>@Autowired
+MybatisMapper mybatisMapper;
  
- userMapper.findOne(1);
- userMapper.findAll();
- userMapper.findByUsername(&quot;&quot;);
- userMapper.delete(1);
- userMapper.insert(user);
+mybatisMapper.findById(1);
+mybatisMapper.findAll();
+mybatisMapper.findByName(&quot;&quot;);
+mybatisMapper.delete(1);
+mybatisMapper.insert(mybatis);
 </code></pre>
 
-<h2 id="toc_1">XML 配置</h2>
+<p>然而我们注意到，默认情况下 access_time 在查询结果中不能自动的映射到实体，因为我们的 Mybatis 实体类中使用的是驼峰式 accessTime</p>
 
-<p>除了使用注解以外，还可以通过 XML 定义数据库相关操作，这样 Mapper 中只留下接口部分，在 SpringBoot 中 XML 文件默认是放到 resources 目录下的。下面用 XML 实现相同的功能。</p>
+<p>解决这个问题大概有以下方式：</p>
 
-<p>applications 增加配置项，配置XML路径，以及别名实体类路径：</p>
+<ol>
+<li>修改 <code>mybatis.configuration.map-underscore-to-camel-case</code> 为 true，(无法解决字段名完全异构的情况)</li>
+<li>在实体类中直接定义成 access_time （不够优雅）</li>
+<li>在 Mapper 中定义 @Results 结果集映射（这有点扯，它肯定不是用来干这个，因为可能有很多个 SELECT 语句，会累死）</li>
+<li>使用 XML 配置的 ResultMap 来定义（只要定义一次，但避免数据库字段变更同样需要额外的维护）</li>
+</ol>
+
+<pre><code>@Select(&quot;SELECT * FROM mybatis WHERE id = #{id}&quot;)
+@Results({
+        @Result(column=&quot;access_time&quot;, property=&quot;accessTime&quot;),
+})
+Mybatis findById(long id); 
+</code></pre>
+
+<h3 id="toc_1">问题</h3>
+
+<ol>
+<li>与 JPA 同样的问题，由数据库自己维护的 created 字段插入后数据不能回写</li>
+</ol>
+
+<p>貌似没有什么好办法，只能再查一次</p>
+
+<ol>
+<li>insertSelective，updateSelective</li>
+</ol>
+
+<p>也就是选择性插入与更新操作，仅仅通过上面的注解示例，不能很好的实现 ，需要定义一个 MybatisSqlProvider：</p>
+
+<pre><code>public class MybatisSqlProvider {
+    public String updateSelectiveById(Mybatis record) {
+        SQL sql = new SQL();
+        sql.UPDATE(&quot;mybatis&quot;);
+
+        if (record.getBirthday() != null) {
+            sql.SET(&quot;birthday = #{birthday}&quot;);
+        }
+
+        if (record.getBirthday() != null) {
+            sql.SET(&quot;sex = #{sex}&quot;);
+        }
+
+        if (record.getName() != null) {
+            sql.SET(&quot;name = #{name}&quot;);
+        }
+
+        sql.WHERE(&quot;id = #{id}&quot;);
+
+        return sql.toString();
+    }
+}
+</code></pre>
+
+<p>然后再在 Mapper 上使用 @UpdateProvider 注解使用上面的定义（头大）：</p>
+
+<pre><code>@UpdateProvider(type = MybatisSqlProvider.class, method = &quot;updateSelectiveById&quot;)
+int updateSelectiveById(Mybatis mybatis);
+</code></pre>
+
+<h2 id="toc_2">XML 配置</h2>
+
+<p>除了使用注解以外，还可以通过 XML 定义数据库相关操作，这样 Mapper 中只留下接口部分，在 SpringBoot 中 XML 文件默认是放到 resources 目录下。</p>
+
+<p>一般情况，项目推荐采用 XML 的方式，因为可以定义 ResultMap （可以实现字段名异构映射，还可以定义关联关系）</p>
+
+<p>可以相对方便的实现 insertSelective，updateSelective，并且还可以实现延迟加载</p>
+
+<p>由于 XML 存放的是主要 SQL 语句，所以可以方便的做 SQL Review</p>
+
+<p>在 applications.properties 增加配置项，配置 XML 路径，以及别名实体类的路径：</p>
 
 <pre><code>mybatis:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.niuchaoqun.springboot.entity
+  mapper-locations: classpath:mapper/*.xml  # XML 文件位置
+  type-aliases-package: com.niuchaoqun.springboot.entity  # 实体类别名，XML文件不需要引用包名路径   
 </code></pre>
 
-<p>UserMapper:</p>
+<p>UserMapper 仅仅定义接口:</p>
 
 <pre><code>@Mapper
-public interface UserMapper {
-    User findOne(long id);
-
-    User findByUsername(String username);
-
+public interface MybatisMapper {
+    User findById(long id);
+    User findByName(String name);
     List&lt;User&gt; findAll();
-
-    int insert(User user);
-
-    int update(User user);
-
-    int updateState(@Param(&quot;id&quot;) long id, @Param(&quot;state&quot;) byte state);
-
+    int insert(Mybatis mybatis);
     int delete(long id);
 }
 </code></pre>
 
-<p>UserMapper.xml</p>
+<p>UserMapper.xml 负责实现：</p>
 
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;!DOCTYPE mapper PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot; &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;
-&lt;mapper namespace=&quot;com.niuchaoqun.springboot.mapper.UserMapper&quot;&gt;
-    &lt;select id=&quot;findOne&quot; parameterType=&quot;long&quot; resultType=&quot;User&quot;&gt;
-      SELECT * FROM user WHERE id = #{id}
+&lt;mapper namespace=&quot;com.niuchaoqun.springboot.mapper.MybatisMapper&quot;&gt;
+    &lt;resultMap id=&quot;BaseResultMap&quot; type=&quot;Mybatis&quot;&gt;
+        &lt;id property=&quot;id&quot; column=&quot;id&quot; /&gt;
+    &lt;/resultMap&gt;
+
+    &lt;select id=&quot;findById&quot; parameterType=&quot;long&quot; resultMap=&quot;BaseResultMap&quot;&gt;
+        SELECT * FROM mybatis WHERE id = #{id}
     &lt;/select&gt;
 
-    &lt;select id=&quot;findAll&quot; resultType=&quot;User&quot;&gt;
-      SELECT * FROM user
+    &lt;select id=&quot;findAll&quot; resultMap=&quot;BaseResultMap&quot;&gt;
+      SELECT * FROM mybatis
     &lt;/select&gt;
 
-    &lt;select id=&quot;findByUsername&quot; parameterType=&quot;string&quot; resultType=&quot;User&quot;&gt;
-        SELECT * FROM user WHERE username = #{username}
+    &lt;select id=&quot;findByName&quot; parameterType=&quot;string&quot; resultMap=&quot;BaseResultMap&quot;&gt;
+        SELECT * FROM mybatis WHERE name = #{name}
     &lt;/select&gt;
-
-    &lt;delete id=&quot;delete&quot; parameterType=&quot;long&quot;&gt;
-      DELETE FROM user WHERE id = #{id}
-    &lt;/delete&gt;
     
-    &lt;insert id=&quot;insert&quot; parameterType=&quot;User&quot; useGeneratedKeys=&quot;true&quot; keyProperty=&quot;id&quot; keyColumn=&quot;ic&quot;&gt;
-      INSERT INTO user
-      (role_id, username, password, salt, name, birthday, sex, access, access_time, state)
+    &lt;insert id=&quot;insert&quot; parameterType=&quot;Mybatis&quot; useGeneratedKeys=&quot;true&quot; keyColumn=&quot;id&quot; keyProperty=&quot;id&quot;&gt;
+      INSERT INTO mybatis
+      (name, birthday, sex, access, access_time, state)
       VALUES
-      (#{role_id}, #{username}, #{password}, #{salt}, #{name}, #{birthday}, #{sex}, #{access}, #{access_time}, #{state})
+      (#{name}, #{birthday}, #{sex}, #{access}, #{accessTime}, #{state})
     &lt;/insert&gt;
-    
-    &lt;update id=&quot;updateState&quot;&gt;
-        UPDATE user SET state = #{id} WHERE id = #{state}
-    &lt;/update&gt;
 
-    &lt;update id=&quot;update&quot; parameterType=&quot;User&quot;&gt;
-        UPDATE user
+    &lt;delete id=&quot;deleteById&quot; parameterType=&quot;long&quot;&gt;
+      DELETE FROM mybatis WHERE id = #{id}
+    &lt;/delete&gt;
+
+    &lt;update id=&quot;update&quot; parameterType=&quot;Mybatis&quot;&gt;
+        UPDATE mybatis
         &lt;set&gt;
+            &lt;if test=&quot;birthday != null&quot;&gt;birthday = #{birthday},&lt;/if&gt;
             &lt;if test=&quot;name != null&quot;&gt;name = #{name},&lt;/if&gt;
-            &lt;if test=&quot;password != null&quot;&gt;password = #{password},&lt;/if&gt;
-            &lt;if test=&quot;salt != null&quot;&gt;salt = #{salt},&lt;/if&gt;
-            &lt;if test=&quot;birthday != null&quot;&gt;birthday = #{birthday},&lt;/if&gt;
             &lt;if test=&quot;sex != null&quot;&gt;sex = #{sex},&lt;/if&gt;
-            &lt;if test=&quot;birthday != null&quot;&gt;birthday = #{birthday},&lt;/if&gt;
-            &lt;if test=&quot;state != null&quot;&gt;state = #{state},&lt;/if&gt;
         &lt;/set&gt;
         WHERE id = #{id}
     &lt;/update&gt;
 &lt;/mapper&gt;
 </code></pre>
 
+<h2 id="toc_3">吐槽</h2>
+
 <p>看到这里，感觉上使用起来还不如 JPA 爽，并且你需要熟悉很多的配置，无论是注解还是 XML 映射文件。</p>
 
-<p>丝毫提不起再接着搞下去的兴趣，光玩这个 MyBatis 配置，然后做个 CURD，估计都能玩一上午，并且一旦修改表结构，表字段名，可以想象有多心痛，MyBatis怎么流行起来的（一定是我姿势不对）。</p>
+<p>丝毫提不起再接着搞下去的兴趣，光玩这个 MyBatis 配置，然后做个 CURD，估计都能玩一上午，并且一旦修改表结构，表字段名，可以想象有多心痛</p>
 
-<p>开始找轮子.</p>
+<p>一定是我姿势不对，开始找轮子。</p>
 
-<h2 id="toc_2">MyBatis Generator 插件</h2>
+<h2 id="toc_4">MyBatis Generator 插件</h2>
 
 <p>这是个 Maven 插件，大概功能就是通过一定的前期配置，帮你生成 MyBatis 需要的实体类、Mapper、或 Mapper with XML，另外还可以生成一些常用的查询接口。</p>
 
@@ -244,7 +315,7 @@ public interface UserMapper {
 
 <p><a href="https://github.com/yyqian/spring-boot-mybatis-generator/blob/master/src/main/resources/generatorConfig-fullAndWithComments.xml">https://github.com/yyqian/spring-boot-mybatis-generator/blob/master/src/main/resources/generatorConfig-fullAndWithComments.xml</a></p>
 
-<p>大概就是配置了一些，是否生成注释啊，生成哪些表啊，是否生成 example 啊等等。留意一个配置项，<javaClientGenerator> 可以制定生成模式：注解版，XML 版，注解XML混合版。</p>
+<p>大概就是配置了一些，是否生成注释啊，生成哪些表啊，是否生成 example 示例啊等等。留意一个配置项，<javaClientGenerator> 可以制定生成模式：注解版，XML 版，注解XML混合版。</p>
 
 <p>可以再增加一个 resources/generatorConfig.properties 进行一些变量的配置：</p>
 
@@ -263,10 +334,9 @@ mbg.target-project.resources=src/main/resources
 <p>最后，通过 Maven 执行生成：</p>
 
 <pre><code>mvn mybatis-generator:generate
-mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 </code></pre>
 
-<p>生成的代码，同时也是一个很好的 MyBatis 学习示例。生成方式是通过 <javaClientGenerator> type 属性指定的：</p>
+<p>生成的代码，同时也是一个很好的 MyBatis 学习示例。</p>
 
 <ul>
 <li>ANNOTATEDMAPPER 纯注解版，一个接口 Mapper（包含基本的注解实现），一个接口实现 SqlProvider（复杂的实现）</li>
@@ -274,7 +344,7 @@ mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
 <li>MIXEDMAPPER 混合版，一个接口 Mapper（包含基本的注解实现），一个 XML 映射文件（复杂的实现）</li>
 </ul>
 
-<p>为了学习，我们还是采用混合方式好了，默认还会生成了一些 CURD 接口</p>
+<p>为了方便学习和观察，我们还是采用混合方式好了，默认还会生成了一些 CURD 接口</p>
 
 <pre><code>int deleteByPrimaryKey(Long id);
 int insert(User record);
@@ -285,26 +355,32 @@ int updateByPrimaryKey(User record);
 
 <p>其中xml映射文件，需要指定生成在resources目录，SpringBoot 才可以自动装载。</p>
 
-<p>这个插件可以减少一些工作量，但是想要完全满足我们的需求，仍然需要大量的配置和修改，比如默认生成的id是 Integer，而我们数据库中设置的是无符号的int，再比如对于与一切时间，默认均生成为 java.util.Date 类型。</p>
+<p>这个插件可以减少一些工作量，但是想要完全满足我们的需求，仍然需要大量的配置和修改。</p>
+
+<p>比如默认生成的 id 是 Integer，而我们数据库中设置的是无符号的int（应该是Long），再比如对于与一切时间，默认均生成为 java.util.Date 类型。</p>
 
 <p>并且冗余信息特别多，所以搞搞快速的测试还可以，用起来差强人意啊。</p>
 
-<h2 id="toc_3">MyBatis 通用 Mapper 与 PageHelper 分页插件</h2>
+<h2 id="toc_5">MyBatis 通用 Mapper 与 PageHelper 分页插件</h2>
 
 <p>文档：<a href="https://mapperhelper.github.io/docs/">https://mapperhelper.github.io/docs/</a></p>
 
 <p>文档：<a href="https://pagehelper.github.io/">https://pagehelper.github.io/</a></p>
 
-<h3 id="toc_4">通用 Mapper</h3>
+<h3 id="toc_6">通用 Mapper</h3>
 
-<p>通用Mapper，已经默认内置了一些单表的增删改查操作，对于基础的需求，不需要手写接口和XML了。而分页插件提供了强大的分页功能。</p>
+<p>通用 Mapper，默认内置了一些单表的增删改查操作（类似使用 generator 生成的方法），对于基础的需求，不需要手写接口和 XML 了。</p>
 
-<p>pom.xml 引入：</p>
+<p>并且借鉴了一些 JPA 的思想，也使用了一些 JPA 的注解。</p>
+
+<p>分页插件提供了强大的分页功能。</p>
+
+<p>通过 pom.xml 引入：</p>
 
 <pre><code>&lt;dependency&gt;
-  &lt;groupId&gt;tk.mybatis&lt;/groupId&gt;
-  &lt;artifactId&gt;mapper-spring-boot-starter&lt;/artifactId&gt;
-  &lt;version&gt;1.1.1&lt;/version&gt;
+    &lt;groupId&gt;tk.mybatis&lt;/groupId&gt;
+    &lt;artifactId&gt;mapper-spring-boot-starter&lt;/artifactId&gt;
+    &lt;version&gt;2.0.2&lt;/version&gt;
 &lt;/dependency&gt;
 &lt;dependency&gt;
   &lt;groupId&gt;com.github.pagehelper&lt;/groupId&gt;
@@ -344,15 +420,26 @@ pagehelper:
 <p>它提供了几乎和 MyBatis Generator 几乎相同的 API（但是并没有生成一坨内容），又扩展了一些API。并且它还自动扩展了 MyBatis Generator 用来自动生成实体类等等。测试一下：</p>
 
 <pre><code>User user = userMapper.selectByPrimaryKey(1);
-
-// 条件查询
-Condition condition = new Condition(User.class);
-condition.createCriteria().andEqualTo(&quot;username&quot;, email);
-
-List&lt;User&gt; users = userMapper.selectByCondition(condition);
 </code></pre>
 
-<h3 id="toc_5">PageHelper 分页</h3>
+<h3 id="toc_7">复杂的查询</h3>
+
+<pre><code># Condition 其实就是 Example
+Condition condition = new Condition(User.class);
+condition.createCriteria();
+
+if (userSearch.getRole_id() != null) {
+    condition.and().andEqualTo(&quot;roleId&quot;, userSearch.getRole_id());
+}
+if (userSearch.getSex() != null) {
+    condition.and().andEqualTo(&quot;sex&quot;, userSearch.getSex());
+}
+condition.orderBy(&quot;created&quot;).desc();
+
+List&lt;User&gt; users = userMapper.selectByExample(condition);
+</code></pre>
+
+<h3 id="toc_8">PageHelper 分页</h3>
 
 <p>使用起来还是比较简单的，主要有两种姿势。</p>
 
@@ -360,7 +447,7 @@ List&lt;User&gt; users = userMapper.selectByCondition(condition);
 <li>每次查询之前使用：</li>
 </ol>
 
-<pre><code>// page = 1 为起始页，PageInfo用来包装分页信息
+<pre><code>// 查询之前调用 page = 1 为起始页，使用 PageInfo 用来包装分页信息
 PageHelper.startPage(page, size);
 List&lt;User&gt; users = userMapper.selectAll();
 PageInfo pageUsers = new PageInfo(users);
@@ -370,7 +457,7 @@ PageInfo pageUsers = new PageInfo(users);
 <li>接口定义是使用系统配置的分页参数</li>
 </ol>
 
-<pre><code>// pageNum 与 pageSize，会进行自动识别，也可以是包含这两个参数的对象
+<pre><code>// 自定义 pageNum 与 pageSize，会进行自动识别，也可以是包含这两个参数的对象
 List&lt;User&gt; selectBySex(@Param(&quot;sex&quot;) String sex,
                              @Param(&quot;pageNum&quot;) int pageNum,
                              @Param(&quot;pageSize&quot;) int pageSize);
@@ -380,17 +467,101 @@ List&lt;User&gt; users2 = userMapper.selectBySex(&quot;female&quot;, page, size)
 PageInfo pageInfo2 = new PageInfo(users2);                                                        
 </code></pre>
 
-<h2 id="toc_6">关联关系</h2>
+<h2 id="toc_9">关联关系</h2>
 
-<h2 id="toc_7">其他</h2>
+<p>通用 Mapper 默认是不支持关联表操作的，如果我们想实现关联表，只能借助 Mybatis 自身的 resultType 和 resultMap 来实现，其中 </p>
 
-<h3 id="toc_8">IDEA MyBatis Plugin</h3>
+<p>resultType 需要你定义实体类或 POJO 的附加属性（很明显这样不太对）</p>
+
+<p>resultMap 实现起来有点麻烦，可以实现延迟加载</p>
+
+<p>整体而言，Mybatis 的关联查询简单粗暴，不像 JPA 那么令人困惑，通过日志调试接口几乎可以完整复原你的 SQL</p>
+
+<h3 id="toc_10">一对一</h3>
+
+<p>在 User 实体类上增加几个关联属性，通用 Mapper 会自动忽略非简单类型（Java简单类型），所以不会影响单表操作</p>
+
+<p>唯一影响的是通过默认单表查询方法，会获取到这几个属性是 null</p>
+
+<p>如果想避免这种情况的话，可以另外定义一个 POJO extends User </p>
+
+<pre><code>public class User {
+...
+    private Role role;
+
+    private UserProfile profile;
+
+    private UserDetail detail;
+...
+}
+</code></pre>
+
+<p>然后定义 Mapper 接口：</p>
+
+<pre><code>User selectUserRelationByPrimaryKey(Long id);
+</code></pre>
+
+<p>在 XML 中定义 resultMap 与 SQL 实现的，注意这里使用了 <association> 属性</p>
+
+<p>这里有几个需要注意的地方，resultMap 做的是SQL查询结果列与实体的关系映射，如果关联表中有重复的字段，需要 alias 处理映射才能映射上，如下面的：r_id, ud_id 等</p>
+
+<p>SELECT 实现 SQL 是多个 INNER JOIN</p>
+
+<p>就这样搞定！</p>
+
+<pre><code>&lt;resultMap id=&quot;UserCompleteResultMap&quot; type=&quot;User&quot;&gt;
+    &lt;id property=&quot;id&quot; column=&quot;id&quot;/&gt;
+    &lt;result property=&quot;username&quot; column=&quot;username&quot;/&gt;
+    &lt;result property=&quot;roleId&quot; column=&quot;role_id&quot;/&gt;
+    &lt;result property=&quot;password&quot; column=&quot;password&quot;/&gt;
+    &lt;result property=&quot;salt&quot; column=&quot;salt&quot;/&gt;
+    &lt;result property=&quot;name&quot; column=&quot;name&quot;/&gt;
+    &lt;result property=&quot;birthday&quot; column=&quot;birthday&quot;/&gt;
+    &lt;result property=&quot;sex&quot; column=&quot;sex&quot;/&gt;
+    &lt;result property=&quot;access&quot; column=&quot;access&quot;/&gt;
+    &lt;result property=&quot;accessTime&quot; column=&quot;access_time&quot;/&gt;
+    &lt;result property=&quot;created&quot; column=&quot;created&quot;/&gt;
+    &lt;result property=&quot;updated&quot; column=&quot;updated&quot;/&gt;
+    &lt;result property=&quot;state&quot; column=&quot;state&quot;/&gt;
+    &lt;association property=&quot;role&quot; javaType=&quot;Role&quot;&gt;
+        &lt;id property=&quot;id&quot; column=&quot;r_id&quot;/&gt;
+        &lt;result property=&quot;name&quot; column=&quot;name&quot;/&gt;
+    &lt;/association&gt;
+    &lt;association property=&quot;profile&quot; javaType=&quot;UserProfile&quot;&gt;
+        &lt;id property=&quot;userId&quot; column=&quot;user_id&quot;/&gt;
+        &lt;result property=&quot;job&quot; column=&quot;job&quot;/&gt;
+    &lt;/association&gt;
+    &lt;association property=&quot;detail&quot; javaType=&quot;UserDetail&quot;&gt;
+        &lt;id property=&quot;id&quot; column=&quot;ud_id&quot;/&gt;
+        &lt;result property=&quot;userId&quot; column=&quot;user_id&quot;/&gt;
+        &lt;result property=&quot;address&quot; column=&quot;address&quot;/&gt;
+    &lt;/association&gt;
+&lt;/resultMap&gt;
+
+&lt;select id=&quot;selectUserRelationByPrimaryKey&quot; parameterType=&quot;long&quot; resultMap=&quot;UserCompleteResultMap&quot;&gt;
+  SELECT u.*, r.id as r_id, r.name, up.user_id, up.job, ud.id as ud_id, ud.user_id, ud.address FROM user u
+  INNER JOIN role r ON u.role_id = r.id
+  INNER JOIN user_profile up ON u.id = up.user_id
+  INNER JOIN user_detail ud ON u.id = ud.user_id
+  WHERE u.id = #{id}
+&lt;/select&gt;
+</code></pre>
+
+<h3 id="toc_11">一对多</h3>
+
+<p>使用 resultMap <collection> 来实现，原理类似。比如一个订单有多个商品  </p>
+
+<h2 id="toc_12">总结</h2>
+
+<p>使用通用 Mapper 可以一定程度的提高 MyBatis 的使用效率</p>
+
+<h3 id="toc_13">IDEA MyBatis Plugin</h3>
 
 <p>一个 MyBatis 收费 IDEA 插件，官网售价 40 美刀，目的是简化 Mapper 接口与 XML 的书写，有兴趣可以关注。</p>
 
 <p><a href="https://www.codesmagic.com/mybatis">https://www.codesmagic.com/mybatis</a></p>
 
-<h3 id="toc_9">MyBatis-Plus</h3>
+<h3 id="toc_14">MyBatis-Plus</h3>
 
 <p>闲逛了一下，发现了这么一个项目 MyBatis-Plus：</p>
 

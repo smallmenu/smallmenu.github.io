@@ -154,13 +154,18 @@ public class User {
 
 <ul>
 <li>@Data 是 lombok 的注解，自动生成Getter，Setter，toString，构造函数等</li>
-<li>@Entity 注解这是个实体类</li>
-<li>@Table 注解表相关，如别名等</li>
-<li>@Id 注解主键，@GeneratedValue 表示自动生成</li>
-<li>@DynamicUpdate，@DynamicInsert 注解可以动态的生成insert、update 语句，默认会生成全部的update</li>
-<li>@Column 标识一些字段特性，字段别名，是否允许为空，是否唯一，是否进行插入和更新（比如由MySQL自动维护）</li>
-<li>@Transient 标识该字段并非数据库字段映射</li>
-<li>@JsonProperty 定义 Spring JSON 别名，@JsonIgnore 定义 JSON 时忽略该字段，@JsonFormat 定义 JSON 时进行格式化操作</li>
+<li>@Entity 注解 Spring Data JPA 实体类</li>
+<li>@Table 注解表相关选项，如表别名等，当你的表(实体类)名是 MySQL 关键词时可能会中枪，通过 @Table(name = &quot;<code>order</code>&quot;) 解决</li>
+<li>@Id 注解表主键</li>
+<li>@GeneratedValue 注解字段为自动生成，如 MySQL AUTO_INCREMENT</li>
+<li>@Column 注解字段属性，如是否允许为空，是否唯一，是否进行插入和更新</li>
+<li>@Transient 标识该字段并非数据库字段的实体映射</li>
+<li>@DynamicUpdate 注解动态生成UPDATE SQL语句，同理还有 @DynamicInsert</li>
+<li>@Generated 数据库的自动维护字段，插入不回写，之前通过@PrePersist，现在这个注解可以解决，原理是又回查了一次</li>
+<li>@JsonProperty JSON 注解，比如配置别名</li>
+<li>@JsonIgnore JSON 注解，在 JSON 时忽略</li>
+<li>@JsonFormat JSON 注解，在 JSON 时转换格式</li>
+<li>@JsonProperty JSON 注解，在 JSON 时转换属性名</li>
 <li>对于JPA而言，字段名 accessTime 默认对应的是 access_time，当然可以通过Column自定义。</li>
 </ul>
 
@@ -190,7 +195,7 @@ User user = new User();
 userRepository.save(user); // 插入或保存
 userRepository.saveFlush(user); // 保存并刷新
 userRepository.exists(1) // 主键查询是否存在
-userRepository.findOne(1); // 主键查询单条
+userRepository.findById(1); // 主键查询单条
 userRepository.delete(1); // 主键删除
 userRepository.findByUsername(&quot;a@b.com&quot;); // 查询单条
 userRepository.findAll(pageable); // 带排序和分页的查询列表
@@ -210,7 +215,7 @@ userRepository.saveState(1, 0); // 更新单个字段
 
 <p>Page 类也是Spring Data提供的一个接口，该接口表示一部分数据的集合以及其相关的下一部分数据、数据总数等相关信息，通过该接口，我们可以得到数据的总体信息（数据总数、总页数...）以及当前数据的信息（当前数据的集合、当前页数等）</p>
 
-<p>Pageable只是一个抽象的接口。可以通过两种途径生成 Pageable 对象：</p>
+<p>Pageable 只是一个抽象的接口。可以通过两种途径生成 Pageable 对象：</p>
 
 <ol>
 <li>通过参数，自己接收参数，自己构造生成 Pageable 对象</li>
@@ -260,7 +265,7 @@ public Object search(@PageableDefault(size = 3, sort = &quot;id&quot;, direction
 <p>一对一的关系，拿 user，user_detail 来说，一般应用起来，有以下几种情况：</p>
 
 <ul>
-<li>主键直接关联：user(id, xx)；user_detail(id, xx) 或 user(id, xx)，user_detail(user_id, xx) 其中 id, userid 为主键</li>
+<li>主键直接关联：user(id, xx)；user_profile(id, xx) 或 user(id, xx)，user_profile(user_id, xx) 其中 id, userid 为主键</li>
 <li>主表含外键的关联：user(id, role_id, xx)；role(id, xx) 。 其中 id 为自增主键</li>
 <li>附表含外键的关联：user(id, xx)；user_detail(id, user_id, xx) 。其中 id 为自增主键</li>
 </ul>
@@ -269,29 +274,33 @@ public Object search(@PageableDefault(size = 3, sort = &quot;id&quot;, direction
 
 <p>附表表含外键的关联：其实和主表含外键的关联完全相反，关联的定义也是相反的。</p>
 
-<h3 id="toc_4">主键ID关联</h3>
+<h3 id="toc_4">主键直接关联</h3>
+
+<p>示例：user(id, xx)，user_profile(id, xx) 或 user(id, xx)，user_profile(user_id, xx)</p>
 
 <p>单向关联，直接在 User 上定义 @OneToOne 与 @PrimaryKeyJoinColumn 即可完成</p>
+
+<p>PrimaryKeyJoinColumn 默认使用当前表 @Id 关联附表 @Id 的主键</p>
 
 <pre><code>@Entity
 @Data
 public class User {
 ...
-     @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @PrimaryKeyJoinColumn
-    private UserDetail detail;
+    private UserProfile profile;
 ...
 }
 
 // 获取的user，会包含detail属性
-User user = userRepository.findOne(userId);
+userRepository.findById(userId);
 </code></pre>
 
 <p>双向关联，除了要定义 User 的 @OneToOne，还需要定义 UserDetail 的 @OneToOne，用 mappedBy 指示 User 表的属性名。</p>
 
 <pre><code>@Entity
 @Data
-public class UserDetail {
+public class UserProfile {
 ...
     @OneToOne(mappedBy = &quot;detail&quot;)
     private User user;
@@ -302,15 +311,15 @@ public class UserDetail {
 <p>出问题了，双向关联，涉及到一个循环引用无限递归的问题，这个问题会发生在 toString、 JSON 转换上。可能这只是个基础问题，但对于我这个入门汉，抓瞎了好长时间。</p>
 
 <p>解决办法：<br/>
-1. 分别给User、UserDetail的关联属性加上：@JsonManagedReference、@JsonBackReference注解，解决 JSON 问题<br/>
-2. 给 UserDetail 实体类加上 @ToString(exclude = &quot;user&quot;) 注解，解决 toString 的问题。</p>
+1. 分别给User、UserProfile 的关联属性加上：@JsonManagedReference、@JsonBackReference注解，解决 JSON 问题<br/>
+2. 给 UserProfile 实体类加上 @ToString(exclude = &quot;user&quot;) 注解，解决 toString 的问题。</p>
 
-<p>所以 UserDetail 最终造型应该是这样的：</p>
+<p>所以 UserProfile 最终造型应该是这样的：</p>
 
 <pre><code>@Entity
 @Data
 @ToString(exclude = &quot;user&quot;)
-public class UserDetail {
+public class UserProfile {
 ...
 
     @OneToOne(mappedBy = &quot;detail&quot;)
@@ -319,25 +328,18 @@ public class UserDetail {
 }
 
 // 现在可以进行双向查询了
-User user1 = userRepository.findOne(userId);
-userDetail userdetail = userDetailRepository.findOne(userId);
-User user2 = userdetail.getUser();
-</code></pre>
-
-<p>@PrimaryKeyJoinColumn 注解主要用于主键关联，注意实体属性需要使用 @Id 的为主键，假如现在是：user(id, xx)，user_detail(user_id, xx) 这种情况。则需要在 User 类上自定义它的属性：</p>
-
-<pre><code>// User
-@OneToOne
-@PrimaryKeyJoinColumn(referencedColumnName = &quot;user_id&quot;)
-@JsonManagedReference
-private UserDetail detail;
+userRepository.findById(userId);
+userProfileRepository.findById(userId);
+userProfileRepository.getUser();
 </code></pre>
 
 <h3 id="toc_5">主表含外键</h3>
 
-<p>使用 @JoinColumn 注解即可完成，默认使用的外键是（属性名+下划线+id)。关联附表的主键 id。</p>
+<p>示例：user(id, role_id, xx)，role(id, xx)</p>
 
-<p>可以通过 name=，referencedColumnName= 属性重新自定义。</p>
+<p>使用 @JoinColumn 注解即可完成，默认使用的外键是（属性名+下划线+id)。可以通过 name= 属性重新自定义</p>
+
+<p>默认关联附表的标注主键 @Id，可以通过 referencedColumnName= 属性重新自定义。</p>
 
 <pre><code>@Entity
 @Data
@@ -346,17 +348,18 @@ public class User {
     // 属性名为role，所以 @JoinColumn 会默认外键是 role_id
     @OneToOne
     @JoinColumn
-    @JsonManagedReference
     private Role role;
 ...
 }
 </code></pre>
 
-<p>对于 user-&gt;role 的表关联需求，我们不需要定义 OneToOne 反向关系，并且 role-&gt;user 本来是个一对多关系。</p>
+<p>对于 user-&gt;role 的表关联需求，我们不需要定义 OneToOne 反向关系，并且 role-&gt;user 其实是个一对多关系。</p>
 
 <h3 id="toc_6">附表含外键</h3>
 
-<p>这种情况一般也会经常出现，它可以保证每个表都有一个自增主键的id</p>
+<p>示例：user(id, xx)；user_detail(id, user_id, xx)</p>
+
+<p>这种情况一般也会经常出现，它可以保证每个表都有一个自增主键的id，这种情况一般在一对多的场景中。</p>
 
 <p>因为外键在附表上，所以需要反过来，在 User 上定义 mapped。</p>
 
@@ -366,7 +369,7 @@ public class User {
 @Data
 public class User {
 ...
-    @OneToOne(mappedBy = &quot;user&quot;)
+    @OneToOne(mappedBy = &quot;user&quot;, cascade = CascadeType.REMOVE)
     @JsonManagedReference
     private UserDetail detail;
 ...
@@ -395,11 +398,30 @@ User user2 = userdetail.getUser();
 
 <p>现在有个问题出现了，这种情况下（附表含外键），我如何定义 User-&gt;UserDetail 的单向关系呢？</p>
 
+<p>貌似没有找到好的解决办法，所以设计时OneToOne尽量避免，采用主键直接关联</p>
+
 <h2 id="toc_7">关联关系：一对多</h2>
+
+<p>示例：user(id)，order(id, user_id)</p>
 
 <p>接着上面的例子，Role -&gt; User 实际上是个一对多的关系。但我们一般不会这么做。直接通过 User 就可以查询嘛。所以这里演示另一个例子。</p>
 
-<p>User-&gt;Order 是一对多，Order-&gt;User 是多对一，定义 Order 实体，注意@Table 注解，因为 order 是 MySQL 关键词（此处中枪）</p>
+<p>User-&gt;Order 是一对多，Order-&gt;User 是多对一，定义 Order 实体，注意 @Table 注解，因为 order 是 MySQL 关键词（此处中枪）</p>
+
+<p>在 User 中定义 @OneToMany，因为是一对多，所以返回的是 List<Order>，并且一般设置为 LAZY，在这里 JoinColumn 中的 name 属性表示外键字段名。</p>
+
+<pre><code>@Entity
+@Data
+public class User {
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name=&quot;user_id&quot;)
+    private List&lt;Order&gt; orders;
+}
+</code></pre>
+
+<p>在 Order 中不能定义 user_id 这个字段，否则会报错，报错类似：</p>
+
+<p><code>Table [order] contains physical column name [user_id] referred to by multiple physical column names: [user_id]</code></p>
 
 <pre><code>@Entity
 @Data
@@ -414,24 +436,14 @@ public class Order {
 }
 </code></pre>
 
-<p>然后在 User 中定义 @OneToMany，因为是一对多，所以返回的是List<Order>，并且一般设置为 LAZY</p>
-
-<pre><code>@OneToMany(fetch = FetchType.LAZY)
-@JoinColumn(name=&quot;user_id&quot;)
-private List&lt;Order&gt; orders;
-</code></pre>
-
 <p>测试一下：</p>
 
-<pre><code>User user = userService.findOne(userId);
-if (user != null) {
-     // LAZY 的缘故，在 getOrders 才会触发获取操作
-     List&lt;Order&gt; orders = user.getOrders();
-     return this.responseData(orders);
+<pre><code>user = userService.findById(userId);
+List&lt;Order&gt; orders = user.getOrders();
 }
 </code></pre>
 
-<p>再看看反向关联，也就是 @ManyToOne，稍作调整</p>
+<p>再看看双向关联，也就是 @ManyToOne，稍作调整</p>
 
 <pre><code>User 实体类
 @OneToMany(fetch = FetchType.LAZY, mappedBy = &quot;user&quot;)
@@ -457,13 +469,15 @@ if (order != null) {
 
 <p>如果是有限的 XToMany 关联，是有意义的。比如配置管理。一个应用拥有有限的多项配置？</p>
 
-<p>Order-&gt;User 这种关联是有意义的。拿到一个 order_id 去反查用户信息。</p>
+<p>Order-&gt;User 这种关联是有意义的。拿到一个 order_id 去反查用户信息。但一般我们也不会直接放到关联查询里面这么做，而是这样直接查询出来：</p>
+
+<p><code>SELECT * FROM order WHERE user_id = ?</code></p>
 
 <h2 id="toc_9">关联关系：多对多</h2>
 
 <p>Order &lt;-&gt; Product 是多对多的关系，关联表是 order_product，</p>
 
-<p>Order 实体配置 @ManyToMany 属性，不需要定义 OrderProduct 实体类，</p>
+<p>Order 实体配置 @ManyToMany 属性，不需要定义关联表的 OrderProduct 实体类，</p>
 
 <pre><code>// @JoinTable 实际可以省略，因为使用的是默认配置
 @ManyToMany(fetch = FetchType.LAZY)
@@ -497,27 +511,30 @@ private List&lt;Order&gt; orders;
 
 <h1 id="toc_11">级联</h1>
 
-<p>在未定义级联的情况下，我们通常需要手动插入。</p>
+<p>经过一番研究，这部分暂时我还没搞明白正确姿势，玩不转，但是级联删除是可以通过 cascade = CascadeType.REMOVE 来配置的，试想：</p>
 
-<p>如 user(id, xx)，user_detail(id, user_id, xx)</p>
+<p>user, user_profile, user_detail 表，他们是一个整体，在 user 表删除的时候肯定要同步删除 user_profile, user_detail表</p>
 
-<pre><code>User user = new User();
-userRepository.save(user);
+<p>实际上应用层实现了 MySQL 外键特性</p>
 
-UserDetail userDetail = new UserDetail();
-userDetail.setUserId(user.getId());
-userDetailRepository.save(userDetail);
+<p>比如为 profile 表设置级联删除：</p>
+
+<pre><code>@OneToOne(cascade = CascadeType.REMOVE)
+@PrimaryKeyJoinColumn
+private UserProfile profile;
 </code></pre>
 
 <p>定义在关联关系上的 cascade 参数可以设置级联的相关东西。</p>
 
-<p>经过一番研究，这部分暂时我还没搞明白正确姿势，玩不转。</p>
-
 <h1 id="toc_12">复杂的查询</h1>
 
-<h1 id="toc_13">问题总结</h1>
+<h1 id="toc_13">总结</h1>
 
-<h2 id="toc_14">数据库默认值字段，插入后不会回写。Entity not return default value after insert</h2>
+<p>一句话：使用 JPA 定义少量的关联，谨慎使用。</p>
+
+<h1 id="toc_14">问题总结</h1>
+
+<h2 id="toc_15">数据库默认值字段，插入后不会回写。Entity not return default value after insert</h2>
 
 <p>一般关键表会记录创建、更新时间，满足基本审计需求，以前我喜欢使用 MySQL 默认值特性，这样应用层就可以不用管他们了，如：</p>
 
@@ -575,7 +592,24 @@ public class BaseEntity {
 
 <p>其中 @MappedSuperclass 表示可以将超类的JPA注解传递给子类</p>
 
-<h2 id="toc_15">OneToOne 关联关系，指定 FetchType.LAZY，JSON 时会出错，得不到数据</h2>
+<blockquote>
+<p>@update 20180604 目前这个问题已经找到了解决方案，可以通过 @Generated 注解 *</p>
+</blockquote>
+
+<pre><code>@Generated(GenerationTime.INSERT)
+@Column(nullable = false, insertable = false, updatable = false)
+@JsonFormat(pattern = &quot;yyyy-MM-dd HH:mm:ss&quot;)
+private LocalDateTime created;
+
+@Generated(GenerationTime.ALWAYS)
+@Column(nullable = false, insertable = false, updatable = false)
+@JsonFormat(pattern = &quot;yyyy-MM-dd HH:mm:ss&quot;)
+private LocalDateTime updated;
+</code></pre>
+
+<p>观察下实际的运行原理，JPA 是在插入后又查询了这两个字段达到回写数据的目的。</p>
+
+<h2 id="toc_16">OneToOne 关联关系，指定 FetchType.LAZY，JSON 时会出错，得不到数据</h2>
 
 <p>原因大概是，JSON序列化的时候，数据还没有fetch到，出错信息如下：</p>
 
@@ -598,7 +632,9 @@ public class BaseEntity {
 
 <p>搞定!</p>
 
-<h2 id="toc_16">关于循环引用和 Lazy Fetch</h2>
+<p>这可能是个Bug，可能最近已经修复了，因为 XToOne 现在默认是 FetchType.EAGER，但是改变了查询方式（一条SQL查询转换为多条SQL查询）</p>
+
+<h2 id="toc_17">关于循环引用和 Lazy Fetch</h2>
 
 <p>接上个问题，这里要思考一个问题场景：</p>
 
@@ -606,15 +642,13 @@ public class BaseEntity {
 <li>Lazy Fetch 在 JSON 序列化实体类时失效 </li>
 </ol>
 
-<p>我们定义了一个 User 实体类，这个实体类有几个关联，比如 OneToOne和 OneToMany，并且设置了Lazy，我们执行了 findOne 查询并返回结果，在 RestController 的时候，会默认执行 Jackson 的序列化JSON 操作。</p>
+<p>我们定义了一个 User 实体类，这个实体类有几个关联，比如 OneToOne和 OneToMany，并且设置了Lazy，我们执行了 findById 查询并返回结果，在 RestController 的时候，会默认执行 Jackson 的序列化JSON 操作。</p>
 
 <p>因为序列化会涉及到实体类关联对象的获取，会触发所有的关联关系。生成一大堆的查询 SQL， 这样 LAZY 就失去意义了啊，比如我只想要 User 单表的基本信息怎么办？</p>
 
 <p>stackoverflow 可以搜到了好多类似问题，我目前还没找到正确的姿势。</p>
 
 <p>可以想象的是，不应当将实体类直接返回给客户端，应该再定义一个返回数据的DTO，将实体类的数据复制到DTO，然后返回并JSON。然而这样好蛋疼，随便一个项目你至少需要定义实体类，输入参数的DTO，输出参数的DTO。</p>
-
-<p>问题暂放这里。</p>
 
 <ol>
 <li>循环引用</li>
@@ -624,14 +658,14 @@ public class BaseEntity {
 
 <p>另一个办法，给实体类加上 @JsonIdentityInfo：</p>
 
-<pre><code>@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property=&quot;id&quot;)
+<pre><code>@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property=&quot;@id&quot;)
 </code></pre>
 
 <p>这样好处是显而易见的，只需要在实体类上注解一下即可。</p>
 
 <p>猜测原理是引入了id，检测了主键是否一致，决定是否引用下去。如 User-&gt;UserDetail-&gt;User。</p>
 
-<p>所以他还会多一次查询，并且关联数据上会多一个关联关系的 id 的字段。</p>
+<p>所以他还会多一次查询，并且关联数据上会多一个关联关系的 @id 的字段，还是比较怪异，并且也解决不了循环 toString() 的循环引用问题</p>
 
 			            </div>
 			          </div><!-- /.blog-post -->
